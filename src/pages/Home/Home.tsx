@@ -1,8 +1,11 @@
+import { useNavigate } from 'react-router';
 import logo from '@/assets/images/logo.png';
 import Layout from '../layout/Layout';
 import * as styles from './style/Home.css';
 
 export default function Home() {
+  const navigate = useNavigate();
+
   return (
     <Layout>
       <div className={styles.container}>
@@ -10,7 +13,11 @@ export default function Home() {
         <img src={logo} alt="다무너" className={styles.logo} />
 
         {/* AI 챗봇 버튼 */}
-        <button type="button" className={styles.chatButton}>
+        <button
+          type="button"
+          className={styles.chatButton}
+          onClick={() => navigate('/chat')}
+        >
           <span className={styles.chatText}>무너에게 다 무너봐~</span>
           <span className={styles.chatBadge}>채팅하기</span>
         </button>
