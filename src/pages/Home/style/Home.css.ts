@@ -2,6 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 export const container = style({
   padding: '20px',
+  paddingTop: '80px',
   paddingBottom: '80px',
 });
 
@@ -78,20 +79,29 @@ export const emptyState = style({
   borderRadius: '12px',
 });
 
-export const slider = style({
+export const sliderWrapper = style({
   width: '100%',
   overflow: 'hidden',
+  position: 'relative',
+  borderRadius: '16px',
+});
+
+export const sliderTrack = style({
+  display: 'flex',
+  transition: 'transform 0.3s ease-in-out',
 });
 
 export const sliderCard = style({
-  width: '100%',
+  minWidth: '100%',
   height: '200px',
   background: 'linear-gradient(135deg, #FFB6D9 0%, #D5A5FF 100%)',
-  borderRadius: '16px',
   display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
   padding: '20px',
+  flexShrink: 0,
+  position: 'relative',
 });
 
 export const sliderContent = style({
@@ -101,6 +111,42 @@ export const sliderContent = style({
   fontSize: '18px',
   fontWeight: '600',
   color: '#fff',
+  marginBottom: '40px',
+});
+
+export const sliderDots = style({
+  display: 'flex',
+  justifyContent: 'center',
+  gap: '8px',
+  position: 'absolute',
+  bottom: '16px',
+  left: '50%',
+  transform: 'translateX(-50%)',
+});
+
+export const dot = style({
+  width: '8px',
+  height: '8px',
+  borderRadius: '50%',
+  backgroundColor: 'rgba(255, 255, 255, 0.5)',
+  border: 'none',
+  cursor: 'pointer',
+  padding: 0,
+  transition: 'all 0.3s ease',
+
+  ':hover': {
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  },
+});
+
+export const dotActive = style({
+  width: '8px',
+  height: '8px',
+  borderRadius: '50%',
+  backgroundColor: '#fff',
+  border: 'none',
+  cursor: 'pointer',
+  padding: 0,
 });
 
 export const tabs = style({

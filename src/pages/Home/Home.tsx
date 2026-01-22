@@ -1,25 +1,75 @@
 import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
 import BottomNav from '@/components/BottomNav';
+import Guide from '@/components/Guide';
 import Header from '@/components/Header';
-import { Loading3D } from '@/components/loading';
 import Layout from '../layout/Layout';
 import * as styles from './style/Home.css';
 
 export default function Home() {
   const navigate = useNavigate();
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [showGuide, setShowGuide] = useState(false);
+
+  const slides = [
+    { id: 1, content: '성향 테스트 하러가기' },
+    { id: 2, content: '슬라이드 2' },
+    { id: 3, content: '슬라이드 3' },
+  ];
+
+  const guideSteps = [
+    {
+      target: `.${styles.chatButton}`,
+      message: 'AI 챗봇에게 궁금한걸 물어보세요 !',
+      position: 'bottom' as const,
+    },
+    {
+      target: `.${styles.emptyState}`,
+      message: '최근에 요약한 상담내역을 볼 수 있습니다 !',
+      position: 'bottom' as const,
+    },
+    {
+      target: `.${styles.sliderWrapper}`,
+      message: '슬라이더를 통해 다른 기능들도 확인하실 수 있어요 !',
+      position: 'bottom' as const,
+    },
+    {
+      target: `.${styles.productList}`,
+      message: '유플러스의 다양한 상품들을 확인하실 수 있습니다 !',
+      position: 'top' as const,
+    },
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // 테스트용: 매번 가이드 표시
+  useEffect(() => {
+    setTimeout(() => setShowGuide(true), 500);
+  }, []);
+
+  const handleGuideComplete = () => {
+    setShowGuide(false);
+    // localStorage.setItem("hasSeenHomeGuide", "true"); // 테스트용 주석 처리
+  };
 
   return (
     <Layout>
       <Header />
 
       <div className={styles.container}>
-        <div style={{ width: '200px', height: '200px' }}>
+        {/* <div style={{ width: "200px", height: "200px" }}>
           <Loading3D
             textureUrl="src/assets/images/search-moono.png"
             floatSpeed={1.8}
             rotation={0.5}
           />
-        </div>
+        </div> */}
 
         {/* AI 챗봇 버튼 */}
         <button
@@ -39,9 +89,29 @@ export default function Home() {
 
         {/* 이벤트 슬라이더 */}
         <section className={styles.section}>
-          <div className={styles.slider}>
-            <div className={styles.sliderCard}>
-              <div className={styles.sliderContent}>성향 테스트 하러가기</div>
+          <div className={styles.sliderWrapper}>
+            <div
+              className={styles.sliderTrack}
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            >
+              {slides.map((slide) => (
+                <div key={slide.id} className={styles.sliderCard}>
+                  <div className={styles.sliderContent}>{slide.content}</div>
+                </div>
+              ))}
+            </div>
+            <div className={styles.sliderDots}>
+              {slides.map((slide, index) => (
+                <button
+                  key={slide.id}
+                  type="button"
+                  className={
+                    currentSlide === index ? styles.dotActive : styles.dot
+                  }
+                  onClick={() => setCurrentSlide(index)}
+                  aria-label={`슬라이드 ${index + 1}로 이동`}
+                />
+              ))}
             </div>
           </div>
         </section>
@@ -82,6 +152,10 @@ export default function Home() {
       </div>
 
       <BottomNav />
+
+      {showGuide && (
+        <Guide steps={guideSteps} onComplete={handleGuideComplete} />
+      )}
     </Layout>
   );
 }

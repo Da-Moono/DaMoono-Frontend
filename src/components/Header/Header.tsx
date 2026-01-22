@@ -1,4 +1,4 @@
-import logo from '@/assets/images/logo.png';
+import logo from '@/assets/images/logo-removebg.png';
 import * as styles from './style/Header.css';
 
 export default function Header() {

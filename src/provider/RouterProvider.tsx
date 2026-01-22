@@ -5,6 +5,8 @@ import ChatManualPage from '../pages/Chat/ChatManualPage';
 import ChatPage from '../pages/Chat/ChatPage';
 import Home from '../pages/Home/Home';
 import Login from '../pages/Login/Login';
+import Plan from '../pages/Plan/Plan';
+import Subscribe from '../pages/Subscribe/Subscribe';
 import Summary from '../pages/Summary/SummaryPage';
 import { PAGE_PATHS } from '../shared/config/paths';
 
@@ -33,6 +35,14 @@ export default function RouterProvider() {
     {
       path: PAGE_PATHS.ADMIN,
       Component: Admin,
+    },
+    {
+      path: PAGE_PATHS.PLAN,
+      Component: Plan,
+    },
+    {
+      path: PAGE_PATHS.SUBSCRIBE,
+      Component: Subscribe,
     },
   ]);
   return <Provider router={router} />;
