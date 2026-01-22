@@ -5,4 +5,5 @@ export const PAGE_PATHS = {
   CHAT_MANUAL: '/chat/manual',
   SUMMARY: '/summary',
   ADMIN: '/admin',
+  MYPAGE: '/mypage',
 };
