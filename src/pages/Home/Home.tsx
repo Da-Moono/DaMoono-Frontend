@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useNavigate } from 'react-router';
 import BottomNav from '@/components/BottomNav';
 import Header from '@/components/Header';
@@ -84,4 +85,10 @@ export default function Home() {
       <BottomNav />
     </Layout>
   );
+=======
+import { container } from './style/Home.css';
+
+export default function Home() {
+  return <div className={container}>This is Home</div>;
+>>>>>>> 3e2f934 (feat : 고객센터 페이지 구현)
 }
