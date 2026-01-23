@@ -12,4 +12,5 @@ export const PAGE_PATHS = {
   PLAN: '/plan',
   SUBSCRIBE: '/subscribe',
   MYPAGE: '/mypage',
+  COUNSEL: '/counsel',
 };

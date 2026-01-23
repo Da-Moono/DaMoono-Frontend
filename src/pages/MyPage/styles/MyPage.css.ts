@@ -7,6 +7,7 @@ export const mypage = style({
   paddingBottom: '80px',
   display: 'flex',
   flexDirection: 'column',
+  marginTop: '50px',
 });
 
 // 마이페이지 상담섹션 컨테이너 스타일
