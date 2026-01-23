@@ -1,5 +1,7 @@
 export const PAGE_PATHS = {
   LOGIN: '/',
+  LOGIN_FORM: '/login/form',
+  SIGNUP: '/signup',
   HOME: '/home',
   SUMMARY: '/summary',
   ADMIN: '/admin',

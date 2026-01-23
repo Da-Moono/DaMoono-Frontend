@@ -10,6 +10,8 @@ import ChatManualPage from '../pages/Chat/ChatManualPage';
 import ChatPage from '../pages/Chat/ChatPage';
 import Home from '../pages/Home/Home';
 import Login from '../pages/Login/Login';
+import LoginForm from '../pages/Login/LoginForm';
+import Signup from '../pages/Login/Signup';
 import PersonalityTest from '../pages/PersonalityTest/PersonalityTest';
 import Plan from '../pages/Plan/Plan';
 import Subscribe from '../pages/Subscribe/Subscribe';
@@ -21,6 +23,14 @@ export default function RouterProvider() {
     {
       path: PAGE_PATHS.LOGIN,
       Component: Login,
+    },
+    {
+      path: PAGE_PATHS.LOGIN_FORM,
+      Component: LoginForm,
+    },
+    {
+      path: PAGE_PATHS.SIGNUP,
+      Component: Signup,
     },
     {
       path: PAGE_PATHS.HOME,
