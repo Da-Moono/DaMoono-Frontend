@@ -49,14 +49,17 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  // 테스트용: 매번 가이드 표시
+  // 첫 방문 체크 및 가이드 표시
   useEffect(() => {
-    setTimeout(() => setShowGuide(true), 500);
+    const hasSeenGuide = localStorage.getItem('hasSeenHomeGuide');
+    if (!hasSeenGuide) {
+      setTimeout(() => setShowGuide(true), 500);
+    }
   }, []);
 
   const handleGuideComplete = () => {
     setShowGuide(false);
-    // localStorage.setItem("hasSeenHomeGuide", "true"); // 테스트용 주석 처리
+    localStorage.setItem('hasSeenHomeGuide', 'true');
   };
 
   return (
