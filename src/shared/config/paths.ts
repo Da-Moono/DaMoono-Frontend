@@ -11,5 +11,6 @@ export const PAGE_PATHS = {
   MINOR_GUIDE: '/minor_guide',
   PLAN: '/plan',
   SUBSCRIBE: '/subscribe',
+  PERSONALITY_TEST: '/personality-test',
   MYPAGE: '/mypage',
 };

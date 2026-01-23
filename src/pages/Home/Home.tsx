@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import BottomNav from '@/components/BottomNav';
 import Guide from '@/components/Guide';
 import Header from '@/components/Header';
+import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
 import * as styles from './style/Home.css';
 
@@ -95,9 +96,19 @@ export default function Home() {
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
               {slides.map((slide) => (
-                <div key={slide.id} className={styles.sliderCard}>
+                <button
+                  key={slide.id}
+                  type="button"
+                  className={styles.sliderCard}
+                  onClick={() => {
+                    if (slide.id === 1) {
+                      navigate(PAGE_PATHS.PERSONALITY_TEST);
+                    }
+                  }}
+                  disabled={slide.id !== 1}
+                >
                   <div className={styles.sliderContent}>{slide.content}</div>
-                </div>
+                </button>
               ))}
             </div>
             <div className={styles.sliderDots}>

@@ -10,6 +10,7 @@ import ChatManualPage from '../pages/Chat/ChatManualPage';
 import ChatPage from '../pages/Chat/ChatPage';
 import Home from '../pages/Home/Home';
 import Login from '../pages/Login/Login';
+import PersonalityTest from '../pages/PersonalityTest/PersonalityTest';
 import Plan from '../pages/Plan/Plan';
 import Subscribe from '../pages/Subscribe/Subscribe';
 import Summary from '../pages/Summary/SummaryPage';
@@ -70,6 +71,10 @@ export default function RouterProvider() {
     {
       path: PAGE_PATHS.SUBSCRIBE,
       Component: Subscribe,
+    },
+    {
+      path: PAGE_PATHS.PERSONALITY_TEST,
+      Component: PersonalityTest,
     },
   ]);
   return <Provider router={router} />;
