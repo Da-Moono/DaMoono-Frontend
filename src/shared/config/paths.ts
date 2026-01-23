@@ -1,5 +1,7 @@
 export const PAGE_PATHS = {
   LOGIN: '/',
+  LOGIN_FORM: '/login/form',
+  SIGNUP: '/signup',
   HOME: '/home',
   SUMMARY: '/summary',
   ADMIN: '/admin',
@@ -7,4 +9,13 @@ export const PAGE_PATHS = {
   PLAN_DETAIL: '/plan/:id',
   SUBSCRIBE: '/subscribe',
   SUBSCRIBE_DETAIL: '/subscribe/:id',
+  PERSONALITY_TEST: '/personality-test',
+  CHAT: '/chat',
+  CHAT_MANUAL: '/chat/manual',
+  MYPAGE: '/mypage',
+  COUNSEL: '/counsel',
+  CUSTOMER_SERVICE: '/customer-service',
+  ARMY_GUIDE: '/customer-service/army',
+  PROXY_GUIDE: '/customer-service/proxy',
+  MINOR_GUIDE: '/customer-service/minor',
 };

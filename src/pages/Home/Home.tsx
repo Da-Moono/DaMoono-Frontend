@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import BottomNav from '@/components/BottomNav';
 import Guide from '@/components/Guide';
 import Header from '@/components/Header';
+import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
 import * as styles from './style/Home.css';
 
 export default function Home() {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showGuide, setShowGuide] = useState(false);
 
@@ -46,14 +49,17 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  // 테스트용: 매번 가이드 표시
+  // 첫 방문 체크 및 가이드 표시
   useEffect(() => {
-    setTimeout(() => setShowGuide(true), 500);
+    const hasSeenGuide = localStorage.getItem('hasSeenHomeGuide');
+    if (!hasSeenGuide) {
+      setTimeout(() => setShowGuide(true), 500);
+    }
   }, []);
 
   const handleGuideComplete = () => {
     setShowGuide(false);
-    // localStorage.setItem("hasSeenHomeGuide", "true"); // 테스트용 주석 처리
+    localStorage.setItem('hasSeenHomeGuide', 'true');
   };
 
   return (
@@ -70,7 +76,11 @@ export default function Home() {
         </div> */}
 
         {/* AI 챗봇 버튼 */}
-        <button type="button" className={styles.chatButton}>
+        <button
+          type="button"
+          className={styles.chatButton}
+          onClick={() => navigate('/chat')}
+        >
           <span className={styles.chatText}>무너에게 다 무너봐~</span>
           <span className={styles.chatBadge}>채팅하기</span>
         </button>
@@ -89,9 +99,19 @@ export default function Home() {
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
               {slides.map((slide) => (
-                <div key={slide.id} className={styles.sliderCard}>
+                <button
+                  key={slide.id}
+                  type="button"
+                  className={styles.sliderCard}
+                  onClick={() => {
+                    if (slide.id === 1) {
+                      navigate(PAGE_PATHS.PERSONALITY_TEST);
+                    }
+                  }}
+                  disabled={slide.id !== 1}
+                >
                   <div className={styles.sliderContent}>{slide.content}</div>
-                </div>
+                </button>
               ))}
             </div>
             <div className={styles.sliderDots}>

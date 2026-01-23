@@ -102,6 +102,12 @@ export const sliderCard = style({
   padding: '20px',
   flexShrink: 0,
   position: 'relative',
+  border: 'none',
+  cursor: 'pointer',
+
+  ':disabled': {
+    cursor: 'default',
+  },
 });
 
 export const sliderContent = style({
