@@ -2,8 +2,105 @@ import { motion } from 'framer-motion';
 import BottomNav from '@/components/BottomNav/BottomNav';
 import Header from '@/components/Header/Header';
 import Layout from '@/pages/layout/Layout';
+import * as s from '@/pages/Summary/style/SummaryPage.css';
 import CharacterScene from './CharacterScene';
-import * as s from './SummaryPage.css';
+import Accordion from './components/Accordion';
+import StatusCard from './components/StatusCard';
+import SummaryResultCard from './components/SummaryResultCard';
+import WarningCard from './components/WarningCard';
+
+const MOCK_SUMMARY_DATA = {
+  id: 'NET-77531',
+  category: '품질',
+  summary: '네트워크 품질측정 티켓 접수 및 단말기 임시 조치 가이드 안내 완료',
+
+  // 2. 처리된 핵심 조치
+  coreActions: [
+    {
+      id: 1,
+      icon: '🛡️',
+      title: '네트워크 품질측정 티켓 등록',
+      description: 'NET-77531 (현장팀 분석 착수)',
+    },
+    {
+      id: 2,
+      icon: '📱',
+      title: '단말기 임시 개선 설정 안내',
+      description: 'LTE 고정 등 4단계 설정법 가이드',
+    },
+    {
+      id: 3,
+      icon: '⏰',
+      title: '결과 안내 예약',
+      description: '영업일 {N}일 내 문자 또는 콜백(해피콜) 예정',
+    },
+  ],
+
+  // 3. 현재 적용 상태
+  currentStatus: [
+    {
+      icon: '✨',
+      label: '처리 상태',
+      detail: '현장 점검 단계',
+      value: '품질 분석 중',
+    },
+    {
+      icon: '🛡️',
+      label: '티켓 번호',
+      detail: '', // 없는 경우 빈 문자열
+      value: 'NET-77531',
+    },
+    {
+      icon: '📱',
+      label: '기기 정보',
+      detail: '단말 모델',
+      value: 'ios 최신',
+    },
+    {
+      icon: '📶',
+      label: '임시 설정 LTE 고정',
+      detail: '4G 우선',
+      value: '적용 완료',
+    },
+  ],
+
+  // 4. 필수 확인 및 주의사항
+  notices: [
+    {
+      id: 1,
+      title: '피크 타임: ',
+      text: '저녁 {19:00~22:00} 혼잡 시간대에는 속도 저하가 발생할 수 있습니다.',
+    },
+    {
+      id: 2,
+      title: '재측정: ',
+      text: '설정 변경 후 {5~10}분 뒤 개선 여부를 다시 확인해 주세요.',
+    },
+    {
+      id: 3,
+      title: '추가 제보:',
+      text: ' 통화 끊김(콜드랍) 발생 시 더 정밀한 분석이 가능합니다.',
+    },
+  ],
+
+  // 5. 다음 단계 안내
+  nextActions: [
+    '📩 문자로 전송된 상세 조치 가이드 및 티켓 정보 확인',
+    '📞 현장팀 분석 완료 후 담당 상담사의 안내 전화(콜백) 대기',
+  ],
+
+  // 6. 이용 가이드 및 꿀팁
+  guides: {
+    title: '📍 단말기 임시 개선 조치 순서',
+    steps: [
+      '설정에서 LTE 고정(4G 우선)으로 전환',
+      'VoLTE 및 Wi-Fi 통화 기능 ON(활성화)',
+      '단말기 전원 재부팅 후 재측정',
+    ],
+  },
+
+  tips: ['🎁 Wi-Fi 우선 사용 권장: 실내에서는 Wi-Fi 연결을 추천드립니다.'],
+};
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -35,19 +132,30 @@ const SummaryPage = () => {
         animate="visible"
       >
         <motion.section className={s.characterSection} variants={itemVariants}>
+          <p>
+            상담 결과 <br /> 요약 및 후속 조치
+          </p>
           <CharacterScene />
         </motion.section>
 
         <motion.section className={s.contentSection} variants={itemVariants}>
-          <div className={s.cardDummy}>상담 결과 요약 섹션</div>
+          <SummaryResultCard
+            category={MOCK_SUMMARY_DATA.category}
+            summary={MOCK_SUMMARY_DATA.summary}
+            coreActions={MOCK_SUMMARY_DATA.coreActions}
+          />
         </motion.section>
 
         <motion.section className={s.contentSection} variants={itemVariants}>
-          <div className={s.cardDummy}>현재 적용 상태 섹션</div>
+          <StatusCard currentStatus={MOCK_SUMMARY_DATA.currentStatus} />
         </motion.section>
 
         <motion.section className={s.contentSection} variants={itemVariants}>
-          <div className={s.cardDummy}>이용 가이드 섹션</div>
+          <WarningCard notices={MOCK_SUMMARY_DATA.notices} />
+        </motion.section>
+
+        <motion.section className={s.contentSection} variants={itemVariants}>
+          <Accordion guides={MOCK_SUMMARY_DATA.guides} />
         </motion.section>
       </motion.div>
 

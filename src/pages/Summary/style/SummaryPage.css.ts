@@ -1,19 +1,22 @@
 import { style } from '@vanilla-extract/css';
 
 export const pageContainer = style({
-  padding: '20px',
+  padding: '100px 20px 100px 20px',
   display: 'flex',
   flexDirection: 'column',
   gap: '16px',
-  backgroundColor: '#F9F9F9', // 배경색 예시
   minHeight: '100vh',
 });
 
 export const characterSection = style({
   width: '100%',
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'space-between',
   alignItems: 'center',
+  fontFamily: 'SCDream',
+  padding: '30px 10px',
+  fontWeight: 700,
+  fontSize: 30,
 });
 
 export const contentSection = style({
