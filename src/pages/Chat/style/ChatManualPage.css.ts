@@ -14,9 +14,19 @@ export const content = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '30px 20px 120px',
-  gap: '16px',
+  padding: '80px 20px 120px',
+  gap: '20px',
   overflow: 'hidden',
+  '@media': {
+    'screen and (max-height: 700px)': {
+      padding: '70px 20px 100px',
+      gap: '15px',
+    },
+    'screen and (max-height: 600px)': {
+      padding: '60px 20px 90px',
+      gap: '10px',
+    },
+  },
 });
 
 export const title = style({
@@ -24,8 +34,18 @@ export const title = style({
   fontSize: '24px',
   fontWeight: 700,
   color: '#333',
-  margin: '0 0 4px',
+  margin: '10px 0 4px',
   textAlign: 'center',
+  '@media': {
+    'screen and (max-height: 700px)': {
+      fontSize: '22px',
+      margin: '8px 0 4px',
+    },
+    'screen and (max-height: 600px)': {
+      fontSize: '20px',
+      margin: '6px 0 3px',
+    },
+  },
 });
 
 export const subtitle = style({
@@ -37,13 +57,23 @@ export const subtitle = style({
   textAlign: 'center',
   whiteSpace: 'pre-line',
   lineHeight: 1.5,
+  '@media': {
+    'screen and (max-height: 700px)': {
+      fontSize: '15px',
+      margin: '0 0 6px',
+    },
+    'screen and (max-height: 600px)': {
+      fontSize: '14px',
+      margin: '0 0 5px',
+    },
+  },
 });
 
 export const indicators = style({
   display: 'flex',
   gap: '10px',
   justifyContent: 'center',
-  margin: '2px 0 4px',
+  margin: '2px 0 6px',
 });
 
 export const indicator = style({
@@ -69,23 +99,45 @@ export const indicatorActive = style({
 
 export const imageContainer = style({
   width: '100%',
-  maxWidth: '180px',
+  maxWidth: '220px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'flex-start',
   margin: '12px 0',
   flex: '0 0 auto',
+  '@media': {
+    'screen and (max-height: 700px)': {
+      maxWidth: '180px',
+      margin: '10px 0',
+    },
+    'screen and (max-height: 600px)': {
+      maxWidth: '150px',
+      margin: '8px 0',
+    },
+  },
 });
 
 export const manualImageContainer = style({
   width: '100%',
-  maxWidth: '200px',
+  maxWidth: '300px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'flex-start',
   margin: '12px 0',
   flex: '0 0 auto',
   maxHeight: 'calc(100vh - 450px)',
+  '@media': {
+    'screen and (max-height: 700px)': {
+      maxWidth: '250px',
+      maxHeight: 'calc(100vh - 400px)',
+      margin: '10px 0',
+    },
+    'screen and (max-height: 600px)': {
+      maxWidth: '200px',
+      maxHeight: 'calc(100vh - 350px)',
+      margin: '8px 0',
+    },
+  },
 });
 
 export const image = style({
@@ -100,10 +152,20 @@ export const description = style({
   fontSize: '14px',
   fontWeight: 400,
   color: '#999',
-  margin: '16px 0 0 0',
+  margin: '30px 0 0 0',
   textAlign: 'center',
   whiteSpace: 'pre-line',
   lineHeight: 1.6,
+  '@media': {
+    'screen and (max-height: 700px)': {
+      fontSize: '13px',
+      margin: '20px 0 0 0',
+    },
+    'screen and (max-height: 600px)': {
+      fontSize: '12px',
+      margin: '15px 0 0 0',
+    },
+  },
 });
 
 export const navButtonLeft = style({
@@ -183,5 +245,17 @@ export const startButton = style({
   transition: 'all 0.3s',
   ':hover': {
     backgroundColor: '#FFE253',
+  },
+  '@media': {
+    'screen and (max-height: 700px)': {
+      bottom: '80px',
+      padding: '9px',
+      fontSize: '17px',
+    },
+    'screen and (max-height: 600px)': {
+      bottom: '70px',
+      padding: '8px',
+      fontSize: '16px',
+    },
   },
 });

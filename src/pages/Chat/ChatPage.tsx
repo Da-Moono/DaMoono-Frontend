@@ -5,6 +5,7 @@ import chatIcon from '@/assets/images/chat.png';
 import infoIcon from '@/assets/images/info-icon.png';
 import moonerbot from '@/assets/images/moonerbot.png';
 import BottomNav from '@/components/BottomNav';
+import Header from '@/components/Header';
 import Layout from '../layout/Layout';
 import ChatInput from './components/ChatInput';
 import MessageCard from './components/MessageCard';
@@ -51,9 +52,19 @@ export default function ChatPage() {
     if (contentRef.current) {
       contentRef.current.scrollTop = contentRef.current.scrollHeight;
     }
-  }, []);
+  });
 
   const handleSendMessage = async (content: string) => {
+    // "상담사 연결" 키워드 체크
+    if (
+      content.includes('상담사 연결') ||
+      content.includes('상담사연결') ||
+      content.includes('채팅 상담사 연결')
+    ) {
+      navigate('/chat/consult');
+      return;
+    }
+
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
@@ -175,6 +186,8 @@ export default function ChatPage() {
         isListening={isListening}
         onListeningChange={setIsListening}
       />
+
+      <Header />
 
       <div className={styles.container}>
         <div className={styles.chatHeader}>

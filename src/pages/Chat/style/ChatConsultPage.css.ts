@@ -1,131 +1,70 @@
 import { keyframes, style } from '@vanilla-extract/css';
 
-// 로딩 애니메이션
-const dotFlashing = keyframes({
+const bounce = keyframes({
   '0%, 80%, 100%': {
-    opacity: 0.3,
+    transform: 'scale(0)',
   },
   '40%': {
-    opacity: 1,
+    transform: 'scale(1)',
   },
 });
 
-// Container
 export const container = style({
   display: 'flex',
   flexDirection: 'column',
-  height: '100vh',
+  minHeight: '100vh',
   backgroundColor: '#FEFDFD',
   position: 'relative',
-  maxWidth: '480px',
-  margin: '0 auto',
   paddingTop: '60px',
 });
 
-// Chat Header (채팅 페이지 내부 헤더)
-export const chatHeader = style({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '8px',
-  padding: '16px 20px',
+export const statusContainer = style({
+  padding: '4px 20px 8px',
   backgroundColor: '#fff',
 });
 
-export const headerIcon = style({
-  width: '20px',
-  height: '20px',
+export const statusHeader = style({
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: '6px',
 });
 
-export const headerTitle = style({
+export const statusIndicator = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+});
+
+export const statusDot = style({
+  width: '10px',
+  height: '10px',
+  borderRadius: '50%',
+  backgroundColor: '#FF1F1F',
+});
+
+export const statusText = style({
   fontFamily: 'S-Core Dream',
   fontSize: '16px',
-  fontWeight: 400,
+  fontWeight: 500,
   color: '#333',
 });
 
-// Content
+export const statusSubtext = style({
+  fontFamily: 'S-Core Dream',
+  fontSize: '10px',
+  fontWeight: 300,
+  color: '#999',
+  margin: 0,
+});
+
 export const content = style({
   flex: 1,
   overflowY: 'auto',
   padding: '20px',
   paddingBottom: '180px',
+  backgroundColor: '#FEFDFD',
 });
 
-// Welcome Section
-export const welcomeSection = style({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '12px',
-  marginBottom: '24px',
-});
-
-export const welcomeIcon = style({
-  width: '50px',
-  height: '50px',
-  borderRadius: '50%',
-});
-
-export const welcomeText = style({
-  fontFamily: 'S-Core Dream',
-  fontSize: '16px',
-  fontWeight: 500,
-  color: '#333',
-  lineHeight: '1.5',
-  margin: 0,
-});
-
-// Recommended Questions
-export const recommendedSection = style({
-  marginBottom: '20px',
-});
-
-export const recommendedTitle = style({
-  fontFamily: 'S-Core Dream',
-  fontSize: '14px',
-  fontWeight: 600,
-  color: '#727272',
-  margin: 0,
-  marginBottom: '16px',
-});
-
-export const questionList = style({
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: '10px',
-  justifyContent: 'flex-start',
-});
-
-export const questionButton = style({
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '6px',
-  padding: '10px 16px',
-  backgroundColor: '#fff',
-  border: 'none',
-  borderRadius: '40px',
-  fontFamily: 'S-Core Dream',
-  fontSize: '13px',
-  fontWeight: 400,
-  color: '#000',
-  textAlign: 'center',
-  cursor: 'pointer',
-  transition: 'all 0.2s',
-  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-  whiteSpace: 'nowrap',
-
-  ':hover': {
-    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.15)',
-    transform: 'translateY(-2px)',
-  },
-});
-
-export const infoIcon = style({
-  width: '18px',
-  height: '18px',
-});
-
-// Messages
 export const messagesContainer = style({
   display: 'flex',
   flexDirection: 'column',
@@ -216,12 +155,11 @@ export const timestamp = style({
   marginLeft: '8px',
 });
 
-// 로딩 애니메이션
 export const loadingDots = style({
   display: 'flex',
   gap: '4px',
   alignItems: 'center',
-  padding: '8px 0',
+  padding: '4px 0',
 });
 
 export const loadingDot = style({
@@ -229,16 +167,13 @@ export const loadingDot = style({
   height: '8px',
   borderRadius: '50%',
   backgroundColor: '#999',
-  animation: `${dotFlashing} 1.4s infinite ease-in-out`,
+  animation: `${bounce} 1.4s infinite ease-in-out both`,
   selectors: {
     '&:nth-child(1)': {
-      animationDelay: '0s',
+      animationDelay: '-0.32s',
     },
     '&:nth-child(2)': {
-      animationDelay: '0.2s',
-    },
-    '&:nth-child(3)': {
-      animationDelay: '0.4s',
+      animationDelay: '-0.16s',
     },
   },
 });

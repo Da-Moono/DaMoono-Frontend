@@ -61,7 +61,7 @@ export default function ChatInput({
   };
 
   const handleConsultant = () => {
-    // 상담사 연결 로직 (추후 구현)
+    navigate('/chat/consult');
     setShowMenu(false);
   };
 

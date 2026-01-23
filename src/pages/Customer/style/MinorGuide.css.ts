@@ -141,7 +141,7 @@ export const linkButton = style({
   fontFamily: "'S-Core Dream', sans-serif",
   fontWeight: 500,
   fontSize: '12px',
-  marginTop: '-4px',
+  marginTop: '12px',
   alignSelf: 'center',
   marginLeft: '-30px',
   cursor: 'pointer',
