@@ -18,4 +18,5 @@ export const PAGE_PATHS = {
   ARMY_GUIDE: '/customer-service/army',
   PROXY_GUIDE: '/customer-service/proxy',
   MINOR_GUIDE: '/customer-service/minor',
+  LOGIN_GUARD: '/login-guard',
 };

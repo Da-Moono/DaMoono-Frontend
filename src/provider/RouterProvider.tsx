@@ -6,6 +6,7 @@ import MinorGuide from '@/pages/Customer/MinorGuide';
 import ProxyGuide from '@/pages/Customer/ProxyGuide';
 import MyPage from '@/pages/MyPage/MyPage';
 import Counsel from '@/pages/MyPage/pages/Counsel';
+import ProtectedRoute from '@/shared/routes/ProtectedRoute';
 import Admin from '../pages/Admin/Admin';
 import ChatAdminPage from '../pages/Chat/ChatAdminPage';
 import ChatConsultPage from '../pages/Chat/ChatConsultPage';
@@ -68,6 +69,14 @@ export default function RouterProvider() {
     {
       path: PAGE_PATHS.MYPAGE,
       Component: MyPage,
+    },
+    {
+      path: PAGE_PATHS.LOGIN_GUARD,
+      element: (
+        <ProtectedRoute>
+          <MyPage />
+        </ProtectedRoute>
+      ),
     },
     {
       path: PAGE_PATHS.CUSTOMER_SERVICE,
