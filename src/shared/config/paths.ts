@@ -19,4 +19,5 @@ export const PAGE_PATHS = {
   PROXY_GUIDE: '/customer-service/proxy',
   MINOR_GUIDE: '/customer-service/minor',
   LOGIN_GUARD: '/login-guard',
+  TIPS_GUIDE: '/mypage/tips',
 };

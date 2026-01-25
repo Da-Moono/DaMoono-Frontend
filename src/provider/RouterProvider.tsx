@@ -16,6 +16,7 @@ import Home from '../pages/Home/Home';
 import Login from '../pages/Login/Login';
 import LoginForm from '../pages/Login/LoginForm';
 import Signup from '../pages/Login/Signup';
+import Tips from '../pages/MyPage/pages/Tips';
 import PersonalityTest from '../pages/PersonalityTest/PersonalityTest';
 import Plan from '../pages/Plan/Plan';
 import PlanDetail from '../pages/Plan/PlanDetail';
@@ -115,6 +116,10 @@ export default function RouterProvider() {
     {
       path: PAGE_PATHS.PERSONALITY_TEST,
       Component: PersonalityTest,
+    },
+    {
+      path: PAGE_PATHS.TIPS_GUIDE,
+      Component: Tips,
     },
   ]);
   return <Provider router={router} />;
