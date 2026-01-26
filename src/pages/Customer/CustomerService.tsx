@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
+import { PAGE_PATHS } from '../../shared/config/paths';
 import Layout from '../layout/Layout';
 import { faqs } from './FAQ.ts';
 import * as S from './style/CustomerService.css.ts';
@@ -21,17 +22,21 @@ export default function CustomerService() {
 
   // 선택된 카테고리에 따른 페이지 이동
   const handleGuideButtonClick = () => {
-    if (selectedCategory === 'army') navigate('/army_guide');
-    if (selectedCategory === 'agent') navigate('/Proxy_guide');
-    if (selectedCategory === 'minor') navigate('/minor_guide');
+    if (selectedCategory === 'army') {
+      navigate(PAGE_PATHS.ARMY_GUIDE);
+    }
+    if (selectedCategory === 'proxy') {
+      navigate(PAGE_PATHS.PROXY_GUIDE);
+    }
+    if (selectedCategory === 'minor') {
+      navigate(PAGE_PATHS.MINOR_GUIDE);
+    }
   };
 
   // --- 필터링 로직 ---
   const filteredFaqs = faqs.filter((faq) => {
-    // '전체'일 때는 TOP10만, 그 외엔 해당 카테고리만 필터링
     const matchesTab =
       activeTab === '전체' ? faq.isTop10 : faq.category === activeTab;
-    // 제목 검색어 포함 여부 확인
     const matchesSearch = faq.title
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
@@ -40,7 +45,6 @@ export default function CustomerService() {
 
   return (
     <Layout>
-      {/* 고정 상단 영역: 검색 및 탭 */}
       <header className={S.headerSection}>
         <div className={S.topLogo} />
         <div className={S.faqCharacter} />
@@ -62,7 +66,7 @@ export default function CustomerService() {
                 className={`${S.categoryTab} ${activeTab === cat ? S.activeTab : ''}`}
                 onClick={() => {
                   setActiveTab(cat);
-                  setOpenId(null); // 탭 변경 시 열려있던 FAQ 닫기
+                  setOpenId(null);
                 }}
               >
                 {cat}
@@ -72,14 +76,13 @@ export default function CustomerService() {
         </div>
       </header>
 
-      {/* 스크롤 영역: FAQ 리스트 및 가이드 프레임 */}
       <div className={S.scrollArea}>
         <div className={S.faqListWrapper}>
           {filteredFaqs.map((faq) => (
             <div
               key={faq.id}
               className={S.faqItemBox}
-              style={{ height: openId === faq.id ? 'auto' : '50px' }} // 열림/닫힘 높이 조절
+              style={{ height: openId === faq.id ? 'auto' : '50px' }}
             >
               <button
                 type="button"
@@ -92,13 +95,12 @@ export default function CustomerService() {
                 />
               </button>
               {openId === faq.id && (
-                <div className={S.faqAnswer}>{faq.content}</div> // 아코디언 답변 내용
+                <div className={S.faqAnswer}>{faq.content}</div>
               )}
             </div>
           ))}
         </div>
 
-        {/* 하단 서류 확인 가이드 영역 */}
         <div className={S.guideFrame}>
           <p
             style={{ textAlign: 'center', paddingTop: '20px', fontWeight: 700 }}
@@ -113,7 +115,7 @@ export default function CustomerService() {
               marginTop: '20px',
             }}
           >
-            {/* 선택 시 노란색 테두리 및 체크 표시 로직 */}
+            {/* 군인 혜택 */}
             <button
               type="button"
               className={S.categoryBox}
@@ -127,19 +129,22 @@ export default function CustomerService() {
             >
               군인 혜택 {selectedCategory === 'army' && '✓'}
             </button>
+
             <button
               type="button"
               className={S.categoryBox}
               style={{
                 border:
-                  selectedCategory === 'agent'
+                  selectedCategory === 'proxy'
                     ? '2px solid #FBC02D'
                     : '1px solid #EFEFEF',
               }}
-              onClick={() => handleCategorySelect('agent')}
+              onClick={() => handleCategorySelect('proxy')}
             >
-              대리인 서류 {selectedCategory === 'agent' && '✓'}
+              대리인 서류 {selectedCategory === 'proxy' && '✓'}
             </button>
+
+            {/* 미성년자 가입 */}
             <button
               type="button"
               className={S.categoryBox}
@@ -158,7 +163,7 @@ export default function CustomerService() {
             type="button"
             className={`${S.guideButton} ${selectedCategory ? S.buttonActive : S.buttonDisabled}`}
             onClick={handleGuideButtonClick}
-            disabled={!selectedCategory} // 카테고리 미선택 시 버튼 비활성화
+            disabled={!selectedCategory}
           >
             서류 확인하기 →
           </button>

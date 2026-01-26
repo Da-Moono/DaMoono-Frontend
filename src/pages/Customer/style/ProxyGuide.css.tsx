@@ -22,7 +22,6 @@ export const topLogo = style({
   backgroundRepeat: 'no-repeat',
 });
 
-// 💡 기본 마진 16px 반영
 export const headerFrame = style({
   position: 'absolute',
   width: 'calc(100% - 32px)',
@@ -158,7 +157,6 @@ export const linkButton = style({
 
 export const warningBox = style({
   position: 'fixed',
-  // 💡 하단 네비바(80px) 바로 위에 오도록 설정
   bottom: '80px',
   width: 'inherit',
   maxWidth: '480px',
@@ -179,7 +177,6 @@ export const warningText = style({
   textAlign: 'center',
 });
 
-// 💡 하단 네비바 스타일 유지 (중첩 방지 및 최상단 노출 고정)
 export const navBar = style({
   position: 'fixed',
   bottom: 0,

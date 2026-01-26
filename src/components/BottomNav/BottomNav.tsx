@@ -9,7 +9,7 @@ export default function BottomNav() {
       <button
         type="button"
         className={styles.navItem}
-        onClick={() => navigate('/customer_service')}
+        onClick={() => navigate('/customer')}
       >
         <span className={styles.navIcon}>📞</span>
         <span className={styles.navLabel}>고객센터</span>

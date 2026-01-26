@@ -1,41 +1,72 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
+import { PAGE_PATHS } from '../../shared/config/paths';
 import BridgeModal from '../Customer/BridgeModal.tsx';
 import Layout from '../layout/Layout';
 import * as S from './style/ArmyGuide.css.ts';
 
 export default function ArmyGuide() {
+  const navigate = useNavigate();
   const [checkedList, setCheckedList] = useState([false, false, false]);
   const [targetUrl, setTargetUrl] = useState<string | null>(null);
 
-  // 체크박스 토글 함수
   const handleCheck = (index: number) => {
     const newCheckedList = [...checkedList];
     newCheckedList[index] = !newCheckedList[index];
     setCheckedList(newCheckedList);
   };
 
-  // 진행률 계산 로직
   const checkedCount = checkedList.filter(Boolean).length;
   const progressPercent = Math.round((checkedCount / 3) * 100);
 
   return (
     <Layout>
       <div className={S.scrollArea}>
-        <div className={S.topLogo} />
+        {/* [수정] div를 button으로 변경하여 린트 에러 해결 */}
+        <button
+          type="button"
+          className={S.topLogo}
+          onClick={() => navigate(PAGE_PATHS.HOME)}
+          aria-label="홈으로 이동"
+          style={{
+            cursor: 'pointer',
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            display: 'block',
+            width: '100%', // 기존 div의 레이아웃을 유지하기 위함
+          }}
+        />
+
         <div className={S.headerFrame}>
           <span className={S.headerTitle}>군인 요금제 및 군인 혜택 가입</span>
         </div>
+
         <h2 className={S.subTitle}>
           다무너와 함께
           <br />
           서류를 챙겨보세요
         </h2>
-        <div className={S.characterImage} />
+
+        {/* [수정] 캐릭터 이미지 영역도 button으로 변경 */}
+        <button
+          type="button"
+          className={S.characterImage}
+          onClick={() => navigate(PAGE_PATHS.CUSTOMER_SERVICE)}
+          aria-label="고객센터 메인으로 이동"
+          style={{
+            cursor: 'pointer',
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            display: 'block',
+            margin: '0 auto', // 중앙 정렬 유지
+          }}
+        />
 
         <div className={S.statusText}>준비 현황 ({checkedCount} / 3)</div>
         <div className={S.progressBarContainer}>
-          {/* 프로그레스 바 동적 너비 적용 */}
           <div
             style={{
               width: `${progressPercent}%`,
@@ -74,9 +105,10 @@ export default function ArmyGuide() {
             <span className={S.docSubText}>입영 통지서, 선발통지서 등</span>
           </p>
           <button
+            type="button" // 타입 명시
             className={S.linkButton}
             onClick={(e) => {
-              e.stopPropagation(); // 카드 클릭 이벤트 전파 방지
+              e.stopPropagation();
               setTargetUrl('https://www.mma.go.kr');
             }}
           >
@@ -95,9 +127,10 @@ export default function ArmyGuide() {
             <span className={S.docSubText}>군 경력 확인이 필요한 경우</span>
           </p>
           <button
+            type="button" // 타입 명시
             className={S.linkButton}
             onClick={(e) => {
-              e.stopPropagation(); // 카드 클릭 이벤트 전파 방지
+              e.stopPropagation();
               setTargetUrl('https://www.gov.kr');
             }}
           >
@@ -112,7 +145,6 @@ export default function ArmyGuide() {
         </span>
       </div>
 
-      {/* 외부 링크 연결용 브릿지 모달 */}
       {targetUrl && (
         <BridgeModal url={targetUrl} onClose={() => setTargetUrl(null)} />
       )}

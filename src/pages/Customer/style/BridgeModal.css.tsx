@@ -1,15 +1,13 @@
 import { keyframes, style } from '@vanilla-extract/css';
 
-//  둥둥 떠다니는(날아가는 듯한) 애니메이션 정의
 const flyAnimation = keyframes({
-  '0%': { transform: 'translateY(0) translateX(0)' },
-  '25%': { transform: 'translateY(-10px) translateX(5px)' },
-  '50%': { transform: 'translateY(0) translateX(10px)' },
-  '75%': { transform: 'translateY(10px) translateX(5px)' },
-  '100%': { transform: 'translateY(0) translateX(0)' },
+  '0%': { transform: 'perspective(500px) translateZ(0) rotate(0deg)' },
+  '25%': { transform: 'perspective(500px) translateZ(50px) rotate(2deg)' },
+  '50%': { transform: 'perspective(500px) translateZ(100px) rotate(0deg)' },
+  '75%': { transform: 'perspective(500px) translateZ(50px) rotate(-2deg)' },
+  '100%': { transform: 'perspective(500px) translateZ(0) rotate(0deg)' },
 });
 
-//  레이아웃의 영향을 받는 전체 배경
 export const overlay = style({
   position: 'fixed',
   top: 0,
@@ -25,7 +23,6 @@ export const overlay = style({
   zIndex: 2000,
 });
 
-//  피그마 Frame 52 규격 반영
 export const modalFrame = style({
   width: 'calc(100% - 48px)',
   height: '580px',
@@ -46,7 +43,6 @@ export const characterImage = style({
   backgroundSize: 'contain',
   backgroundRepeat: 'no-repeat',
   marginBottom: '20px',
-  // 💡 애니메이션 적용: 3초 동안 무한히 부드럽게 움직임
   animation: `${flyAnimation} 3s ease-in-out infinite`,
 });
 
