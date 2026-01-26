@@ -1,12 +1,14 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
+import { PAGE_PATHS } from '../../shared/config/paths';
 import BridgeModal from '../Customer/BridgeModal.tsx';
 import Layout from '../layout/Layout';
 import * as S from './style/ProxyGuide.css';
 
 export default function ProxyGuide() {
+  const navigate = useNavigate();
   const [checkedList, setCheckedList] = useState([false, false, false]);
-
   const [targetUrl, setTargetUrl] = useState<string | null>(null);
 
   const handleCheck = (index: number) => {
@@ -21,7 +23,22 @@ export default function ProxyGuide() {
   return (
     <Layout>
       <div className={S.scrollArea}>
-        <div className={S.topLogo} />
+        {/* [수정] 상단 로고: div -> button으로 변경 */}
+        <button
+          type="button"
+          className={S.topLogo}
+          onClick={() => navigate(PAGE_PATHS.HOME)}
+          aria-label="홈으로 이동"
+          style={{
+            cursor: 'pointer',
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            display: 'block',
+            width: '100%',
+          }}
+        />
+
         <div className={S.headerFrame}>
           <span className={S.headerTitle}>대리인 신청 시 구비 서류</span>
         </div>
@@ -30,7 +47,22 @@ export default function ProxyGuide() {
           <br />
           서류를 챙겨보세요
         </h2>
-        <div className={S.characterImage} />
+
+        {/* [수정] 캐릭터 이미지: div -> button으로 변경 */}
+        <button
+          type="button"
+          className={S.characterImage}
+          onClick={() => navigate(PAGE_PATHS.CUSTOMER_SERVICE)}
+          aria-label="고객센터 메인으로 이동"
+          style={{
+            cursor: 'pointer',
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            display: 'block',
+            margin: '0 auto',
+          }}
+        />
 
         <div className={S.statusText}>준비 현황 ({checkedCount} / 3)</div>
         <div className={S.progressBarContainer}>
@@ -77,7 +109,7 @@ export default function ProxyGuide() {
           </p>
         </button>
 
-        {/* 3. 법인/기타 구비 서류 및 홈택스 링크 */}
+        {/* 3. 법인/기타 구비 서류 */}
         <button
           type="button"
           className={S.documentCard}
@@ -92,6 +124,7 @@ export default function ProxyGuide() {
             </span>
           </p>
           <button
+            type="button"
             className={S.linkButton}
             onClick={(e) => {
               e.stopPropagation();
@@ -110,12 +143,10 @@ export default function ProxyGuide() {
         </span>
       </div>
 
-      {/** 💡 브릿지 모달 렌더링 */}
       {targetUrl && (
         <BridgeModal url={targetUrl} onClose={() => setTargetUrl(null)} />
       )}
 
-      {/* 💡 공통 BottomNav 적용 */}
       <BottomNav />
     </Layout>
   );

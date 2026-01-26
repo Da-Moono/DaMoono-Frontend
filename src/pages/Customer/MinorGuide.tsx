@@ -1,28 +1,44 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
+import { PAGE_PATHS } from '../../shared/config/paths';
 import BridgeModal from '../Customer/BridgeModal.tsx';
 import Layout from '../layout/Layout';
 import * as S from './style/MinorGuide.css.ts';
 
 export default function MinorGuide() {
+  const navigate = useNavigate();
   const [checkedList, setCheckedList] = useState([false, false, false]);
   const [targetUrl, setTargetUrl] = useState<string | null>(null);
 
-  // 체크박스 상태 토글
   const handleCheck = (index: number) => {
     const newCheckedList = [...checkedList];
     newCheckedList[index] = !newCheckedList[index];
     setCheckedList(newCheckedList);
   };
 
-  // 준비 현황 및 프로그레스 바 수치 계산
   const checkedCount = checkedList.filter(Boolean).length;
   const progressPercent = Math.round((checkedCount / 3) * 100);
 
   return (
     <Layout>
       <div className={S.scrollArea}>
-        <div className={S.topLogo} />
+        {/* [수정] 상단 로고: div -> button 변경 및 스타일 초기화 */}
+        <button
+          type="button"
+          className={S.topLogo}
+          onClick={() => navigate(PAGE_PATHS.HOME)}
+          aria-label="홈으로 이동"
+          style={{
+            cursor: 'pointer',
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            display: 'block',
+            width: '100%',
+          }}
+        />
+
         <div className={S.headerFrame}>
           <span className={S.headerTitle}>미성년자 가입 구비 서류</span>
         </div>
@@ -31,7 +47,22 @@ export default function MinorGuide() {
           <br />
           서류를 챙겨보세요
         </h2>
-        <div className={S.characterImage} />
+
+        {/* [수정] 캐릭터 이미지: div -> button 변경 및 스타일 초기화 */}
+        <button
+          type="button"
+          className={S.characterImage}
+          onClick={() => navigate(PAGE_PATHS.CUSTOMER_SERVICE)}
+          aria-label="고객센터 메인으로 이동"
+          style={{
+            cursor: 'pointer',
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            display: 'block',
+            margin: '0 auto',
+          }}
+        />
 
         <div className={S.statusText}>준비 현황 ({checkedCount} / 3)</div>
         <div className={S.progressBarContainer}>
@@ -46,6 +77,7 @@ export default function MinorGuide() {
         </div>
         <div className={S.percentText}>{progressPercent} %</div>
 
+        {/* 카드 1 */}
         <button
           type="button"
           className={S.documentCard}
@@ -61,6 +93,7 @@ export default function MinorGuide() {
           </p>
         </button>
 
+        {/* 카드 2 */}
         <button
           type="button"
           className={S.documentCard}
@@ -75,9 +108,10 @@ export default function MinorGuide() {
             </span>
           </p>
           <button
+            type="button"
             className={S.linkButton}
             onClick={(e) => {
-              e.stopPropagation(); // 카드 클릭 이벤트 전파 방지
+              e.stopPropagation();
               setTargetUrl('https://www.gov.kr');
             }}
           >
@@ -85,6 +119,7 @@ export default function MinorGuide() {
           </button>
         </button>
 
+        {/* 카드 3 */}
         <button
           type="button"
           className={S.documentCard}
@@ -99,9 +134,10 @@ export default function MinorGuide() {
             </span>
           </p>
           <button
+            type="button"
             className={S.linkButton}
             onClick={(e) => {
-              e.stopPropagation(); // 카드 클릭 이벤트 전파 방지
+              e.stopPropagation();
               setTargetUrl(
                 'https://www.uplusumobile.com/support/cs/docFormDownload',
               );
@@ -114,16 +150,13 @@ export default function MinorGuide() {
 
       <div className={S.warningBox}>
         <span className={S.warningText}>
-          ※ 만 4세 미만 영유아 및 장애인 등 복지할인 대상자는 추가 서류가
-          필요합니다.
+          ※ 모든 서류는 발급일로부터 3개월 이내여야 합니다.
         </span>
       </div>
 
-      {/* 외부 링크 연결용 브릿지 모달 */}
       {targetUrl && (
         <BridgeModal url={targetUrl} onClose={() => setTargetUrl(null)} />
       )}
-
       <BottomNav />
     </Layout>
   );
