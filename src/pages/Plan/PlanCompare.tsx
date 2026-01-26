@@ -33,8 +33,12 @@ export default function PlanCompare() {
   const { plan1Id, plan2Id } =
     (location.state as { plan1Id?: number; plan2Id?: number }) || {};
 
-  const plan1 = plan1Id ? MOCK_PLANS.find((p) => p.id === plan1Id) : null;
-  const plan2 = plan2Id ? MOCK_PLANS.find((p) => p.id === plan2Id) : null;
+  const plan1 = plan1Id
+    ? (MOCK_PLANS.find((p) => p.id === plan1Id) ?? null)
+    : null;
+  const plan2 = plan2Id
+    ? (MOCK_PLANS.find((p) => p.id === plan2Id) ?? null)
+    : null;
 
   // 차트 데이터 계산 함수
   const calculateChartData = useCallback((plan: PlanType | null) => {
