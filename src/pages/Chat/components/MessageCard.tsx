@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
 import moonerCrew from '@/assets/images/mooner-crew.png';
 import * as styles from '../style/MessageCard.css';
 
@@ -19,6 +20,7 @@ interface MessageCardProps {
 export default function MessageCard({ cards, type }: MessageCardProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -73,64 +75,109 @@ export default function MessageCard({ cards, type }: MessageCardProps) {
     return '더 많은 정보 보러가기';
   };
 
+  const handleMoreClick = () => {
+    if (type === 'plan') {
+      navigate('/plan');
+    } else if (type === 'subscription') {
+      navigate('/subscribe');
+    } else if (type === 'phone') {
+      // 휴대폰 페이지 경로 (필요시 수정)
+      navigate('/phone');
+    } else if (type === 'event') {
+      // 이벤트 페이지 경로 (필요시 수정)
+      navigate('/event');
+    }
+  };
+
+  const totalCards = type === 'event' ? cards.length : cards.length + 1;
+
   return (
     <div className={styles.container}>
       <div className={styles.cardWrapper} ref={scrollRef}>
         <div className={styles.cardTrack}>
-          {cards.map((card) => (
-            <div key={card.title} className={styles.card}>
-              <h4 className={styles.cardTitle}>{card.title}</h4>
+          {cards.map((card) => {
+            // '설명' 항목을 찾아서 분리
+            const descriptionDetail = card.details.find(
+              (detail) => detail.label === '설명',
+            );
 
-              {card.originalPrice && (
-                <>
-                  <p className={styles.cardOriginalPrice}>
-                    {card.originalPrice}
-                  </p>
-                  {card.discountPrice && (
-                    <p className={styles.cardDiscountPrice}>
-                      {card.discountPrice}
+            // mainFeature가 있으면 '데이터' 항목 제거 (무제한이든 아니든)
+            const otherDetails = card.details.filter(
+              (detail) =>
+                detail.label !== '설명' &&
+                !(card.mainFeature && detail.label === '데이터'),
+            );
+
+            return (
+              <div key={card.title} className={styles.card}>
+                <h4 className={styles.cardTitle}>{card.title}</h4>
+
+                {card.originalPrice && (
+                  <>
+                    <p className={styles.cardOriginalPrice}>
+                      {card.originalPrice}
                     </p>
-                  )}
-                </>
-              )}
+                    {card.discountPrice && (
+                      <p className={styles.cardDiscountPrice}>
+                        {card.discountPrice}
+                      </p>
+                    )}
+                  </>
+                )}
 
-              {card.price && !card.originalPrice && (
-                <p className={styles.cardPrice}>{card.price}</p>
-              )}
+                {card.price && !card.originalPrice && (
+                  <p className={styles.cardPrice}>{card.price}</p>
+                )}
 
-              {card.mainFeature && (
-                <>
-                  <div className={styles.divider} />
-                  <p className={styles.mainFeature}>{card.mainFeature}</p>
-                </>
-              )}
+                {card.mainFeature && (
+                  <>
+                    <div className={styles.divider} />
+                    <p className={styles.mainFeature}>{card.mainFeature}</p>
+                  </>
+                )}
 
-              <div className={styles.cardDetails}>
-                {card.details.map((detail) => (
-                  <div
-                    key={`${detail.label}-${detail.value}`}
-                    className={styles.detailRow}
-                  >
-                    <span className={styles.detailLabel}>{detail.label}</span>
-                    <span className={styles.detailValue}>{detail.value}</span>
+                {/* 설명을 맨 위에 한 줄로 표시 */}
+                {descriptionDetail && (
+                  <div className={styles.descriptionRow}>
+                    <span className={styles.descriptionText}>
+                      {descriptionDetail.value}
+                    </span>
                   </div>
-                ))}
-              </div>
-            </div>
-          ))}
+                )}
 
-          {/* 마지막 카드 */}
-          <div className={styles.card}>
-            <h4 className={styles.cardTitle}>{getMoreText()}</h4>
-            <img
-              src={moonerCrew}
-              alt="무너 크루"
-              className={styles.crewImage}
-            />
-            <button type="button" className={styles.moreButton}>
-              {getMoreButtonText()}
-            </button>
-          </div>
+                <div className={styles.cardDetails}>
+                  {otherDetails.map((detail) => (
+                    <div
+                      key={`${detail.label}-${detail.value}`}
+                      className={styles.detailRow}
+                    >
+                      <span className={styles.detailLabel}>{detail.label}</span>
+                      <span className={styles.detailValue}>{detail.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+
+          {/* 마지막 카드 - 이벤트 타입이 아닐 때만 표시 */}
+          {type !== 'event' && (
+            <div className={styles.card}>
+              <h4 className={styles.cardTitle}>{getMoreText()}</h4>
+              <img
+                src={moonerCrew}
+                alt="무너 크루"
+                className={styles.crewImage}
+              />
+              <button
+                type="button"
+                className={styles.moreButton}
+                onClick={handleMoreClick}
+              >
+                {getMoreButtonText()}
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -145,13 +192,13 @@ export default function MessageCard({ cards, type }: MessageCardProps) {
           ←
         </button>
         <span className={styles.pageIndicator}>
-          {currentIndex + 1} / {cards.length + 1}
+          {currentIndex + 1} / {totalCards}
         </span>
         <button
           type="button"
           className={styles.navButton}
           onClick={handleNext}
-          disabled={currentIndex === cards.length}
+          disabled={currentIndex === totalCards - 1}
         >
           →
         </button>

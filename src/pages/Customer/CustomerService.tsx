@@ -9,13 +9,13 @@ import * as S from './style/CustomerService.css.ts';
 export default function CustomerService() {
   const navigate = useNavigate();
 
-  // --- 상태 관리 ---
+  // 상태 관리
   const [openId, setOpenId] = useState<string | null>(null); // FAQ 아코디언 열림 상태
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null); // 하단 가이드 선택 상태
   const [searchQuery, setSearchQuery] = useState(''); // 검색어 상태
   const [activeTab, setActiveTab] = useState<string>('전체'); // 상단 카테고리 탭 상태
 
-  // --- 핸들러 함수 ---
+  // 핸들러 함수
   const toggleFaq = (id: string) => setOpenId(openId === id ? null : id); // FAQ 열고 닫기
   const handleCategorySelect = (id: string) =>
     setSelectedCategory(selectedCategory === id ? null : id); // 가이드 항목 토글 선택
@@ -33,7 +33,7 @@ export default function CustomerService() {
     }
   };
 
-  // --- 필터링 로직 ---
+  //  필터링 로직
   const filteredFaqs = faqs.filter((faq) => {
     const matchesTab =
       activeTab === '전체' ? faq.isTop10 : faq.category === activeTab;

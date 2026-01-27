@@ -5,6 +5,12 @@ class SocketService {
   private sessionId: string | null = null;
 
   connect() {
+    // 이미 연결되어 있으면 재연결하지 않음
+    if (this.socket?.connected) {
+      console.log('🔌 Socket 이미 연결됨:', this.socket.id);
+      return this.socket;
+    }
+
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
     this.socket = io(apiUrl);
 
@@ -26,8 +32,8 @@ class SocketService {
   }
 
   // 사용자: 상담 시작
-  startConsult(userId: string) {
-    this.socket?.emit('start-consult', userId);
+  startConsult(userId: string, userName?: string) {
+    this.socket?.emit('start-consult', { userId, userName });
   }
 
   // 상담사: 세션 참여
@@ -69,7 +75,13 @@ class SocketService {
 
   onWaitingSessions(
     callback: (
-      sessions: Array<{ sessionId: string; userId: string; createdAt: Date }>,
+      sessions: Array<{
+        sessionId: string;
+        userId: string;
+        userName?: string;
+        status: 'waiting' | 'connected';
+        createdAt: Date;
+      }>,
     ) => void,
   ) {
     this.socket?.on('waiting-sessions', callback);
@@ -77,7 +89,13 @@ class SocketService {
 
   onSessionsUpdated(
     callback: (
-      sessions: Array<{ sessionId: string; userId: string; createdAt: Date }>,
+      sessions: Array<{
+        sessionId: string;
+        userId: string;
+        userName?: string;
+        status: 'waiting' | 'connected';
+        createdAt: Date;
+      }>,
     ) => void,
   ) {
     this.socket?.on('sessions-updated', callback);

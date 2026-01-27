@@ -21,6 +21,9 @@ export const characterSection = style({
 
 export const contentSection = style({
   width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '16px',
 });
 
 export const cardDummy = style({

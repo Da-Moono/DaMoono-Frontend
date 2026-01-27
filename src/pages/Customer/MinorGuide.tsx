@@ -23,7 +23,6 @@ export default function MinorGuide() {
   return (
     <Layout>
       <div className={S.scrollArea}>
-        {/* [수정] 상단 로고: div -> button 변경 및 스타일 초기화 */}
         <button
           type="button"
           className={S.topLogo}
@@ -48,7 +47,6 @@ export default function MinorGuide() {
           서류를 챙겨보세요
         </h2>
 
-        {/* [수정] 캐릭터 이미지: div -> button 변경 및 스타일 초기화 */}
         <button
           type="button"
           className={S.characterImage}

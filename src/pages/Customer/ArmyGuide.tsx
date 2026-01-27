@@ -23,7 +23,6 @@ export default function ArmyGuide() {
   return (
     <Layout>
       <div className={S.scrollArea}>
-        {/* [수정] div를 button으로 변경하여 린트 에러 해결 */}
         <button
           type="button"
           className={S.topLogo}
@@ -35,7 +34,7 @@ export default function ArmyGuide() {
             border: 'none',
             padding: 0,
             display: 'block',
-            width: '100%', // 기존 div의 레이아웃을 유지하기 위함
+            width: '100%',
           }}
         />
 
@@ -49,7 +48,6 @@ export default function ArmyGuide() {
           서류를 챙겨보세요
         </h2>
 
-        {/* [수정] 캐릭터 이미지 영역도 button으로 변경 */}
         <button
           type="button"
           className={S.characterImage}
@@ -61,7 +59,7 @@ export default function ArmyGuide() {
             border: 'none',
             padding: 0,
             display: 'block',
-            margin: '0 auto', // 중앙 정렬 유지
+            margin: '0 auto',
           }}
         />
 
@@ -105,7 +103,7 @@ export default function ArmyGuide() {
             <span className={S.docSubText}>입영 통지서, 선발통지서 등</span>
           </p>
           <button
-            type="button" // 타입 명시
+            type="button"
             className={S.linkButton}
             onClick={(e) => {
               e.stopPropagation();
@@ -127,7 +125,7 @@ export default function ArmyGuide() {
             <span className={S.docSubText}>군 경력 확인이 필요한 경우</span>
           </p>
           <button
-            type="button" // 타입 명시
+            type="button"
             className={S.linkButton}
             onClick={(e) => {
               e.stopPropagation();

@@ -8,6 +8,7 @@ export const CardContainer = style({
   boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   position: 'relative',
   paddingBottom: 20,
+  backgroundColor: '#FEFDFD',
 
   transition: 'all 0.3s ease-in-out',
 

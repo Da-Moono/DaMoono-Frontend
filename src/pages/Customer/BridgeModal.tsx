@@ -14,8 +14,8 @@ export default function BridgeModal({ url, onClose }: BridgeModalProps) {
       setPercent((prev) => {
         if (prev >= 100) {
           clearInterval(timer);
-          window.open(url, '_blank'); // 목표 페이지 새 창 열기
-          onClose(); // 이동 완료 후 모달 닫기
+          window.open(url, '_blank');
+          onClose();
           return 100;
         }
         return prev + 1;

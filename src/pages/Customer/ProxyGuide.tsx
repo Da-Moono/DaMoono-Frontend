@@ -23,7 +23,6 @@ export default function ProxyGuide() {
   return (
     <Layout>
       <div className={S.scrollArea}>
-        {/* [수정] 상단 로고: div -> button으로 변경 */}
         <button
           type="button"
           className={S.topLogo}
@@ -48,7 +47,6 @@ export default function ProxyGuide() {
           서류를 챙겨보세요
         </h2>
 
-        {/* [수정] 캐릭터 이미지: div -> button으로 변경 */}
         <button
           type="button"
           className={S.characterImage}

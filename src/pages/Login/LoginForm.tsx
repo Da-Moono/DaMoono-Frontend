@@ -21,12 +21,22 @@ export default function LoginForm() {
     setIsLoading(true);
     try {
       const data = await login({ userId, password });
+      console.log('로그인 응답:', data);
+      console.log('Role:', data.data?.role);
+
       if (data.success) {
-        // 로그인 성공 시 사용자 정보 저장 (선택사항)
+        // 로그인 성공 시 사용자 정보 저장
         localStorage.setItem('userName', data.data.name);
         localStorage.setItem('userRole', data.data.role);
 
-        navigate(PAGE_PATHS.HOME);
+        // ADMIN이면 상담사 페이지로, 아니면 홈으로
+        if (data.data.role === 'ADMIN') {
+          console.log('ADMIN으로 /chat/admin 이동');
+          navigate('/chat/admin');
+        } else {
+          console.log('일반 사용자로 홈 이동');
+          navigate(PAGE_PATHS.HOME);
+        }
       }
     } catch (error) {
       alert(

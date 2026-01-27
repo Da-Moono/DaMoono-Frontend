@@ -5,6 +5,7 @@ import Layout from '@/pages/layout/Layout';
 import * as s from '@/pages/Summary/style/SummaryPage.css';
 import CharacterScene from './CharacterScene';
 import Accordion from './components/Accordion';
+import NextActionCard from './components/NextActionCard';
 import StatusCard from './components/StatusCard';
 import SummaryResultCard from './components/SummaryResultCard';
 import WarningCard from './components/WarningCard';
@@ -89,17 +90,29 @@ const MOCK_SUMMARY_DATA = {
     '📞 현장팀 분석 완료 후 담당 상담사의 안내 전화(콜백) 대기',
   ],
 
-  // 6. 이용 가이드 및 꿀팁
+  // 6. 이용 가이드 / 제시안 / 꿀팁
   guides: {
     title: '📍 단말기 임시 개선 조치 순서',
     steps: [
       '설정에서 LTE 고정(4G 우선)으로 전환',
       'VoLTE 및 Wi-Fi 통화 기능 ON(활성화)',
+      '백그라운드 데이터 제한 및 데이터 절약 모드 적용',
       '단말기 전원 재부팅 후 재측정',
     ],
   },
 
-  tips: ['🎁 Wi-Fi 우선 사용 권장: 실내에서는 Wi-Fi 연결을 추천드립니다.'],
+  proposals: {
+    title: '💡 제시안',
+    items: [],
+  },
+
+  tips: {
+    title: '🎁 꿀팁',
+    steps: [
+      'Wi-Fi 우선 사용 권장: 데이터 속도가 불안정한 실내 장소에서는 가급적 Wi-Fi를 우선 연결하여 사용하시는 것을 추천드립니다.',
+      '신뢰할 수 있는 AP 활용: 보안이 확인된 신뢰할 수 있는 AP를 연결하면 훨씬 안정적인 통신 환경을 이용하실 수 있습니다.',
+    ],
+  },
 };
 
 const containerVariants = {
@@ -155,7 +168,13 @@ const SummaryPage = () => {
         </motion.section>
 
         <motion.section className={s.contentSection} variants={itemVariants}>
-          <Accordion guides={MOCK_SUMMARY_DATA.guides} />
+          <Accordion type="guide" data={MOCK_SUMMARY_DATA.guides} />
+          <Accordion type="tip" data={MOCK_SUMMARY_DATA.tips} />
+          <Accordion type="proposal" data={MOCK_SUMMARY_DATA.proposals} />
+        </motion.section>
+
+        <motion.section className={s.contentSection} variants={itemVariants}>
+          <NextActionCard nextActions={MOCK_SUMMARY_DATA.nextActions} />
         </motion.section>
       </motion.div>
 
