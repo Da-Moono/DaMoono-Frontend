@@ -7,7 +7,6 @@ import ProxyGuide from '@/pages/Customer/ProxyGuide';
 import MyPage from '@/pages/MyPage/MyPage';
 import Counsel from '@/pages/MyPage/pages/Counsel';
 import ProtectedRoute from '@/shared/routes/ProtectedRoute';
-import Admin from '../pages/Admin/Admin';
 import ChatAdminPage from '../pages/Chat/ChatAdminPage';
 import ChatConsultPage from '../pages/Chat/ChatConsultPage';
 import ChatManualPage from '../pages/Chat/ChatManualPage';
@@ -65,22 +64,17 @@ export default function RouterProvider() {
       Component: Summary,
     },
     {
-      path: PAGE_PATHS.ADMIN,
-      Component: Admin,
-    },
-    {
-      path: PAGE_PATHS.MYPAGE,
-      Component: MyPage,
-    },
-    {
-      path: PAGE_PATHS.LOGIN_GUARD,
       element: <ProtectedRoute />,
+      children: [
+        { path: '/mypage', Component: MyPage },
+        { path: '/counsel', Component: Counsel },
+        { path: '/mypage/tips', Component: Tips },
+      ],
     },
     {
       path: PAGE_PATHS.CUSTOMER_SERVICE,
       element: <CustomerService />,
     },
-
     {
       path: PAGE_PATHS.ARMY_GUIDE,
       element: <ArmyGuide />,
@@ -115,16 +109,8 @@ export default function RouterProvider() {
       Component: SubscribeDetail,
     },
     {
-      path: PAGE_PATHS.COUNSEL,
-      Component: Counsel,
-    },
-    {
       path: PAGE_PATHS.PERSONALITY_TEST,
       Component: PersonalityTest,
-    },
-    {
-      path: PAGE_PATHS.TIPS_GUIDE,
-      Component: Tips,
     },
   ]);
   return <Provider router={router} />;
