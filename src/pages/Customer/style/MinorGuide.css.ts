@@ -1,15 +1,17 @@
 import { style } from '@vanilla-extract/css';
 
+const SCOREDREAM = "'S-Core Dream', sans-serif";
+
 export const scrollArea = style({
   position: 'relative',
   width: '100%',
   height: '100%',
   overflowY: 'auto',
-
   paddingBottom: '140px',
   boxSizing: 'border-box',
 });
 
+// 상단 중앙 로고 이미지
 export const topLogo = style({
   position: 'absolute',
   width: '80px',
@@ -17,9 +19,10 @@ export const topLogo = style({
   left: '50%',
   transform: 'translateX(-50%)',
   top: '0px',
-  backgroundImage: 'url("/src/assets/images/logo.png")',
+  backgroundImage: 'url("../../../assets/images/logo.png")',
   backgroundSize: 'contain',
   backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center',
 });
 
 export const headerFrame = style({
@@ -36,7 +39,7 @@ export const headerFrame = style({
 });
 
 export const headerTitle = style({
-  fontFamily: "'S-Core Dream', sans-serif",
+  fontFamily: SCOREDREAM,
   fontWeight: 700,
   fontSize: '16px',
   color: '#000000',
@@ -46,30 +49,32 @@ export const subTitle = style({
   position: 'absolute',
   width: 'calc(100% - 48px)',
   left: '24px',
-  top: '105px',
-  fontFamily: "'S-Core Dream', sans-serif",
+  top: '115px',
+  fontFamily: SCOREDREAM,
   fontWeight: 600,
   fontSize: '20px',
   lineHeight: '1.2',
   color: '#000000',
 });
 
+// 우측 상단 캐릭터 이미지
 export const characterImage = style({
   position: 'absolute',
   width: '95px',
   height: '95px',
   right: '12px',
   top: '105px',
-  backgroundImage: 'url("/src/assets/images/question.png")',
+  backgroundImage: 'url("../../../assets/images/question.png")',
   backgroundSize: 'contain',
   backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center',
 });
 
 export const statusText = style({
   position: 'absolute',
   left: '24px',
   top: '185px',
-  fontFamily: "'Inter', sans-serif",
+  fontFamily: SCOREDREAM,
   fontStyle: 'italic',
   fontWeight: 700,
   fontSize: '18px',
@@ -91,7 +96,7 @@ export const percentText = style({
   position: 'absolute',
   right: '15px',
   top: '225px',
-  fontFamily: "'Inter', sans-serif",
+  fontFamily: SCOREDREAM,
   fontWeight: 700,
   fontSize: '18px',
   lineHeight: '25px',
@@ -115,7 +120,7 @@ export const documentCard = style({
 });
 
 export const docText = style({
-  fontFamily: "'S-Core Dream', sans-serif",
+  fontFamily: SCOREDREAM,
   fontWeight: 500,
   fontSize: '16px',
   lineHeight: '1.4',
@@ -123,7 +128,7 @@ export const docText = style({
 });
 
 export const docSubText = style({
-  fontFamily: "'S-Core Dream', sans-serif",
+  fontFamily: SCOREDREAM,
   fontWeight: 300,
   fontSize: '13px',
   color: '#000000',
@@ -137,7 +142,7 @@ export const linkButton = style({
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
   border: 'none',
   borderRadius: '6px',
-  fontFamily: "'S-Core Dream', sans-serif",
+  fontFamily: SCOREDREAM,
   fontWeight: 500,
   fontSize: '12px',
   marginTop: '12px',
@@ -146,15 +151,12 @@ export const linkButton = style({
   cursor: 'pointer',
   transition: 'background-color 0.2s ease, transform 0.1s ease',
   selectors: {
-    '&:hover': {
-      backgroundColor: '#F9D84A',
-    },
-    '&:active': {
-      transform: 'scale(0.98)',
-    },
+    '&:hover': { backgroundColor: '#F9D84A' },
+    '&:active': { transform: 'scale(0.98)' },
   },
 });
 
+// 하단 주의사항 주황색 박스
 export const warningBox = style({
   position: 'fixed',
   bottom: '80px',
@@ -170,7 +172,7 @@ export const warningBox = style({
 });
 
 export const warningText = style({
-  fontFamily: "'S-Core Dream', sans-serif",
+  fontFamily: SCOREDREAM,
   fontWeight: 600,
   fontSize: '13px',
   color: '#000000',
@@ -211,7 +213,7 @@ export const navIcon = style({
 });
 
 export const navText = style({
-  fontFamily: "'S-Core Dream', sans-serif",
+  fontFamily: SCOREDREAM,
   fontWeight: 400,
   fontSize: '11px',
   marginTop: '4px',

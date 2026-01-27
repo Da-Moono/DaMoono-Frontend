@@ -33,7 +33,7 @@ export default function CustomerService() {
     }
   };
 
-  //  필터링 로직
+  // --- 필터링 로직
   const filteredFaqs = faqs.filter((faq) => {
     const matchesTab =
       activeTab === '전체' ? faq.isTop10 : faq.category === activeTab;
