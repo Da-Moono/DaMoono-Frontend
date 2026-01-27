@@ -4,9 +4,11 @@ import { useNavigate, useSearchParams } from 'react-router';
 import chatIcon from '@/assets/images/chat.png';
 import counselingIcon from '@/assets/images/counseling-icon.png';
 import counselingMoono from '@/assets/images/counseling-moono.png';
+import endCounselingIcon from '@/assets/images/end-counseling-icon.png';
 import noCounselingMoono from '@/assets/images/no-counseling-moono.png';
-import BottomNav from '@/components/BottomNav';
+import consult from '@/assets/images/plus-consult.png';
 import Header from '@/components/Header';
+import { logout } from '@/services/authApi';
 import socketService from '@/services/socketService';
 import Layout from '../layout/Layout';
 import ChatInput from './components/ChatInput';
@@ -25,6 +27,8 @@ interface Message {
 interface WaitingSession {
   sessionId: string;
   userId: string;
+  userName?: string;
+  status: 'waiting' | 'connected';
   createdAt: Date;
 }
 
@@ -121,6 +125,7 @@ export default function ChatAdminPage() {
   };
 
   const handleBackToList = () => {
+    // 세션을 종료하지 않고 목록으로만 돌아감
     setShowSessionList(true);
     setSessionId('');
     setMessages([]);
@@ -133,6 +138,23 @@ export default function ChatAdminPage() {
     setIsConnected(true);
     setShowSessionList(false);
     navigate(`/chat/admin?session=${selectedSessionId}`);
+  };
+
+  const handleLogout = async () => {
+    if (confirm('로그아웃 하시겠습니까?')) {
+      try {
+        await logout();
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userRole');
+        navigate('/');
+      } catch (error) {
+        console.error('로그아웃 실패:', error);
+        // 에러가 발생해도 로컬 스토리지는 정리하고 홈으로 이동
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userRole');
+        navigate('/');
+      }
+    }
   };
 
   const formatTime = (date: Date) => {
@@ -165,7 +187,7 @@ export default function ChatAdminPage() {
                 alt="무너"
                 className={styles.headerIcon}
               />
-              <h2>김영희 상담사</h2>
+              <h2>상담사 페이지</h2>
             </div>
             <div className={styles.content}>
               {waitingSessions.length === 0 ? (
@@ -211,16 +233,91 @@ export default function ChatAdminPage() {
                             alt="무너"
                             className={styles.chatIcon}
                           />
-                          <p className={styles.counselingId}>
-                            {session.userId}
-                          </p>
+                          <div>
+                            <p className={styles.counselingId}>
+                              {session.userName || '게스트'}
+                            </p>
+                            <p className={styles.sessionIdSmall}>
+                              ({session.sessionId})
+                            </p>
+                          </div>
                         </div>
-                        <div className={styles.counselingBtn}>상담 시작</div>
+                        <div
+                          className={styles.counselingBtn}
+                          style={{
+                            background:
+                              session.status === 'connected'
+                                ? 'linear-gradient(90deg, rgba(31, 255, 106, 0.2) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(31, 255, 106, 0.2) 100%)'
+                                : undefined,
+                            color:
+                              session.status === 'connected'
+                                ? '#1FFF6A'
+                                : undefined,
+                          }}
+                        >
+                          {session.status === 'connected'
+                            ? '상담 진행 중'
+                            : '상담 시작'}
+                        </div>
                       </div>
                     </button>
                   ))}
                 </div>
               )}
+            </div>
+            <div className={styles.content}>
+              <div className={styles.chatBox}>
+                <div className={styles.chatState}>
+                  <img src={consult} alt="상담사" className={styles.chatIcon} />
+                  <span>완료된 상담</span>
+                </div>
+                {waitingSessions.map((session) => (
+                  <button
+                    type="button"
+                    key={session.sessionId}
+                    onClick={() => handleJoinSession(session.sessionId)}
+                    className={styles.endChatCard}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow =
+                        '0 4px 12px rgba(0, 0, 0, 0.15)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow =
+                        '0 2px 8px rgba(0, 0, 0, 0.1)';
+                    }}
+                  >
+                    <div className={styles.counselingWrapper}>
+                      <div className={styles.counselingIdBox}>
+                        <img
+                          src={endCounselingIcon}
+                          alt="무너"
+                          className={styles.chatIcon}
+                        />
+                        <div>
+                          <p className={styles.counselingId}>
+                            {session.userName || '게스트'}
+                          </p>
+                          <p className={styles.sessionIdSmall}>
+                            ({session.sessionId})
+                          </p>
+                        </div>
+                      </div>
+                      <div className={styles.endCounselingBtn}>상담 완료</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className={styles.logoutContainer}>
+              <button
+                type="button"
+                className={styles.logoutButton}
+                onClick={handleLogout}
+              >
+                로그아웃
+              </button>
             </div>
           </>
         ) : (
@@ -331,8 +428,6 @@ export default function ChatAdminPage() {
           </>
         )}
       </div>
-
-      <BottomNav />
     </Layout>
   );
 }

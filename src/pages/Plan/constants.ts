@@ -1,4 +1,20 @@
+import disneyPlusImg from '@/assets/images/disney-plus.png';
+import millieImg from '@/assets/images/millie.png';
+import netflixImg from '@/assets/images/netflix.png';
+import tvingImg from '@/assets/images/tving.png';
+import wavveImg from '@/assets/images/wavve.png';
+import youtubeImg from '@/assets/images/youtube-premium.png';
+
 import type { OTTType, Plan, SortTarget } from './types';
+
+export const OTT_IMAGES: Record<OTTType, string> = {
+  NETFLIX: netflixImg,
+  YOUTUBE_PREMIUM: youtubeImg,
+  'DISNEY+': disneyPlusImg,
+  WAVVE: wavveImg,
+  TVING: tvingImg,
+  MILLIE: millieImg,
+};
 
 export const SORT_LABELS: Record<SortTarget, string> = {
   price: '월정액',

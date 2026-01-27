@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import BottomNav from '@/components/BottomNav';
 import Guide from '@/components/Guide';
 import Header from '@/components/Header';
@@ -9,13 +9,18 @@ import * as styles from './style/Home.css';
 
 export default function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showGuide, setShowGuide] = useState(false);
 
   const slides = [
-    { id: 1, content: '성향 테스트 하러가기' },
-    { id: 2, content: '슬라이드 2' },
-    { id: 3, content: '슬라이드 3' },
+    {
+      id: 1,
+      content: '성향 테스트 하러가기',
+      path: PAGE_PATHS.PERSONALITY_TEST,
+    },
+    { id: 2, content: '요금제 둘러보기', path: PAGE_PATHS.PLAN },
+    { id: 3, content: '구독 둘러보기', path: PAGE_PATHS.SUBSCRIBE },
   ];
 
   const guideSteps = [
@@ -31,7 +36,7 @@ export default function Home() {
     },
     {
       target: `.${styles.sliderWrapper}`,
-      message: '슬라이더를 통해 다른 기능들도 확인하실 수 있어요 !',
+      message: '슬라이더를 통해 다른 페이지로 이동하실 수 있어요 !',
       position: 'bottom' as const,
     },
     {
@@ -47,19 +52,19 @@ export default function Home() {
     }, 5000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
-  // 첫 방문 체크 및 가이드 표시
+  // 회원가입 후 가이드 표시
   useEffect(() => {
-    const hasSeenGuide = localStorage.getItem('hasSeenHomeGuide');
-    if (!hasSeenGuide) {
+    if (location.state?.showGuide) {
       setTimeout(() => setShowGuide(true), 500);
+      // 상태 초기화 (뒤로가기 시 다시 표시 안 되도록)
+      window.history.replaceState({}, document.title);
     }
-  }, []);
+  }, [location]);
 
   const handleGuideComplete = () => {
     setShowGuide(false);
-    localStorage.setItem('hasSeenHomeGuide', 'true');
   };
 
   return (
@@ -103,12 +108,7 @@ export default function Home() {
                   key={slide.id}
                   type="button"
                   className={styles.sliderCard}
-                  onClick={() => {
-                    if (slide.id === 1) {
-                      navigate(PAGE_PATHS.PERSONALITY_TEST);
-                    }
-                  }}
-                  disabled={slide.id !== 1}
+                  onClick={() => navigate(slide.path)}
                 >
                   <div className={styles.sliderContent}>{slide.content}</div>
                 </button>
@@ -134,7 +134,11 @@ export default function Home() {
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>BEST 상품 한번에 보기</h2>
-            <button type="button" className={styles.moreButton}>
+            <button
+              type="button"
+              className={styles.moreButton}
+              onClick={() => navigate(PAGE_PATHS.PLAN)}
+            >
               더보기 &gt;
             </button>
           </div>

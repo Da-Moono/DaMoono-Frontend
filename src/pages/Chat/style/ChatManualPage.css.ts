@@ -3,10 +3,12 @@ import { style } from '@vanilla-extract/css';
 export const container = style({
   display: 'flex',
   flexDirection: 'column',
-  minHeight: 'calc(100vh - 140px)',
+  height: 'calc(100vh - 140px)',
   backgroundColor: '#FEFDFD',
   position: 'relative',
   padding: '0 60px',
+  maxWidth: '500px',
+  margin: '0 auto',
 });
 
 export const content = style({

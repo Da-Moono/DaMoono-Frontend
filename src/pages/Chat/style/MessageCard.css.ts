@@ -79,13 +79,42 @@ export const divider = style({
 
 export const mainFeature = style({
   fontFamily: 'SCDream',
-  fontSize: '20px',
+  fontSize: '18px',
   fontWeight: 700,
   color: '#451D95',
   margin: 0,
+  marginTop: '12px',
   marginBottom: '16px',
-  textAlign: 'center',
+  textAlign: 'left',
   padding: '8px 0',
+});
+
+export const mainFeatureLabel = style({
+  fontFamily: 'SCDream',
+  fontSize: '14px',
+  fontWeight: 500,
+  color: '#767676',
+  marginRight: '8px',
+});
+
+export const descriptionRow = style({
+  marginTop: '12px',
+  marginBottom: '8px',
+  padding: '12px',
+  backgroundColor: '#F8F9FA',
+  borderRadius: '8px',
+});
+
+export const descriptionText = style({
+  fontFamily: 'SCDream',
+  fontSize: '13px',
+  fontWeight: 400,
+  color: '#666',
+  lineHeight: '1.5',
+  margin: 0,
+  display: 'block',
+  whiteSpace: 'normal',
+  wordBreak: 'keep-all',
 });
 
 export const cardDetails = style({
@@ -93,8 +122,6 @@ export const cardDetails = style({
   flexDirection: 'column',
   gap: '12px',
   marginTop: '8px',
-  paddingTop: '16px',
-  borderTop: '1px solid #F0F0F0',
 });
 
 export const detailRow = style({
@@ -120,16 +147,17 @@ export const detailValue = style({
 
 export const crewImage = style({
   width: '60%',
+  maxWidth: '200px',
   height: 'auto',
-  margin: '20px auto',
+  margin: 'auto',
   display: 'block',
   borderRadius: '12px',
+  flex: 1,
+  objectFit: 'contain',
 });
 
 export const moreButton = style({
   width: '100%',
-  maxWidth: '400px',
-  margin: '0 auto',
   padding: '14px 20px',
   backgroundColor: '#ECE7FF',
   border: 'none',
@@ -141,6 +169,21 @@ export const moreButton = style({
   cursor: 'pointer',
   transition: 'all 0.2s',
   display: 'block',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  marginTop: '20px',
+
+  '@media': {
+    '(max-width: 400px)': {
+      fontSize: '13px',
+      padding: '12px 16px',
+    },
+    '(max-width: 350px)': {
+      fontSize: '12px',
+      padding: '10px 12px',
+    },
+  },
 
   ':hover': {
     backgroundColor: '#DDD5FF',

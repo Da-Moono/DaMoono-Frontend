@@ -14,7 +14,7 @@ import BottomNav from '@/components/BottomNav';
 import Header from '@/components/Header';
 import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
-import { MOCK_PLANS, OTT_LABELS } from './constants';
+import { MOCK_PLANS, OTT_IMAGES, OTT_LABELS } from './constants';
 import * as styles from './style/PlanDetail.css';
 
 ChartJS.register(
@@ -50,6 +50,7 @@ export default function PlanDetail() {
 
     const { price, dataAmountMb, voiceMinutes, smsIncluded, overageSpeedMbps } =
       plan;
+
     // 최대값 계산
     const maxPrice = Math.max(...MOCK_PLANS.map((p) => p.price));
     const maxData = Math.max(
@@ -210,16 +211,44 @@ export default function PlanDetail() {
               <div className={styles.value}>{smsIncluded}건</div>
             </div>
 
-            {/* OTT 서비스 */}
+            {/* OTT 서비스 부분*/}
             {subscriptionServices.length > 0 && (
               <div className={styles.section}>
                 <div className={styles.sectionTitle}>OTT 혜택</div>
-                <div className={styles.ottList}>
-                  {subscriptionServices.map((service, index) => (
-                    <span key={service} className={styles.ottItem}>
-                      {OTT_LABELS[service]}
-                      {index < subscriptionServices.length - 1 && ', '}
-                    </span>
+                <div
+                  className={styles.ottList}
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '12px',
+                    marginTop: '8px',
+                  }}
+                >
+                  {subscriptionServices.map((service) => (
+                    <div
+                      key={service}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                      }}
+                      title={OTT_LABELS[service]}
+                    >
+                      <img
+                        src={OTT_IMAGES[service]}
+                        alt={OTT_LABELS[service]}
+                        style={{
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          border: '1px solid #f0f0f0',
+                        }}
+                      />
+                      <span style={{ fontSize: '14px', fontWeight: 500 }}>
+                        {OTT_LABELS[service]}
+                      </span>
+                    </div>
                   ))}
                 </div>
               </div>

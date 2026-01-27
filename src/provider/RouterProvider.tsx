@@ -65,22 +65,17 @@ export default function RouterProvider() {
       Component: Summary,
     },
     {
-      path: PAGE_PATHS.ADMIN,
-      Component: Admin,
-    },
-    {
-      path: PAGE_PATHS.MYPAGE,
-      Component: MyPage,
-    },
-    {
-      path: PAGE_PATHS.LOGIN_GUARD,
       element: <ProtectedRoute />,
+      children: [
+        { path: '/mypage', Component: MyPage },
+        { path: '/counsel', Component: Counsel },
+        { path: '/mypage/tips', Component: Tips },
+      ],
     },
     {
       path: PAGE_PATHS.CUSTOMER_SERVICE,
       element: <CustomerService />,
     },
-
     {
       path: PAGE_PATHS.ARMY_GUIDE,
       element: <ArmyGuide />,
@@ -115,16 +110,12 @@ export default function RouterProvider() {
       Component: SubscribeDetail,
     },
     {
-      path: PAGE_PATHS.COUNSEL,
-      Component: Counsel,
-    },
-    {
       path: PAGE_PATHS.PERSONALITY_TEST,
       Component: PersonalityTest,
     },
     {
-      path: PAGE_PATHS.TIPS_GUIDE,
-      Component: Tips,
+      path: PAGE_PATHS.ADMIN,
+      Component: Admin,
     },
   ]);
   return <Provider router={router} />;

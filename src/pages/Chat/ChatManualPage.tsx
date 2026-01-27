@@ -59,25 +59,25 @@ export default function ChatManualPage() {
     <Layout>
       <Header />
       <div className={styles.container}>
-        {/* 화살표 버튼들 */}
-        {currentPage > 0 && (
-          <button
-            type="button"
-            className={styles.navButtonLeft}
-            onClick={handlePrevPage}
-          >
-            ←
-          </button>
-        )}
-        {currentPage < pages.length - 1 && (
-          <button
-            type="button"
-            className={styles.navButtonRight}
-            onClick={handleNextPage}
-          >
-            →
-          </button>
-        )}
+        {/* 화살표 버튼들 - 항상 렌더링하되 첫 페이지에서는 왼쪽 화살표 숨김 */}
+        <button
+          type="button"
+          className={styles.navButtonLeft}
+          onClick={handlePrevPage}
+          style={{ visibility: currentPage > 0 ? 'visible' : 'hidden' }}
+        >
+          ←
+        </button>
+        <button
+          type="button"
+          className={styles.navButtonRight}
+          onClick={handleNextPage}
+          style={{
+            visibility: currentPage < pages.length - 1 ? 'visible' : 'hidden',
+          }}
+        >
+          →
+        </button>
 
         {/* 메인 컨텐츠 */}
         <div className={styles.content}>

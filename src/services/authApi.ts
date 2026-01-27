@@ -73,6 +73,21 @@ export const refreshToken = async () => {
   return response.json();
 };
 
+// 로그인 상태 확인
+export const getAuthStatus = async () => {
+  const response = await fetch(`${API_BASE_URL}/auth/me`, {
+    method: 'GET',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    // 401 / 403 → 비로그인 상태
+    throw new Error('인증되지 않은 사용자입니다.');
+  }
+
+  return response.json();
+};
+
 // 로그아웃
 export const logout = async () => {
   const response = await fetch(`${API_BASE_URL}/auth/logout`, {

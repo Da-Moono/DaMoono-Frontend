@@ -16,6 +16,20 @@ export const headerLeft = style({
   flex: 1,
 });
 
+export const backButton = style({
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  fontSize: '18px',
+  padding: '4px 8px',
+  marginRight: '4px',
+  color: '#666',
+  transition: 'color 0.3s',
+  ':hover': {
+    color: '#333',
+  },
+});
+
 export const headerIcon = style({
   width: '20px',
   height: '20px',

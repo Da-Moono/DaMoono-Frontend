@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import mascot from '@/assets/images/search-moono.png';
-import { checkUserId, signup } from '@/services/authApi';
+import { checkUserId, login, signup } from '@/services/authApi';
 import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
 import * as styles from './style/Signup.css';
@@ -86,9 +86,16 @@ export default function Signup() {
 
     setIsLoading(true);
     try {
+      // 회원가입
       await signup({ name, userId, password });
+
+      // 자동 로그인
+      const loginData = await login({ userId, password });
+      localStorage.setItem('userName', loginData.data.name);
+      localStorage.setItem('userRole', loginData.data.role);
+
       alert('회원가입이 완료되었습니다.');
-      navigate(PAGE_PATHS.LOGIN_FORM);
+      navigate(PAGE_PATHS.HOME, { state: { showGuide: true } });
     } catch (error) {
       console.error('회원가입 에러:', error);
       alert(

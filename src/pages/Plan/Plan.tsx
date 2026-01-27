@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import { Loading3D } from '@/components/loading';
 import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
-import { MOCK_PLANS, OTT_LABELS, SORT_LABELS } from './constants';
+import { MOCK_PLANS, OTT_IMAGES, OTT_LABELS, SORT_LABELS } from './constants';
 import * as styles from './style/Plan.css';
 import type {
   NetworkType,
@@ -54,7 +54,6 @@ function CurrentPlanCard({
         {name}
       </div>
 
-      {/* 배지 */}
       <div className={styles.badgeContainer}>
         <span className={`${styles.badge} ${styles.badgeData}`}>
           {dataAmountMb === 0
@@ -72,7 +71,6 @@ function CurrentPlanCard({
         </span>
       </div>
 
-      {/* OTT 서비스 */}
       {subscriptionServices.length > 0 && (
         <div className={styles.ottContainer}>
           {subscriptionServices.map((service, index) => (
@@ -81,7 +79,16 @@ function CurrentPlanCard({
               className={`${styles.ottCircle} ${index !== 0 ? styles.ottCircleOverlap : ''}`}
               title={OTT_LABELS[service]}
             >
-              {OTT_LABELS[service].charAt(0)}
+              <img
+                src={OTT_IMAGES[service]}
+                alt={OTT_LABELS[service]}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                }}
+              />
             </div>
           ))}
         </div>
@@ -117,7 +124,6 @@ function SortFilterPanel({
   return (
     <div className={styles.filterPanel}>
       <div className={styles.filterControls}>
-        {/* 정렬 순서 */}
         <div className={styles.selectWrapper} style={{ width: '85px' }}>
           <select
             value={sortOrder}
@@ -127,13 +133,14 @@ function SortFilterPanel({
             <option value="asc">낮은 순</option>
             <option value="desc">높은 순</option>
           </select>
+          {/* 에러 수정: role과 aria-label 추가 */}
           <svg
             className={styles.selectIcon}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
             role="img"
-            aria-label="드롭다운 아이콘"
+            aria-label="정렬 순서 선택 메뉴 열기"
           >
             <path
               strokeLinecap="round"
@@ -144,7 +151,6 @@ function SortFilterPanel({
           </svg>
         </div>
 
-        {/* 정렬 기준 */}
         <div className={styles.selectWrapper} style={{ width: '96px' }}>
           <select
             value={sortTarget ?? ''}
@@ -164,13 +170,14 @@ function SortFilterPanel({
               </option>
             ))}
           </select>
+          {/* 에러 수정: role과 aria-label 추가 */}
           <svg
             className={styles.selectIcon}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
             role="img"
-            aria-label="드롭다운 아이콘"
+            aria-label="정렬 기준 선택 메뉴 열기"
           >
             <path
               strokeLinecap="round"
@@ -181,7 +188,6 @@ function SortFilterPanel({
           </svg>
         </div>
 
-        {/* 필터 버튼 */}
         <div className={styles.selectWrapper} style={{ width: '80px' }}>
           <button
             onClick={() => setShowFilterMenu(!showFilterMenu)}
@@ -189,13 +195,14 @@ function SortFilterPanel({
           >
             필터링
           </button>
+          {/* 에러 수정: role과 aria-label 추가 */}
           <svg
             className={styles.selectIcon}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
             role="img"
-            aria-label="드롭다운 아이콘"
+            aria-label="필터 옵션 열기"
           >
             <path
               strokeLinecap="round"
@@ -205,10 +212,8 @@ function SortFilterPanel({
             />
           </svg>
 
-          {/* 필터 메뉴 */}
           {showFilterMenu && (
             <div className={styles.filterMenu}>
-              {/* 네트워크 필터 */}
               <div className={styles.filterSection}>
                 <div className={styles.filterSectionTitle}>네트워크</div>
                 <div className={styles.filterButtons}>
@@ -228,7 +233,6 @@ function SortFilterPanel({
                 </div>
               </div>
 
-              {/* OTT 필터 */}
               <div className={styles.filterSection}>
                 <div className={styles.filterSectionTitle}>OTT 혜택</div>
                 <div className={styles.filterButtons}>
@@ -239,13 +243,13 @@ function SortFilterPanel({
                       <button
                         key={key}
                         className={`${styles.filterButton} ${isSelected ? styles.filterButtonActive : ''}`}
-                        onClick={() => {
+                        onClick={() =>
                           setSelectedOttList(
                             isSelected
                               ? selectedOttList.filter((v) => v !== ottKey)
                               : [...selectedOttList, ottKey],
-                          );
-                        }}
+                          )
+                        }
                       >
                         {label}
                       </button>
@@ -301,7 +305,6 @@ function PlanCard({
         {name}
       </div>
 
-      {/* 배지 */}
       <div className={styles.badgeContainer}>
         <span className={`${styles.badge} ${styles.badgeData}`}>
           {dataAmountMb === 0
@@ -319,7 +322,6 @@ function PlanCard({
         </span>
       </div>
 
-      {/* OTT 서비스 */}
       {subscriptionServices.length > 0 && (
         <div className={styles.ottContainer}>
           {subscriptionServices.map((service, index) => (
@@ -328,7 +330,16 @@ function PlanCard({
               className={`${styles.ottCircle} ${index !== 0 ? styles.ottCircleOverlap : ''}`}
               title={OTT_LABELS[service]}
             >
-              {OTT_LABELS[service].charAt(0)}
+              <img
+                src={OTT_IMAGES[service]}
+                alt={OTT_LABELS[service]}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                }}
+              />
             </div>
           ))}
         </div>
@@ -346,124 +357,63 @@ export default function Plan() {
     null,
   );
   const [selectedOttList, setSelectedOttList] = useState<OTTType[]>([]);
-  const [isLoading] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState<number | null>(null);
   const [isCompareMode, setIsCompareMode] = useState(false);
   const [comparePlans, setComparePlans] = useState<number[]>([]);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // 현재 사용 중인 요금제 상태
   const [currentPlan, setCurrentPlan] = useState<PlanType>(() => {
     const savedPlanId = localStorage.getItem('currentPlanId');
     if (savedPlanId) {
       const planId = parseInt(savedPlanId, 10);
       const savedPlan = MOCK_PLANS.find((p) => p.id === planId);
-      if (savedPlan) {
-        return savedPlan;
-      }
+      if (savedPlan) return savedPlan;
     }
-    // 저장된 요금제가 없으면 랜덤 선택
-    const randomIndex = Math.floor(Math.random() * MOCK_PLANS.length);
-    return MOCK_PLANS[randomIndex];
+    return MOCK_PLANS[Math.floor(Math.random() * MOCK_PLANS.length)];
   });
 
-  // localStorage에서 현재 사용중인 요금제 가져오기
   const loadCurrentPlan = useCallback(() => {
     const savedPlanId = localStorage.getItem('currentPlanId');
     if (savedPlanId) {
       const planId = parseInt(savedPlanId, 10);
       const savedPlan = MOCK_PLANS.find((p) => p.id === planId);
-      if (savedPlan) {
-        setCurrentPlan(savedPlan);
-        return;
-      }
+      if (savedPlan) setCurrentPlan(savedPlan);
     }
   }, []);
 
-  // 컴포넌트 마운트 시 및 페이지 포커스 시 localStorage 확인
   useEffect(() => {
     loadCurrentPlan();
-
-    const handleFocus = () => {
-      loadCurrentPlan();
-    };
-
-    window.addEventListener('focus', handleFocus);
-    return () => {
-      window.removeEventListener('focus', handleFocus);
-    };
+    window.addEventListener('focus', loadCurrentPlan);
+    return () => window.removeEventListener('focus', loadCurrentPlan);
   }, [loadCurrentPlan]);
 
-  // 필터링 및 정렬 로직
   const filteredAndSortedPlans = useMemo(() => {
     let filtered = [...MOCK_PLANS];
-
-    // 네트워크 필터
-    if (selectedNetwork) {
-      filtered = filtered.filter(
-        (plan) => plan.networkType === selectedNetwork,
-      );
-    }
-
-    // OTT 필터
+    if (selectedNetwork)
+      filtered = filtered.filter((p) => p.networkType === selectedNetwork);
     if (selectedOttList.length > 0) {
-      filtered = filtered.filter((plan) =>
-        selectedOttList.some((ott) => plan.subscriptionServices.includes(ott)),
+      filtered = filtered.filter((p) =>
+        selectedOttList.some((ott) => p.subscriptionServices.includes(ott)),
       );
     }
-
-    // 정렬
     if (sortTarget) {
       filtered.sort((a, b) => {
-        let aValue: number;
-        let bValue: number;
-
-        switch (sortTarget) {
-          case 'price':
-            aValue = a.price;
-            bValue = b.price;
-            break;
-          case 'dataAmountMb':
-            aValue = a.dataAmountMb;
-            bValue = b.dataAmountMb;
-            break;
-          case 'voiceMinutes':
-            aValue = a.voiceMinutes;
-            bValue = b.voiceMinutes;
-            break;
-          case 'overageSpeedMbps':
-            aValue = a.overageSpeedMbps ?? 0;
-            bValue = b.overageSpeedMbps ?? 0;
-            break;
-          case 'smsIncluded':
-            aValue = a.smsIncluded;
-            bValue = b.smsIncluded;
-            break;
-          default:
-            return 0;
-        }
-
-        if (sortOrder === 'asc') {
-          return aValue - bValue;
-        } else {
-          return bValue - aValue;
-        }
+        const aVal = a[sortTarget] ?? 0;
+        const bVal = b[sortTarget] ?? 0;
+        return sortOrder === 'asc'
+          ? (aVal as number) - (bVal as number)
+          : (bVal as number) - (aVal as number);
       });
     }
-
     return filtered;
   }, [selectedNetwork, selectedOttList, sortTarget, sortOrder]);
 
   const handlePlanClick = (plan: PlanType) => {
     if (isCompareMode) {
-      // 비교 모드: 카드 선택/해제
-      if (comparePlans.includes(plan.id)) {
-        setComparePlans(comparePlans.filter((id) => id !== plan.id));
-      } else if (comparePlans.length < 2) {
-        setComparePlans([...comparePlans, plan.id]);
-      }
+      if (comparePlans.includes(plan.id))
+        setComparePlans((p) => p.filter((id) => id !== plan.id));
+      else if (comparePlans.length < 2) setComparePlans((p) => [...p, plan.id]);
     } else {
-      // 일반 모드: 상세보기로 이동
       setSelectedPlanId(plan.id);
       navigate(PAGE_PATHS.PLAN_DETAIL.replace(':id', plan.id.toString()));
     }
@@ -477,25 +427,13 @@ export default function Plan() {
     }
   };
 
-  const handleCancelCompare = () => {
-    setIsCompareMode(false);
-    setComparePlans([]);
-  };
-
   return (
     <Layout>
       <Header />
-
       <div className={styles.container}>
         <div className={styles.gradientBg} />
-
         <div className={styles.content} ref={listRef}>
-          {/* 헤더 */}
-          <div style={{ marginBottom: '24px' }}>
-            <h1 className={styles.title}>요금제 목록</h1>
-          </div>
-
-          {/* 문어 */}
+          <h1 className={styles.title}>요금제 목록</h1>
           <div
             style={{ width: '200px', height: '200px', marginBottom: '24px' }}
           >
@@ -503,20 +441,14 @@ export default function Plan() {
               textureUrl="src/assets/images/search-moono.png"
               size="lg"
               floatSpeed={1.8}
-              rotation={0.3}
             />
           </div>
-
-          {/* 비교하기 버튼 */}
           <button
-            type="button"
             className={`${styles.compareButton} ${isCompareMode ? styles.compareButtonActive : ''}`}
             onClick={() => setIsCompareMode(!isCompareMode)}
           >
             요금제 한눈에 비교하기!! click!!
           </button>
-
-          {/* 현재 사용 중인 요금제 */}
           <div
             style={{
               marginBottom: '24px',
@@ -535,8 +467,6 @@ export default function Plan() {
               onClick={handlePlanClick}
             />
           </div>
-
-          {/* 정렬/필터 패널 */}
           <SortFilterPanel
             selectedNetwork={selectedNetwork}
             setSelectedNetwork={setSelectedNetwork}
@@ -547,56 +477,21 @@ export default function Plan() {
             selectedOttList={selectedOttList}
             setSelectedOttList={setSelectedOttList}
           />
-
-          {/* 요금제 리스트 */}
           <div className={styles.planList}>
-            {isLoading
-              ? Array.from({ length: 4 }, (_, i) => i).map((i) => (
-                  <div key={`skeleton-${i}`} className={styles.skeleton}>
-                    <div
-                      style={{
-                        height: '16px',
-                        width: '80px',
-                        backgroundColor: '#d1d5db',
-                        borderRadius: '4px',
-                        marginBottom: '4px',
-                      }}
-                    />
-                    <div
-                      style={{
-                        height: '20px',
-                        width: '120px',
-                        backgroundColor: '#d1d5db',
-                        borderRadius: '4px',
-                        marginBottom: '8px',
-                      }}
-                    />
-                  </div>
-                ))
-              : filteredAndSortedPlans.map((plan) => (
-                  <PlanCard
-                    key={plan.id}
-                    plan={plan}
-                    isSelected={selectedPlanId === plan.id}
-                    isCompareMode={isCompareMode}
-                    isCompareSelected={comparePlans.includes(plan.id)}
-                    onClick={handlePlanClick}
-                  />
-                ))}
+            {filteredAndSortedPlans.map((plan) => (
+              <PlanCard
+                key={plan.id}
+                plan={plan}
+                isSelected={selectedPlanId === plan.id}
+                isCompareMode={isCompareMode}
+                isCompareSelected={comparePlans.includes(plan.id)}
+                onClick={handlePlanClick}
+              />
+            ))}
           </div>
-
-          {/* 결과 없음 */}
-          {!isLoading && filteredAndSortedPlans.length === 0 && (
-            <div className={styles.emptyState}>
-              조건에 맞는 요금제가 없습니다.
-            </div>
-          )}
-
-          {/* 비교 모드 하단 버튼 */}
           {isCompareMode && (
             <div className={styles.compareActions}>
               <button
-                type="button"
                 className={styles.compareConfirmButton}
                 onClick={handleCompareClick}
                 disabled={comparePlans.length !== 2}
@@ -604,9 +499,11 @@ export default function Plan() {
                 비교하기 ({comparePlans.length}/2)
               </button>
               <button
-                type="button"
                 className={styles.compareCancelButton}
-                onClick={handleCancelCompare}
+                onClick={() => {
+                  setIsCompareMode(false);
+                  setComparePlans([]);
+                }}
               >
                 취소
               </button>
@@ -614,7 +511,6 @@ export default function Plan() {
           )}
         </div>
       </div>
-
       <BottomNav />
     </Layout>
   );

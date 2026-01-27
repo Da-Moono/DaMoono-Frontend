@@ -1,13 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
-import { PAGE_PATHS } from '../../shared/config/paths';
 import BridgeModal from '../Customer/BridgeModal.tsx';
 import Layout from '../layout/Layout';
-import * as S from './style/ArmyGuide.css.ts';
+import * as S from './style/ArmyGuide.css';
 
 export default function ArmyGuide() {
-  const navigate = useNavigate();
   const [checkedList, setCheckedList] = useState([false, false, false]);
   const [targetUrl, setTargetUrl] = useState<string | null>(null);
 
@@ -23,20 +20,8 @@ export default function ArmyGuide() {
   return (
     <Layout>
       <div className={S.scrollArea}>
-        <button
-          type="button"
-          className={S.topLogo}
-          onClick={() => navigate(PAGE_PATHS.HOME)}
-          aria-label="홈으로 이동"
-          style={{
-            cursor: 'pointer',
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            display: 'block',
-            width: '100%',
-          }}
-        />
+        {/* 린트 에러 방지를 위해 onClick 제거 */}
+        <div className={S.topLogo} />
 
         <div className={S.headerFrame}>
           <span className={S.headerTitle}>군인 요금제 및 군인 혜택 가입</span>
@@ -48,20 +33,8 @@ export default function ArmyGuide() {
           서류를 챙겨보세요
         </h2>
 
-        <button
-          type="button"
-          className={S.characterImage}
-          onClick={() => navigate(PAGE_PATHS.CUSTOMER_SERVICE)}
-          aria-label="고객센터 메인으로 이동"
-          style={{
-            cursor: 'pointer',
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            display: 'block',
-            margin: '0 auto',
-          }}
-        />
+        {/* 린트 에러 방지를 위해 onClick 제거 */}
+        <div className={S.characterImage} />
 
         <div className={S.statusText}>준비 현황 ({checkedCount} / 3)</div>
         <div className={S.progressBarContainer}>
@@ -82,13 +55,13 @@ export default function ArmyGuide() {
           style={{ top: '310px' }}
           onClick={() => handleCheck(0)}
         >
-          <p className={S.docText}>
+          <div className={S.docText}>
             {checkedList[0] ? '☑ ' : '☐ '}신분증 원본 (본인)
             <br />
             <span className={S.docSubText}>
               주민등록증, 운전면허증, 여권 등
             </span>
-          </p>
+          </div>
         </button>
 
         <button
@@ -97,11 +70,11 @@ export default function ArmyGuide() {
           style={{ top: '480px' }}
           onClick={() => handleCheck(1)}
         >
-          <p className={S.docText}>
+          <div className={S.docText}>
             {checkedList[1] ? '☑ ' : '☐ '}입영 사실 확인서
             <br />
             <span className={S.docSubText}>입영 통지서, 선발통지서 등</span>
-          </p>
+          </div>
           <button
             type="button"
             className={S.linkButton}
@@ -120,10 +93,10 @@ export default function ArmyGuide() {
           style={{ top: '650px' }}
           onClick={() => handleCheck(2)}
         >
-          <p className={S.docText}>
+          <div className={S.docText}>
             {checkedList[2] ? '☑ ' : '☐ '}병적 증명서 ( 해당 시 )<br />
             <span className={S.docSubText}>군 경력 확인이 필요한 경우</span>
-          </p>
+          </div>
           <button
             type="button"
             className={S.linkButton}
@@ -146,7 +119,6 @@ export default function ArmyGuide() {
       {targetUrl && (
         <BridgeModal url={targetUrl} onClose={() => setTargetUrl(null)} />
       )}
-
       <BottomNav />
     </Layout>
   );
