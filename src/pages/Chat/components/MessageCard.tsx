@@ -77,47 +77,70 @@ export default function MessageCard({ cards, type }: MessageCardProps) {
     <div className={styles.container}>
       <div className={styles.cardWrapper} ref={scrollRef}>
         <div className={styles.cardTrack}>
-          {cards.map((card) => (
-            <div key={card.title} className={styles.card}>
-              <h4 className={styles.cardTitle}>{card.title}</h4>
+          {cards.map((card) => {
+            // '설명' 항목을 찾아서 분리
+            const descriptionDetail = card.details.find(
+              (detail) => detail.label === '설명',
+            );
 
-              {card.originalPrice && (
-                <>
-                  <p className={styles.cardOriginalPrice}>
-                    {card.originalPrice}
-                  </p>
-                  {card.discountPrice && (
-                    <p className={styles.cardDiscountPrice}>
-                      {card.discountPrice}
+            // mainFeature가 있으면 '데이터' 항목 제거 (무제한이든 아니든)
+            const otherDetails = card.details.filter(
+              (detail) =>
+                detail.label !== '설명' &&
+                !(card.mainFeature && detail.label === '데이터'),
+            );
+
+            return (
+              <div key={card.title} className={styles.card}>
+                <h4 className={styles.cardTitle}>{card.title}</h4>
+
+                {card.originalPrice && (
+                  <>
+                    <p className={styles.cardOriginalPrice}>
+                      {card.originalPrice}
                     </p>
-                  )}
-                </>
-              )}
+                    {card.discountPrice && (
+                      <p className={styles.cardDiscountPrice}>
+                        {card.discountPrice}
+                      </p>
+                    )}
+                  </>
+                )}
 
-              {card.price && !card.originalPrice && (
-                <p className={styles.cardPrice}>{card.price}</p>
-              )}
+                {card.price && !card.originalPrice && (
+                  <p className={styles.cardPrice}>{card.price}</p>
+                )}
 
-              {card.mainFeature && (
-                <>
-                  <div className={styles.divider} />
-                  <p className={styles.mainFeature}>{card.mainFeature}</p>
-                </>
-              )}
+                {card.mainFeature && (
+                  <>
+                    <div className={styles.divider} />
+                    <p className={styles.mainFeature}>{card.mainFeature}</p>
+                  </>
+                )}
 
-              <div className={styles.cardDetails}>
-                {card.details.map((detail) => (
-                  <div
-                    key={`${detail.label}-${detail.value}`}
-                    className={styles.detailRow}
-                  >
-                    <span className={styles.detailLabel}>{detail.label}</span>
-                    <span className={styles.detailValue}>{detail.value}</span>
+                {/* 설명을 맨 위에 한 줄로 표시 */}
+                {descriptionDetail && (
+                  <div className={styles.descriptionRow}>
+                    <span className={styles.descriptionText}>
+                      {descriptionDetail.value}
+                    </span>
                   </div>
-                ))}
+                )}
+
+                <div className={styles.cardDetails}>
+                  {otherDetails.map((detail) => (
+                    <div
+                      key={`${detail.label}-${detail.value}`}
+                      className={styles.detailRow}
+                    >
+                      <span className={styles.detailLabel}>{detail.label}</span>
+                      <span className={styles.detailValue}>{detail.value}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           {/* 마지막 카드 */}
           <div className={styles.card}>

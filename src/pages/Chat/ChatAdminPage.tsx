@@ -211,9 +211,16 @@ export default function ChatAdminPage() {
                             alt="무너"
                             className={styles.chatIcon}
                           />
-                          <p className={styles.counselingId}>
-                            {session.userId}
-                          </p>
+                          <div>
+                            <p className={styles.counselingId}>
+                              {session.userId.startsWith('user-')
+                                ? `사용자 ${session.userId.replace('user-', '').slice(0, 8)}`
+                                : session.userId}
+                            </p>
+                            <p className={styles.sessionIdSmall}>
+                              ({session.sessionId.slice(0, 8)}...)
+                            </p>
+                          </div>
                         </div>
                         <div className={styles.counselingBtn}>상담 시작</div>
                       </div>

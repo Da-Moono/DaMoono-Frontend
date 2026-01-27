@@ -8,6 +8,7 @@ import socketService from '@/services/socketService';
 import Layout from '../layout/Layout';
 import ChatHeader from './components/ChatHeader';
 import ChatInput from './components/ChatInput';
+import ConsultModal from './components/ConsultModal';
 import VoiceRecorder, {
   type VoiceRecorderRef,
 } from './components/VoiceRecorder';
@@ -20,13 +21,16 @@ interface Message {
   timestamp: Date;
 }
 
+type ModalType = 'connecting' | 'endConsult' | 'summary' | 'summarizing' | null;
+
 export default function ChatConsultPage() {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const [sessionId, setSessionId] = useState<string>('');
+  const [_sessionId, setSessionId] = useState<string>('');
+  const [modalType, setModalType] = useState<ModalType>('connecting');
   const contentRef = useRef<HTMLDivElement>(null);
   const voiceRecorderRef = useRef<VoiceRecorderRef>(null);
 
@@ -43,6 +47,7 @@ export default function ChatConsultPage() {
     // 상담사 연결
     socketService.onConsultantConnected(() => {
       setIsConnected(true);
+      setModalType(null); // 연결되면 모달 닫기
       console.log('👨‍💼 상담사 연결됨');
     });
 
@@ -91,15 +96,39 @@ export default function ChatConsultPage() {
   };
 
   const handleEndConsult = () => {
-    if (confirm('상담을 종료하시겠습니까?')) {
-      socketService.endConsult();
-      navigate('/chat');
-    }
+    setModalType('endConsult');
+  };
+
+  const handleConfirmEndConsult = () => {
+    socketService.endConsult();
+    setModalType(null);
+    navigate('/chat');
   };
 
   const handleSummary = () => {
-    // TODO: 요약 페이지로 이동
-    alert('요약 기능은 준비 중입니다.');
+    setModalType('summary');
+  };
+
+  const handleConfirmSummary = () => {
+    setModalType('summarizing');
+
+    // 요약 API 호출 시뮬레이션 (실제로는 API 호출)
+    setTimeout(() => {
+      socketService.endConsult();
+      setModalType(null);
+      // TODO: 요약 결과 페이지로 이동
+      navigate('/mypage');
+    }, 3000);
+  };
+
+  const handleCloseModal = () => {
+    if (modalType === 'connecting') {
+      // 연결 취소
+      socketService.endConsult();
+      navigate('/chat');
+    } else {
+      setModalType(null);
+    }
   };
 
   const formatTime = (date: Date) => {
@@ -112,6 +141,28 @@ export default function ChatConsultPage() {
 
   return (
     <Layout>
+      {/* 모달 */}
+      {modalType && (
+        <ConsultModal
+          type={modalType}
+          isOpen={!!modalType}
+          onClose={
+            modalType === 'connecting' ||
+            modalType === 'endConsult' ||
+            modalType === 'summary'
+              ? handleCloseModal
+              : undefined
+          }
+          onConfirm={
+            modalType === 'endConsult'
+              ? handleConfirmEndConsult
+              : modalType === 'summary'
+                ? handleConfirmSummary
+                : undefined
+          }
+        />
+      )}
+
       {/* 녹음 컴포넌트 */}
       <VoiceRecorder
         ref={voiceRecorderRef}
@@ -151,14 +202,6 @@ export default function ChatConsultPage() {
               ? '상담사와 실시간 대화 중입니다'
               : '평균 답장 소요시간 5분 이내'}
           </p>
-          {sessionId && (
-            <p
-              className={styles.statusSubtext}
-              style={{ marginTop: '4px', fontSize: '9px' }}
-            >
-              세션 ID: {sessionId}
-            </p>
-          )}
         </div>
 
         {/* 메시지 영역 */}

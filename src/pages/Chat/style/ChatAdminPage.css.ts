@@ -124,6 +124,15 @@ export const counselingIdBox = style({
 export const counselingId = style({
   fontSize: '16px',
   fontWeight: '500',
+  margin: 0,
+});
+
+export const sessionIdSmall = style({
+  fontSize: '11px',
+  fontWeight: '300',
+  color: '#999',
+  margin: 0,
+  marginTop: '2px',
 });
 
 export const counselingBtn = style({
