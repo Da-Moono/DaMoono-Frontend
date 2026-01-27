@@ -26,8 +26,8 @@ class SocketService {
   }
 
   // 사용자: 상담 시작
-  startConsult(userId: string) {
-    this.socket?.emit('start-consult', userId);
+  startConsult(userId: string, userName?: string) {
+    this.socket?.emit('start-consult', { userId, userName });
   }
 
   // 상담사: 세션 참여
@@ -69,7 +69,13 @@ class SocketService {
 
   onWaitingSessions(
     callback: (
-      sessions: Array<{ sessionId: string; userId: string; createdAt: Date }>,
+      sessions: Array<{
+        sessionId: string;
+        userId: string;
+        userName?: string;
+        status: 'waiting' | 'connected';
+        createdAt: Date;
+      }>,
     ) => void,
   ) {
     this.socket?.on('waiting-sessions', callback);
@@ -77,7 +83,13 @@ class SocketService {
 
   onSessionsUpdated(
     callback: (
-      sessions: Array<{ sessionId: string; userId: string; createdAt: Date }>,
+      sessions: Array<{
+        sessionId: string;
+        userId: string;
+        userName?: string;
+        status: 'waiting' | 'connected';
+        createdAt: Date;
+      }>,
     ) => void,
   ) {
     this.socket?.on('sessions-updated', callback);

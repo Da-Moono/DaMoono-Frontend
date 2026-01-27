@@ -22,12 +22,22 @@ export const container = style({
 **********************/
 export const header = style({
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
   alignItems: 'center',
   gap: '40px',
   padding: '16px 20px',
   marginTop: '60px',
   backgroundColor: '#fff',
+  '@media': {
+    'screen and (max-width: 768px)': {
+      gap: '20px',
+      padding: '12px 16px',
+    },
+    'screen and (max-width: 480px)': {
+      gap: '12px',
+      padding: '10px 12px',
+    },
+  },
 });
 
 /***********************
@@ -65,6 +75,16 @@ export const noChatDot = style({
 export const chatStateIcon = style({
   width: '150px',
   height: '110px',
+  '@media': {
+    'screen and (max-width: 768px)': {
+      width: '120px',
+      height: '90px',
+    },
+    'screen and (max-width: 480px)': {
+      width: '100px',
+      height: '75px',
+    },
+  },
 });
 
 export const chatCard = style({
@@ -87,9 +107,19 @@ export const headerLeft = style({
 });
 
 export const headerIcon = style({
-  width: '200px',
-  height: '200px',
+  width: '150px',
+  height: '150px',
   objectFit: 'contain',
+  '@media': {
+    'screen and (max-width: 768px)': {
+      width: '120px',
+      height: '120px',
+    },
+    'screen and (max-width: 480px)': {
+      width: '100px',
+      height: '100px',
+    },
+  },
 });
 
 export const chatIcon = style({
@@ -124,6 +154,22 @@ export const counselingIdBox = style({
 export const counselingId = style({
   fontSize: '16px',
   fontWeight: '500',
+  margin: 0,
+  '@media': {
+    'screen and (max-width: 480px)': {
+      fontSize: '14px',
+    },
+  },
+});
+
+export const sessionIdSmall = style({
+  fontSize: '11px',
+  fontWeight: '300',
+  color: '#999',
+  margin: 0,
+  marginTop: '2px',
+  wordBreak: 'break-all',
+  maxWidth: '200px',
 });
 
 export const counselingBtn = style({
@@ -138,9 +184,16 @@ export const counselingBtn = style({
     rgba(255, 255, 255, 0.2) 66%,
     rgba(255, 166, 41, 0.2) 100%
   )`,
-
   color: '#FFA629',
   fontWeight: '500',
+  fontSize: '14px',
+  whiteSpace: 'nowrap',
+  '@media': {
+    'screen and (max-width: 480px)': {
+      fontSize: '12px',
+      padding: '4px 12px',
+    },
+  },
 });
 
 export const endButton = style({

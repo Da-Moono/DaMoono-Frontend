@@ -25,6 +25,8 @@ interface Message {
 interface WaitingSession {
   sessionId: string;
   userId: string;
+  userName?: string;
+  status: 'waiting' | 'connected';
   createdAt: Date;
 }
 
@@ -121,6 +123,7 @@ export default function ChatAdminPage() {
   };
 
   const handleBackToList = () => {
+    // 세션을 종료하지 않고 목록으로만 돌아감
     setShowSessionList(true);
     setSessionId('');
     setMessages([]);
@@ -165,7 +168,7 @@ export default function ChatAdminPage() {
                 alt="무너"
                 className={styles.headerIcon}
               />
-              <h2>김영희 상담사</h2>
+              <h2>상담사 페이지</h2>
             </div>
             <div className={styles.content}>
               {waitingSessions.length === 0 ? (
@@ -211,11 +214,32 @@ export default function ChatAdminPage() {
                             alt="무너"
                             className={styles.chatIcon}
                           />
-                          <p className={styles.counselingId}>
-                            {session.userId}
-                          </p>
+                          <div>
+                            <p className={styles.counselingId}>
+                              {session.userName || '게스트'}
+                            </p>
+                            <p className={styles.sessionIdSmall}>
+                              ({session.sessionId})
+                            </p>
+                          </div>
                         </div>
-                        <div className={styles.counselingBtn}>상담 시작</div>
+                        <div
+                          className={styles.counselingBtn}
+                          style={{
+                            background:
+                              session.status === 'connected'
+                                ? 'linear-gradient(90deg, rgba(31, 255, 106, 0.2) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(31, 255, 106, 0.2) 100%)'
+                                : undefined,
+                            color:
+                              session.status === 'connected'
+                                ? '#1FFF6A'
+                                : undefined,
+                          }}
+                        >
+                          {session.status === 'connected'
+                            ? '상담 진행 중'
+                            : '상담 시작'}
+                        </div>
                       </div>
                     </button>
                   ))}
