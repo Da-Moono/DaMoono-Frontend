@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import mascot from '@/assets/images/search-moono.png';
+import logo from '@/assets/images/logo.png';
 import { login } from '@/services/authApi';
 import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
@@ -63,8 +63,7 @@ export default function LoginForm() {
     <Layout>
       <div className={styles.container}>
         <div className={styles.logoContainer}>
-          <img src={mascot} alt="무너" className={styles.mascot} />
-          <div className={styles.speechBubble}>다 무 너</div>
+          <img src={logo} alt="다무너 로고" className={styles.logo} />
         </div>
 
         <div className={styles.formContainer}>

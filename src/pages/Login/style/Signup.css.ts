@@ -16,35 +16,11 @@ export const logoContainer = style({
   marginBottom: '40px',
 });
 
-export const mascot = style({
-  width: '80px',
-  height: '80px',
+export const logo = style({
+  width: '180px',
+  height: 'auto',
   objectFit: 'contain',
   marginBottom: '12px',
-});
-
-export const speechBubble = style({
-  position: 'relative',
-  backgroundColor: '#fff',
-  border: '2px solid #333',
-  borderRadius: '30px',
-  padding: '8px 20px',
-  fontSize: '16px',
-  fontWeight: '700',
-  color: '#333',
-
-  '::after': {
-    content: '""',
-    position: 'absolute',
-    top: '-8px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    width: '0',
-    height: '0',
-    borderLeft: '8px solid transparent',
-    borderRight: '8px solid transparent',
-    borderBottom: '8px solid #333',
-  },
 });
 
 export const formContainer = style({

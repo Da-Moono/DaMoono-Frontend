@@ -93,21 +93,29 @@ export const sliderTrack = style({
 
 export const sliderCard = style({
   minWidth: '100%',
-  height: '200px',
-  background: 'linear-gradient(135deg, #FFB6D9 0%, #D5A5FF 100%)',
+  height: '240px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: '20px',
+  padding: 0,
   flexShrink: 0,
   position: 'relative',
   border: 'none',
   cursor: 'pointer',
+  overflow: 'hidden',
+  backgroundColor: '#f5f5f5',
 
   ':disabled': {
     cursor: 'default',
   },
+});
+
+export const sliderImage = style({
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  objectPosition: 'center -10px',
 });
 
 export const sliderContent = style({

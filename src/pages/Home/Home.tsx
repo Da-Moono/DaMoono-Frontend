@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import planBanner from '@/assets/images/Plan-banner.png';
+import serviceRecommendationBanner from '@/assets/images/ServiceRecommendation-banner.png';
+import subscribeBanner from '@/assets/images/Subscribe-banner.png';
 import BottomNav from '@/components/BottomNav';
 import Guide from '@/components/Guide';
 import Header from '@/components/Header';
@@ -35,9 +38,20 @@ export default function Home() {
       id: 1,
       content: '맞춤 서비스 추천받기',
       path: PAGE_PATHS.SERVICE_RECOMMENDATION,
+      image: serviceRecommendationBanner,
     },
-    { id: 2, content: '요금제 둘러보기', path: PAGE_PATHS.PLAN },
-    { id: 3, content: '구독 둘러보기', path: PAGE_PATHS.SUBSCRIBE },
+    {
+      id: 2,
+      content: '요금제 둘러보기',
+      path: PAGE_PATHS.PLAN,
+      image: planBanner,
+    },
+    {
+      id: 3,
+      content: '구독 둘러보기',
+      path: PAGE_PATHS.SUBSCRIBE,
+      image: subscribeBanner,
+    },
   ];
 
   const guideSteps = [
@@ -136,7 +150,11 @@ export default function Home() {
                   className={styles.sliderCard}
                   onClick={() => navigate(slide.path)}
                 >
-                  <div className={styles.sliderContent}>{slide.content}</div>
+                  <img
+                    src={slide.image}
+                    alt={slide.content}
+                    className={styles.sliderImage}
+                  />
                 </button>
               ))}
             </div>
@@ -163,7 +181,11 @@ export default function Home() {
             <button
               type="button"
               className={styles.moreButton}
-              onClick={() => navigate(PAGE_PATHS.PLAN)}
+              onClick={() =>
+                navigate(
+                  activeTab === 'plan' ? PAGE_PATHS.PLAN : PAGE_PATHS.SUBSCRIBE,
+                )
+              }
             >
               더보기 &gt;
             </button>

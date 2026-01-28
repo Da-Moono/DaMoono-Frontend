@@ -6,11 +6,7 @@ import thinkingMascot from '@/assets/images/thinking-moono.png';
 import Header from '@/components/Header';
 import { MOCK_PLANS, OTT_IMAGES, OTT_LABELS } from '@/pages/Plan/constants';
 import type { Plan } from '@/pages/Plan/types';
-import {
-  CATEGORY_LABELS,
-  MOCK_SUBSCRIBES,
-  SUBSCRIBE_IMAGES,
-} from '@/pages/Subscribe/constants';
+import { CATEGORY_LABELS, MOCK_SUBSCRIBES } from '@/pages/Subscribe/constants';
 import type { Subscribe } from '@/pages/Subscribe/types';
 import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
@@ -575,7 +571,6 @@ export default function ServiceRecommendation() {
               <h2 className={styles.resultSectionTitle}>추천 구독 서비스</h2>
               <div className={styles.resultCardList}>
                 {recommendedSubscribes.map((subscribe) => {
-                  const subscribeImage = SUBSCRIBE_IMAGES[subscribe.name];
                   return (
                     <button
                       key={subscribe.id}
@@ -615,23 +610,6 @@ export default function ServiceRecommendation() {
                             {CATEGORY_LABELS[subscribe.category]}
                           </span>
                         )}
-                      </div>
-
-                      <div className={styles.resultSubscribeContainer}>
-                        <div
-                          className={styles.resultSubscribeCircle}
-                          title={subscribe.name}
-                        >
-                          {subscribeImage ? (
-                            <img
-                              src={subscribeImage}
-                              alt={subscribe.name}
-                              className={styles.resultSubscribeImage}
-                            />
-                          ) : (
-                            subscribe.name.charAt(0)
-                          )}
-                        </div>
                       </div>
                     </button>
                   );
