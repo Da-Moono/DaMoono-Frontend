@@ -109,15 +109,21 @@ LangChain + OpenAI API
 5. 상담 종료 및 요약
 
 ---
+오케이 👍 요청한 것 **전부 반영해서** 깔끔하게 다시 정리해줄게.
+
+* `@아이디` → **클릭 시 해당 GitHub 프로필로 이동**
+* **양해강** 역할에 **AI 추가**
+* **역할/기여 설명에서 bold 전부 제거**
+* **이름 bold는 유지**
+
+---
 
 ## 👥 팀원 및 역할
-
 | 프로필 | 이름 | 주요 역할 및 기여 |
 | --- | --- | --- |
-| ![profile]() | **김예린**<br/>@yerroong | **Frontend · AI** OpenAI + LangChain 기반 텍스트·음성 AI 챗봇 프론트·백엔드 연동 구현, 요금제·구독 상품 응답 로직 설계, **Socket.IO 기반 실시간 상담 채팅 통신 구현**, 상담사 채팅 UI 개발, 챗봇 대화 흐름·프롬프트 설계 및 챗봇 매뉴얼 제작 |
-| ![profile]() | **류종현**<br/>@jonghyunRyu | **Frontend** 마이페이지 및 관리자 페이지 UI 구현, 상담 이력·이용 데이터 시각화, 요금제·구독 정보 조회 UI 개발, 다중 데이터 로딩 렌더링 최적화 및 3D 로딩 UI 적용 |
-| ![profile]() | **양해강**<br/>@Inoansta | **Backend** 백엔드 프로젝트 및 DB 초기 셋업, 회원가입·인증 API 구현, REST API 설계, 프론트엔드 연동 및 서비스 배포 환경 구성 |
-| ![profile]() | **이해니**<br/>@haeni82 | **Frontend** 상담 요약 페이지(UI) 구현, 유저용 상담 요약 프롬프트(JSON) 설계, 상담사 WebSocket 양방향 통신 구조 설계, 상담 요약 및 후속 액션 제안 기능 기획 |
-| ![profile]() | **이혁준**<br/>@Lilium0422 | **Frontend** 홈·온보딩·성향 분석 페이지 UI 및 컴포넌트 구현, 사용자 성향 분석 로직 설계, 공용 레이아웃(헤더·하단 메뉴) 및 서비스 가이드 UI 개발 |
-| ![profile]() | **유덕현**<br/>@Ydh0622 | **Frontend** FAQ 페이지 및 군인·미성년자·대리인 가입 시 구비 서류 안내 UI 구현, 이미지 애니메이션 및 인터랙션 마무리 |
-| ![profile]() | **최낙운** | **Frontend** 구독 서비스 및 요금제 목록·상세 페이지 UI 구현, 요금제 비교 기능 및 그래프 시각화 개발, 요금제 데이터 백엔드 연동 |
+| ![profile]() | **김예린**<br/>[@yerroong](https://github.com/yerroong) | **Frontend · AI**<br/>팀장으로, OpenAI + LangChain 기반 텍스트·음성 AI 챗봇 프론트·백엔드 연동 구현, 요금제·구독 상품 응답 로직 설계, Socket.IO 기반 실시간 상담 채팅 통신 구현, 상담사 채팅 UI 개발, 챗봇 대화 흐름·프롬프트 설계 및 챗봇 매뉴얼 제작 |
+| ![profile]() | **류종현**<br/>[@jonghyunRyu](https://github.com/jonghyunRyu) | **Frontend**<br/>마이페이지 및 관리자 페이지 UI 구현, 상담 이력·이용 데이터 시각화, 요금제·구독 정보 조회 UI 개발, 다중 데이터 로딩 렌더링 최적화 및 3D 로딩 UI 적용 |
+| ![profile]() | **양해강**<br/>[@Inoansta](https://github.com/Inoansta) | **Backend · AI**<br/>백엔드 프로젝트 및 DB 초기 셋업, 회원가입·인증 API 구현, REST API 설계, 프론트엔드 연동 및 서비스 배포 환경 구성, AI 기능 연동을 위한 서버 구조 설계 |
+| ![profile]() | **이해니**<br/>[@haeni82](https://github.com/haeni82) | **Frontend**<br/>상담 요약 페이지(UI) 구현, 유저용 상담 요약 프롬프트(JSON) 설계, 상담사 WebSocket 양방향 통신 구조 설계, 상담 요약 및 후속 액션 제안 기능 기획 |
+| ![profile]() | **이혁준**<br/>[@Lilium0422](https://github.com/Lilium0422) | **Frontend**<br/>홈·온보딩·성향 분석 페이지 UI 및 컴포넌트 구현, 사용자 성향 분석 로직 설계, 공용 레이아웃(헤더·하단 메뉴) 및 서비스 가이드 UI 개발 |
+| ![profile]() | **유덕현**<br/>[@Ydh0622](https://github.com/Ydh0622) | **Frontend**<br/>FAQ 페이지 및 군인·미성년자·대리인 가입 시 구비 서류 안내 UI 구현, 이미지 애니메이션 및 인터랙션 마무리 |
