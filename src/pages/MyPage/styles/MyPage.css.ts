@@ -13,12 +13,12 @@ export const mypage = style({
 // 마이페이지 상담섹션 컨테이너 스타일
 export const container = style({
   padding: '16px',
-  background: '#FEFDFD',
+  background: '#FFFFFF',
 });
 
 // 마이페이지 메뉴/이용 꿀팁 컨테이너 스타일
 export const section = style({
-  background: '#FEFDFD',
+  background: '#FFFFFF',
   padding: '16px',
   margin: '16px 16px 32px 16px',
   borderRadius: '10px',
