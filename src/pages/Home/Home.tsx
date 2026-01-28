@@ -139,6 +139,20 @@ export default function Home() {
         {/* 이벤트 슬라이더 */}
         <section className={styles.section}>
           <div className={styles.sliderWrapper}>
+            {/* 왼쪽 화살표 */}
+            <button
+              type="button"
+              className={styles.sliderArrowLeft}
+              onClick={() =>
+                setCurrentSlide((prev) =>
+                  prev === 0 ? slides.length - 1 : prev - 1,
+                )
+              }
+              aria-label="이전 슬라이드"
+            >
+              ‹
+            </button>
+
             <div
               className={styles.sliderTrack}
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -158,6 +172,21 @@ export default function Home() {
                 </button>
               ))}
             </div>
+
+            {/* 오른쪽 화살표 */}
+            <button
+              type="button"
+              className={styles.sliderArrowRight}
+              onClick={() =>
+                setCurrentSlide((prev) =>
+                  prev === slides.length - 1 ? 0 : prev + 1,
+                )
+              }
+              aria-label="다음 슬라이드"
+            >
+              ›
+            </button>
+
             <div className={styles.sliderDots}>
               {slides.map((slide, index) => (
                 <button

@@ -118,6 +118,66 @@ export const sliderImage = style({
   objectPosition: 'center -10px',
 });
 
+export const sliderArrowLeft = style({
+  position: 'absolute',
+  left: '4px',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  zIndex: 10,
+  width: '40px',
+  height: '40px',
+  borderRadius: '50%',
+  backgroundColor: 'transparent',
+  border: 'none',
+  fontSize: '48px',
+  fontWeight: '300',
+  color: 'rgba(255, 255, 255, 0.7)',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'all 0.2s ease',
+
+  ':hover': {
+    color: 'rgba(255, 255, 255, 1)',
+    transform: 'translateY(-50%) scale(1.2)',
+  },
+
+  ':active': {
+    transform: 'translateY(-50%) scale(1)',
+  },
+});
+
+export const sliderArrowRight = style({
+  position: 'absolute',
+  right: '4px',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  zIndex: 10,
+  width: '40px',
+  height: '40px',
+  borderRadius: '50%',
+  backgroundColor: 'transparent',
+  border: 'none',
+  fontSize: '48px',
+  fontWeight: '300',
+  color: 'rgba(255, 255, 255, 0.7)',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'all 0.2s ease',
+
+  ':hover': {
+    color: 'rgba(255, 255, 255, 1)',
+    transform: 'translateY(-50%) scale(1.2)',
+  },
+
+  ':active': {
+    transform: 'translateY(-50%) scale(1)',
+  },
+});
+
 export const sliderContent = style({
   padding: '16px 32px',
   backgroundColor: '#FFB6D9',
