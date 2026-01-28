@@ -141,21 +141,24 @@ export default function ChatConsultPage() {
         },
       );
 
-      if (response.status === 201 || response.status === 200) {
-        socketService.endConsult();
-        setModalType(null);
+      console.log('요약 API 응답:', response);
 
-        // response.data 전체가 아니라 .payload만 넘깁니다.
-        navigate('/summary', {
-          state: { summaryData: response.data.payload },
-        });
-      }
+      // 응답이 성공하면 (axios는 2xx를 자동으로 처리하므로 여기 도달 = 성공)
+      socketService.endConsult();
+
+      // response.data 전체가 아니라 .payload만 넘깁니다.
+      navigate('/summary', {
+        state: { summaryData: response.data.payload },
+      });
+
+      setModalType(null);
+      // 플래그는 navigate 후에 정리
+      sessionStorage.removeItem('is_user_summarizing');
     } catch (error) {
       console.error('요약 생성 중 에러 발생:', error);
       alert('요약 데이터를 가져오는데 실패했습니다.');
       setModalType(null);
-    } finally {
-      // 플래그 정리
+      // 에러 시에도 플래그 정리
       sessionStorage.removeItem('is_user_summarizing');
     }
   };
