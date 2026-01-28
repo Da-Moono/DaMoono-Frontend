@@ -33,8 +33,8 @@ export default function Home() {
   const slides = [
     {
       id: 1,
-      content: '성향 테스트 하러가기',
-      path: PAGE_PATHS.PERSONALITY_TEST,
+      content: '맞춤 서비스 추천받기',
+      path: PAGE_PATHS.SERVICE_RECOMMENDATION,
     },
     { id: 2, content: '요금제 둘러보기', path: PAGE_PATHS.PLAN },
     { id: 3, content: '구독 둘러보기', path: PAGE_PATHS.SUBSCRIBE },

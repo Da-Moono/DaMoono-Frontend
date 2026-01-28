@@ -10,7 +10,7 @@ export const PAGE_PATHS = {
   PLAN_COMPARE: '/plan/compare',
   SUBSCRIBE: '/subscribe',
   SUBSCRIBE_DETAIL: '/subscribe/:id',
-  PERSONALITY_TEST: '/personality-test',
+  SERVICE_RECOMMENDATION: '/service-recommendation',
   CHAT: '/chat',
   CHAT_MANUAL: '/chat/manual',
   MYPAGE: '/mypage',

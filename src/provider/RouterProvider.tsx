@@ -17,10 +17,10 @@ import Login from '../pages/Login/Login';
 import LoginForm from '../pages/Login/LoginForm';
 import Signup from '../pages/Login/Signup';
 import Tips from '../pages/MyPage/pages/Tips';
-import PersonalityTest from '../pages/PersonalityTest/PersonalityTest';
 import Plan from '../pages/Plan/Plan';
 import PlanCompare from '../pages/Plan/PlanCompare';
 import PlanDetail from '../pages/Plan/PlanDetail';
+import ServiceRecommendation from '../pages/ServiceRecommendation/ServiceRecommendation';
 import Subscribe from '../pages/Subscribe/Subscribe';
 import SubscribeDetail from '../pages/Subscribe/SubscribeDetail';
 import Summary from '../pages/Summary/SummaryPage';
@@ -110,8 +110,8 @@ export default function RouterProvider() {
       Component: SubscribeDetail,
     },
     {
-      path: PAGE_PATHS.PERSONALITY_TEST,
-      Component: PersonalityTest,
+      path: PAGE_PATHS.SERVICE_RECOMMENDATION,
+      Component: ServiceRecommendation,
     },
     {
       path: PAGE_PATHS.ADMIN,
