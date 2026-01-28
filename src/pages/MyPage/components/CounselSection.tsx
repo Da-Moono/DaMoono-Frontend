@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router';
 import * as css from '../styles/MyPage.css';
 
 interface CounselSectionProps {
-  count?: number;
+  count: number;
 }
 
-export function CounselSection({ count = 1 }: CounselSectionProps) {
+export function CounselSection({ count = 0 }: CounselSectionProps) {
   const navigate = useNavigate();
   const hasCounsel = count > 0;
 
