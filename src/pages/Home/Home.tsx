@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router';
 import BottomNav from '@/components/BottomNav';
 import Guide from '@/components/Guide';
 import Header from '@/components/Header';
+import { MOCK_PLANS } from '@/pages/Plan/constants';
+import { MOCK_SUBSCRIBES } from '@/pages/Subscribe/constants';
 import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
 import * as styles from './style/Home.css';
@@ -12,6 +14,19 @@ export default function Home() {
   const location = useLocation();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showGuide, setShowGuide] = useState(false);
+  const [activeTab, setActiveTab] = useState<'plan' | 'subscribe'>('plan');
+
+  // 랜덤으로 5개 선택하는 함수
+  const getRandomItems = <T,>(array: T[], count: number): T[] => {
+    const shuffled = [...array].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, count);
+  };
+
+  // 랜덤 5개 요금제
+  const [randomPlans] = useState(() => getRandomItems(MOCK_PLANS, 5));
+
+  // 랜덤 5개 구독
+  const [randomSubscribes] = useState(() => getRandomItems(MOCK_SUBSCRIBES, 5));
 
   const slides = [
     {
@@ -130,10 +145,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* BEST 상품 한번에 보기 */}
+        {/* 유플러스 상품 둘러보기 */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>BEST 상품 한번에 보기</h2>
+            <h2 className={styles.sectionTitle}>유플러스 상품 둘러보기</h2>
             <button
               type="button"
               className={styles.moreButton}
@@ -144,27 +159,68 @@ export default function Home() {
           </div>
 
           <div className={styles.tabs}>
-            <button type="button" className={styles.tabActive}>
+            <button
+              type="button"
+              className={activeTab === 'plan' ? styles.tabActive : styles.tab}
+              onClick={() => setActiveTab('plan')}
+            >
               요금제
             </button>
-            <button type="button" className={styles.tab}>
+            <button
+              type="button"
+              className={
+                activeTab === 'subscribe' ? styles.tabActive : styles.tab
+              }
+              onClick={() => setActiveTab('subscribe')}
+            >
               구독
             </button>
           </div>
 
           <div className={styles.productList}>
-            {[1, 2, 3, 4, 5].map((rank) => (
-              <div key={rank} className={styles.productItem}>
-                <div className={styles.productRank}>{rank}</div>
-                <div className={styles.productIcon} />
-                <div className={styles.productInfo}>
-                  <p className={styles.productName}>
-                    데이터 무한 + 로밍 + 유튜브 프리미엄 요금제 + 추가 혜택 &gt;
-                  </p>
-                  <p className={styles.productPrice}>월 59,800원</p>
-                </div>
-              </div>
-            ))}
+            {activeTab === 'plan'
+              ? randomPlans.map((plan, index) => (
+                  <button
+                    key={plan.id}
+                    type="button"
+                    className={styles.productItem}
+                    onClick={() =>
+                      navigate(
+                        `${PAGE_PATHS.PLAN_DETAIL.replace(':id', plan.id.toString())}`,
+                      )
+                    }
+                  >
+                    <div className={styles.productRank}>{index + 1}</div>
+                    <div className={styles.productInfo}>
+                      <p className={styles.productName}>{plan.name} &gt;</p>
+                      <p className={styles.productPrice}>
+                        월 {plan.price.toLocaleString()}원
+                      </p>
+                    </div>
+                  </button>
+                ))
+              : randomSubscribes.map((subscribe, index) => (
+                  <button
+                    key={subscribe.id}
+                    type="button"
+                    className={styles.productItem}
+                    onClick={() =>
+                      navigate(
+                        `${PAGE_PATHS.SUBSCRIBE_DETAIL.replace(':id', subscribe.id.toString())}`,
+                      )
+                    }
+                  >
+                    <div className={styles.productRank}>{index + 1}</div>
+                    <div className={styles.productInfo}>
+                      <p className={styles.productName}>
+                        {subscribe.name} &gt;
+                      </p>
+                      <p className={styles.productPrice}>
+                        월 {subscribe.monthlyPrice.toLocaleString()}원
+                      </p>
+                    </div>
+                  </button>
+                ))}
           </div>
         </section>
       </div>

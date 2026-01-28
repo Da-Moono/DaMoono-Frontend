@@ -199,6 +199,16 @@ export const productItem = style({
   padding: '16px',
   backgroundColor: '#f9f9f9',
   borderRadius: '12px',
+  cursor: 'pointer',
+  transition: 'all 0.2s ease',
+  border: 'none',
+  width: '100%',
+  textAlign: 'left',
+
+  ':hover': {
+    backgroundColor: '#f0f0f0',
+    transform: 'translateY(-2px)',
+  },
 });
 
 export const productRank = style({
