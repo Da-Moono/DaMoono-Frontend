@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion';
 import { useLocation } from 'react-router';
 import BottomNav from '@/components/BottomNav/BottomNav';
+import BackButton from '@/components/Button/BackButton';
 import Header from '@/components/Header/Header';
 import Layout from '@/pages/layout/Layout';
 import * as s from '@/pages/Summary/style/SummaryPage.css';
 import CustomerDNA from './components/CustomerDNA';
 import MoodTimeline from './components/MoodTimeline';
+import NextInteractionGuide from './components/NextGuide';
 import ReportCard from './components/ReportCard';
 
 const MOCK_SUMMARY_DATA = {
@@ -117,13 +119,18 @@ const SummaryPage = () => {
             title="고객 성향 태그"
           />
         </motion.section>
-
         <motion.section className={s.contentSection} variants={itemVariants}>
           <CustomerDNA
             dnaList={summaryData?.risk_tagging}
             title="핵심 리스크 태그"
           />
         </motion.section>
+
+        <motion.section className={s.contentSection} variants={itemVariants}>
+          <NextInteractionGuide guide={summaryData?.next_interaction_guide} />
+        </motion.section>
+
+        <BackButton targetPath="/chat/admin" label="상담 목록으로 돌아가기" />
       </motion.div>
 
       <BottomNav />

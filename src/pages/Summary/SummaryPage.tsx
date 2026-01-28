@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useLocation } from 'react-router';
 import BottomNav from '@/components/BottomNav/BottomNav';
+import BackButton from '@/components/Button/BackButton';
 import Header from '@/components/Header/Header';
 import Layout from '@/pages/layout/Layout';
 import * as s from '@/pages/Summary/style/SummaryPage.css';
@@ -189,6 +190,8 @@ const SummaryPage = () => {
             <ProposalHighlight data={summaryData.proposals} />
           )}
         </motion.section>
+
+        <BackButton targetPath="/chat" label="채팅 화면으로 돌아가기" />
       </motion.div>
 
       {/* 4. 네비게이션 */}
