@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import mascot from '@/assets/images/search-moono.png';
+import logo from '@/assets/images/logo.png';
 import { login } from '@/services/authApi';
 import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
