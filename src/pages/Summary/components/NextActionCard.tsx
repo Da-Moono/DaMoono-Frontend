@@ -1,5 +1,5 @@
 import PhoneIcon from '@/pages/Summary/assets/call.svg'; // 전화 아이콘
-import DetectiveMascot from '@/pages/Summary/assets/detective.png';
+import DetectiveMascot from '@/pages/Summary/assets/holeman.png';
 import MailIcon from '@/pages/Summary/assets/mail.svg'; // 메일 아이콘
 import PinkBubble from '@/pages/Summary/assets/pink-bubble.svg'; // 공통 말풍선 배경
 import * as s from '@/pages/Summary/style/NextActionCard.css';

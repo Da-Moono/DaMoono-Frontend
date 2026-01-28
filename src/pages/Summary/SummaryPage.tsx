@@ -5,7 +5,10 @@ import Layout from '@/pages/layout/Layout';
 import * as s from '@/pages/Summary/style/SummaryPage.css';
 import CharacterScene from './CharacterScene';
 import Accordion from './components/Accordion';
+import CompactTipBox from './components/CompactTipBox';
+import GuideChecklist from './components/GuideChecklist';
 import NextActionCard from './components/NextActionCard';
+import ProposalHighlight from './components/ProposalHighlight';
 import StatusCard from './components/StatusCard';
 import SummaryResultCard from './components/SummaryResultCard';
 import WarningCard from './components/WarningCard';
@@ -102,12 +105,12 @@ const MOCK_SUMMARY_DATA = {
   },
 
   proposals: {
-    title: '💡 제시안',
-    items: [],
+    title: '제시안',
+    items: ['그냥 샘플 데이터입니다.'],
   },
 
   tips: {
-    title: '🎁 꿀팁',
+    title: '꿀팁',
     steps: [
       'Wi-Fi 우선 사용 권장: 데이터 속도가 불안정한 실내 장소에서는 가급적 Wi-Fi를 우선 연결하여 사용하시는 것을 추천드립니다.',
       '신뢰할 수 있는 AP 활용: 보안이 확인된 신뢰할 수 있는 AP를 연결하면 훨씬 안정적인 통신 환경을 이용하실 수 있습니다.',
@@ -168,13 +171,17 @@ const SummaryPage = () => {
         </motion.section>
 
         <motion.section className={s.contentSection} variants={itemVariants}>
-          <Accordion type="guide" data={MOCK_SUMMARY_DATA.guides} />
-          <Accordion type="tip" data={MOCK_SUMMARY_DATA.tips} />
-          <Accordion type="proposal" data={MOCK_SUMMARY_DATA.proposals} />
+          <NextActionCard nextActions={MOCK_SUMMARY_DATA.nextActions} />
         </motion.section>
 
         <motion.section className={s.contentSection} variants={itemVariants}>
-          <NextActionCard nextActions={MOCK_SUMMARY_DATA.nextActions} />
+          <Accordion type="guide" data={MOCK_SUMMARY_DATA.guides} />
+          <Accordion type="tip" data={MOCK_SUMMARY_DATA.tips} />
+          <Accordion type="proposal" data={MOCK_SUMMARY_DATA.proposals} />
+
+          <GuideChecklist data={MOCK_SUMMARY_DATA.guides} />
+          <CompactTipBox data={MOCK_SUMMARY_DATA.tips} />
+          <ProposalHighlight data={MOCK_SUMMARY_DATA.proposals} />
         </motion.section>
       </motion.div>
 
