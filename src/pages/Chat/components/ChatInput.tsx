@@ -79,7 +79,7 @@ export default function ChatInput({
       setShowMenu(false);
       return;
     }
-    
+
     navigate('/chat/consult');
     setShowMenu(false);
   };
@@ -97,91 +97,97 @@ export default function ChatInput({
           useLayout={false}
         />
       )}
-      
-      <div className={hasBottomNav ? styles.inputContainerWithBottomNav : styles.inputContainer}>
-      {showMenu && (
-        <div className={styles.menuOverlay}>
+
+      <div
+        className={
+          hasBottomNav
+            ? styles.inputContainerWithBottomNav
+            : styles.inputContainer
+        }
+      >
+        {showMenu && (
+          <div className={styles.menuOverlay}>
+            <button
+              type="button"
+              className={styles.closeButton}
+              onClick={handleMenuToggle}
+            >
+              <img src={dropArrow} alt="닫기" className={styles.closeIcon} />
+            </button>
+            <div className={styles.menuGrid}>
+              <button
+                type="button"
+                className={styles.menuButton}
+                onClick={handleClearChat}
+              >
+                <img
+                  src={plusChat}
+                  alt="채팅 초기화"
+                  className={styles.menuIcon}
+                />
+                <span className={styles.menuText}>채팅 초기화</span>
+              </button>
+              <button
+                type="button"
+                className={styles.menuButton}
+                onClick={handleConsultant}
+              >
+                <img
+                  src={plusConsult}
+                  alt="상담사 연결"
+                  className={styles.menuIcon}
+                />
+                <span className={styles.menuText}>상담사 연결</span>
+              </button>
+              <button
+                type="button"
+                className={styles.menuButton}
+                onClick={handleManual}
+              >
+                <img src={plusInfo} alt="메뉴얼" className={styles.menuIcon} />
+                <span className={styles.menuText}>메뉴얼</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className={styles.inputWrapper}>
           <button
             type="button"
-            className={styles.closeButton}
+            className={styles.plusButton}
             onClick={handleMenuToggle}
           >
-            <img src={dropArrow} alt="닫기" className={styles.closeIcon} />
+            <img src={plusButton} alt="메뉴" className={styles.plusIcon} />
           </button>
-          <div className={styles.menuGrid}>
+
+          <div className={styles.inputBox}>
+            <input
+              type="text"
+              placeholder="질문을 입력하세요"
+              value={inputMessage}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              className={styles.input}
+              disabled={isLoading}
+            />
             <button
               type="button"
-              className={styles.menuButton}
-              onClick={handleClearChat}
+              className={styles.iconButton}
+              onClick={handleVoiceInput}
+              disabled={isLoading}
             >
-              <img
-                src={plusChat}
-                alt="채팅 초기화"
-                className={styles.menuIcon}
-              />
-              <span className={styles.menuText}>채팅 초기화</span>
+              <img src={mic} alt="음성 입력" className={styles.icon} />
             </button>
             <button
               type="button"
-              className={styles.menuButton}
-              onClick={handleConsultant}
+              className={styles.iconButton}
+              onClick={handleSend}
+              disabled={isLoading}
             >
-              <img
-                src={plusConsult}
-                alt="상담사 연결"
-                className={styles.menuIcon}
-              />
-              <span className={styles.menuText}>상담사 연결</span>
-            </button>
-            <button
-              type="button"
-              className={styles.menuButton}
-              onClick={handleManual}
-            >
-              <img src={plusInfo} alt="메뉴얼" className={styles.menuIcon} />
-              <span className={styles.menuText}>메뉴얼</span>
+              <img src={sendButton} alt="전송" className={styles.icon} />
             </button>
           </div>
         </div>
-      )}
-
-      <div className={styles.inputWrapper}>
-        <button
-          type="button"
-          className={styles.plusButton}
-          onClick={handleMenuToggle}
-        >
-          <img src={plusButton} alt="메뉴" className={styles.plusIcon} />
-        </button>
-
-        <div className={styles.inputBox}>
-          <input
-            type="text"
-            placeholder="질문을 입력하세요"
-            value={inputMessage}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            className={styles.input}
-            disabled={isLoading}
-          />
-          <button
-            type="button"
-            className={styles.iconButton}
-            onClick={handleVoiceInput}
-            disabled={isLoading}
-          >
-            <img src={mic} alt="음성 입력" className={styles.icon} />
-          </button>
-          <button
-            type="button"
-            className={styles.iconButton}
-            onClick={handleSend}
-            disabled={isLoading}
-          >
-            <img src={sendButton} alt="전송" className={styles.icon} />
-          </button>
-        </div>
-      </div>
       </div>
     </>
   );

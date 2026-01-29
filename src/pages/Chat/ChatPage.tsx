@@ -210,7 +210,7 @@ export default function ChatPage() {
           useLayout={false}
         />
       )}
-      
+
       {/* 녹음 컴포넌트 */}
       <VoiceRecorder
         ref={voiceRecorderRef}

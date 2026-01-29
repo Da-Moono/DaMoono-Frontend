@@ -10,10 +10,10 @@ interface LoginRequiredModalProps {
   useLayout?: boolean;
 }
 
-export default function LoginRequiredModal({ 
-  onClose, 
+export default function LoginRequiredModal({
+  onClose,
   message = '로그인 후 이용 가능한 페이지입니다.\n로그인 후 다시 시도해 주세요!',
-  useLayout = true 
+  useLayout = true,
 }: LoginRequiredModalProps) {
   const navigate = useNavigate();
 

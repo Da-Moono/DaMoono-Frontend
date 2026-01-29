@@ -28,7 +28,7 @@ export default function LoginForm() {
         // 로그인 성공 시 사용자 정보 저장
         console.log('로그인 데이터:', data);
         console.log('저장할 userName:', data.data.name);
-        
+
         localStorage.setItem('userId', data.data.userId);
         localStorage.setItem('userName', data.data.name);
         localStorage.setItem('userRole', data.data.role);

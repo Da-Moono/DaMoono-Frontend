@@ -48,7 +48,7 @@ export default function ChatConsultPage() {
     if (isConsultPageInitialized) {
       return;
     }
-    
+
     isConsultPageInitialized = true;
 
     const userName = localStorage.getItem('userName');
@@ -148,7 +148,7 @@ export default function ChatConsultPage() {
         });
       });
     });
-  }, [messages]);
+  }, []);
 
   const handleSendMessage = async (content: string) => {
     // Socket으로만 메시지 전송 (로컬 상태에 추가하지 않음)
@@ -160,7 +160,7 @@ export default function ChatConsultPage() {
   const handleInputChange = (value: string) => {
     if (value.length > 0) {
       socketService.sendTyping('user', true);
-      
+
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
       }
@@ -316,19 +316,19 @@ export default function ChatConsultPage() {
             <div className={styles.statusIndicator}>
               <div
                 className={styles.statusDot}
-                style={{ 
-                  backgroundColor: isConsultEnded 
-                    ? '#FF1F1F' 
-                    : isConnected 
-                      ? '#1FFF6A' 
-                      : '#FF1F1F' 
+                style={{
+                  backgroundColor: isConsultEnded
+                    ? '#FF1F1F'
+                    : isConnected
+                      ? '#1FFF6A'
+                      : '#FF1F1F',
                 }}
               />
               <span className={styles.statusText}>
-                {isConsultEnded 
-                  ? '상담 종료됨' 
-                  : isConnected 
-                    ? '상담사 연결됨' 
+                {isConsultEnded
+                  ? '상담 종료됨'
+                  : isConnected
+                    ? '상담사 연결됨'
                     : '실시간 상담 서비스'}
               </span>
             </div>

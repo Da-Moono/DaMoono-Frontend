@@ -50,7 +50,9 @@ export default function ChatAdminPage() {
   const [currentUserName, setCurrentUserName] = useState<string>('고객'); // 현재 상담 중인 사용자 이름
   const [isConsultEnded, setIsConsultEnded] = useState(false); // 상담 종료 상태
   const [waitingSessions, setWaitingSessions] = useState<WaitingSession[]>([]);
-  const [completedSessions, setCompletedSessions] = useState<CompletedSession[]>([]);
+  const [completedSessions, setCompletedSessions] = useState<
+    CompletedSession[]
+  >([]);
   const [showSessionList, setShowSessionList] = useState(true);
   const [isUserTyping, setIsUserTyping] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -75,9 +77,10 @@ export default function ChatAdminPage() {
           setSessionId('');
           setMessages([]);
           setIsConsultEnded(false);
+          setIsLoading(false); // 로딩 상태 리셋
 
           navigate('/admin-summary', {
-            state: { 
+            state: {
               summaryData: response.data.payload,
               userName: currentUserName,
             },
@@ -89,6 +92,7 @@ export default function ChatAdminPage() {
         setSessionId('');
         setMessages([]);
         setIsConsultEnded(false);
+        setIsLoading(false); // 로딩 상태 리셋
         navigate('/chat/admin');
       }
     },
@@ -102,53 +106,10 @@ export default function ChatAdminPage() {
     const urlSessionId = searchParams.get('session');
     if (urlSessionId) {
       setSessionId(urlSessionId);
+      socketService.setSessionId(urlSessionId); // socketService에도 sessionId 설정
       socketService.joinSession(urlSessionId);
       setIsConnected(true);
       setShowSessionList(false);
-      
-      socketService.onConsultEnded(() => {
-        const isManualEnd = sessionStorage.getItem(
-          `is_admin_manual_end_${urlSessionId}`,
-        );
-
-        if (isManualEnd === 'true') {
-          sessionStorage.removeItem(`is_admin_manual_end_${urlSessionId}`);
-          return;
-        }
-
-        setIsConnected(false);
-        setIsConsultEnded(true);
-        
-        messageIdCounter.current += 1;
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `${Date.now()}-${messageIdCounter.current}`,
-            role: 'user',
-            content: `${currentUserName}님이 상담을 종료하였습니다.`,
-            timestamp: new Date(),
-          },
-        ]);
-        
-        setTimeout(() => {
-          messageIdCounter.current += 1;
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: `${Date.now()}-${messageIdCounter.current}`,
-              role: 'user',
-              content: '요약본을 생성합니다.',
-              timestamp: new Date(),
-            },
-          ]);
-          
-          setIsLoading(true);
-          
-          setTimeout(() => {
-            handleSummaryAndNavigate(urlSessionId);
-          }, 1000);
-        }, 500);
-      });
     } else {
       socketService.getWaitingSessions();
       socketService.getCompletedSessions();
@@ -157,18 +118,18 @@ export default function ChatAdminPage() {
     socketService.onWaitingSessions((sessions) => {
       const normalizedSessions = sessions.map((session) => {
         let userName = session.userName;
-        
+
         if (!userName && (session as any).userId) {
           const userIdObj = (session as any).userId;
           userName = userIdObj.userName || '게스트';
         }
-        
+
         return {
           ...session,
           userName: userName || '게스트',
         };
       });
-      
+
       setWaitingSessions(normalizedSessions);
     });
 
@@ -183,31 +144,31 @@ export default function ChatAdminPage() {
     socketService.onSessionsUpdated((sessions) => {
       const normalizedSessions = sessions.map((session) => {
         let userName = session.userName;
-        
+
         if (!userName && (session as any).userId) {
           const userIdObj = (session as any).userId;
           userName = userIdObj.userName || '게스트';
         }
-        
+
         return {
           ...session,
           userName: userName || '게스트',
         };
       });
-      
+
       setWaitingSessions(normalizedSessions);
     });
 
     socketService.onMessage((data) => {
       messageIdCounter.current += 1;
-      
+
       const newMessage: Message = {
         id: `${Date.now()}-${messageIdCounter.current}-${Math.random().toString(36).substring(2, 9)}`,
         role: data.sender === 'consultant' ? 'consultant' : 'user',
         content: data.message,
         timestamp: new Date(data.timestamp),
       };
-      
+
       setMessages((prev) => [...prev, newMessage]);
     });
 
@@ -215,6 +176,53 @@ export default function ChatAdminPage() {
       if (data.sender === 'user') {
         setIsUserTyping(data.isTyping);
       }
+    });
+
+    socketService.onConsultEnded(() => {
+      const urlSessionId = searchParams.get('session');
+      if (!urlSessionId) return;
+
+      const isManualEnd = sessionStorage.getItem(
+        `is_admin_manual_end_${urlSessionId}`,
+      );
+
+      if (isManualEnd === 'true') {
+        sessionStorage.removeItem(`is_admin_manual_end_${urlSessionId}`);
+        return;
+      }
+
+      setIsConnected(false);
+      setIsConsultEnded(true);
+
+      messageIdCounter.current += 1;
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `${Date.now()}-${messageIdCounter.current}`,
+          role: 'user',
+          content: `${currentUserName}님이 상담을 종료하였습니다.`,
+          timestamp: new Date(),
+        },
+      ]);
+
+      setTimeout(() => {
+        messageIdCounter.current += 1;
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `${Date.now()}-${messageIdCounter.current}`,
+            role: 'user',
+            content: '요약본을 생성합니다.',
+            timestamp: new Date(),
+          },
+        ]);
+
+        setIsLoading(true);
+
+        setTimeout(() => {
+          handleSummaryAndNavigate(urlSessionId);
+        }, 1000);
+      }, 500);
     });
 
     return () => {
@@ -232,11 +240,13 @@ export default function ChatAdminPage() {
 
   // 완료된 상담 목록 갱신
   useEffect(() => {
-    const handleCompletedUpdate = (sessions: Array<{
-      sessionId: string;
-      userName: string;
-      completedAt: Date;
-    }>) => {
+    const handleCompletedUpdate = (
+      sessions: Array<{
+        sessionId: string;
+        userName: string;
+        completedAt: Date;
+      }>,
+    ) => {
       setCompletedSessions(sessions);
     };
 
@@ -258,20 +268,27 @@ export default function ChatAdminPage() {
         });
       });
     });
-  }, [messages]);
+  }, []);
 
   const handleSendMessage = async (content: string) => {
-    if (!content.trim()) return; // 빈 메시지 방지
-    
+    if (!content.trim() || !sessionId || isConsultEnded) {
+      console.error('메시지 전송 실패:', {
+        hasContent: !!content.trim(),
+        sessionId,
+        isConsultEnded,
+        socketSessionId: socketService.getSessionId(),
+      });
+      return;
+    }
+
     socketService.sendMessage(content, 'consultant');
-    socketService.sendTyping('consultant', false); // 전송 후 입력 중 상태 해제
-    setIsLoading(false);
+    socketService.sendTyping('consultant', false);
   };
 
   const handleInputChange = (value: string) => {
     if (value.length > 0) {
       socketService.sendTyping('consultant', true);
-      
+
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
       }
@@ -302,7 +319,7 @@ export default function ChatAdminPage() {
             timestamp: new Date(),
           },
         ]);
-        
+
         setTimeout(() => {
           messageIdCounter.current += 1;
           setMessages((prev) => [
@@ -314,9 +331,9 @@ export default function ChatAdminPage() {
               timestamp: new Date(),
             },
           ]);
-          
+
           setIsLoading(true);
-          
+
           setTimeout(() => {
             socketService.endConsult();
             handleSummaryAndNavigate(sessionId);
@@ -328,13 +345,17 @@ export default function ChatAdminPage() {
 
   const handleJoinSession = (selectedSessionId: string) => {
     // 세션에 참여할 때 해당 세션의 userName 저장
-    const session = waitingSessions.find(s => s.sessionId === selectedSessionId);
+    const session = waitingSessions.find(
+      (s) => s.sessionId === selectedSessionId,
+    );
     if (session) {
       setCurrentUserName(session.userName || '고객');
     }
-    
+
     setSessionId(selectedSessionId);
+    socketService.setSessionId(selectedSessionId); // socketService에도 sessionId 설정
     setIsConsultEnded(false); // 상태 리셋
+    setIsLoading(false); // 로딩 상태 리셋
     socketService.joinSession(selectedSessionId);
     setIsConnected(true);
     setShowSessionList(false);
@@ -344,14 +365,16 @@ export default function ChatAdminPage() {
   const handleViewCompletedSummary = async (selectedSessionId: string) => {
     try {
       // 완료된 세션에서 userName 찾기
-      const session = completedSessions.find(s => s.sessionId === selectedSessionId);
+      const session = completedSessions.find(
+        (s) => s.sessionId === selectedSessionId,
+      );
       const userName = session?.userName || '고객';
-      
+
       const response = await getConsultantSummary(selectedSessionId);
-      
+
       if (response.success && response.payload) {
         navigate('/admin-summary', {
-          state: { 
+          state: {
             summaryData: response.payload.payload,
             userName: userName, // userName 추가
           },
@@ -414,7 +437,7 @@ export default function ChatAdminPage() {
               />
               <h2>상담사 페이지</h2>
             </div>
-            
+
             {/* 현재 요청된 상담 섹션 */}
             <div style={{ padding: '20px 0' }}>
               {waitingSessions.length === 0 ? (
@@ -501,7 +524,13 @@ export default function ChatAdminPage() {
                   <span>완료된 상담</span>
                 </div>
                 {completedSessions.length === 0 ? (
-                  <p style={{ textAlign: 'center', color: '#999', padding: '20px' }}>
+                  <p
+                    style={{
+                      textAlign: 'center',
+                      color: '#999',
+                      padding: '20px',
+                    }}
+                  >
                     완료된 상담이 없습니다.
                   </p>
                 ) : (
@@ -509,7 +538,9 @@ export default function ChatAdminPage() {
                     <button
                       type="button"
                       key={session.sessionId}
-                      onClick={() => handleViewCompletedSummary(session.sessionId)}
+                      onClick={() =>
+                        handleViewCompletedSummary(session.sessionId)
+                      }
                       className={styles.endChatCard}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.transform = 'translateY(-2px)';
@@ -575,21 +606,21 @@ export default function ChatAdminPage() {
             <div className={styles.statusContainer}>
               <div className={styles.statusHeader}>
                 <div className={styles.statusIndicator}>
-                  <div 
+                  <div
                     className={styles.statusDot}
-                    style={{ 
-                      backgroundColor: isConsultEnded 
-                        ? '#FF1F1F' 
-                        : isConnected 
-                          ? '#1FFF6A' 
-                          : '#FF1F1F' 
+                    style={{
+                      backgroundColor: isConsultEnded
+                        ? '#FF1F1F'
+                        : isConnected
+                          ? '#1FFF6A'
+                          : '#FF1F1F',
                     }}
                   />
                   <span className={styles.statusText}>
-                    {isConsultEnded 
-                      ? '상담 종료됨' 
-                      : isConnected 
-                        ? '상담 진행 중' 
+                    {isConsultEnded
+                      ? '상담 종료됨'
+                      : isConnected
+                        ? '상담 진행 중'
                         : '대기 중'}
                   </span>
                 </div>
@@ -630,7 +661,9 @@ export default function ChatAdminPage() {
                       ) : (
                         <div className={styles.userMessageContainer}>
                           <div className={styles.userHeader}>
-                            <span className={styles.userName}>{currentUserName}</span>
+                            <span className={styles.userName}>
+                              {currentUserName}
+                            </span>
                           </div>
                           <div className={styles.userMessage}>
                             <div className={styles.userText}>
@@ -654,7 +687,9 @@ export default function ChatAdminPage() {
                   {isUserTyping && (
                     <div className={styles.userMessageContainer}>
                       <div className={styles.userHeader}>
-                        <span className={styles.userName}>{currentUserName}</span>
+                        <span className={styles.userName}>
+                          {currentUserName}
+                        </span>
                       </div>
                       <div className={styles.userMessage}>
                         <div className={styles.userText}>

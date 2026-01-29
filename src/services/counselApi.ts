@@ -1,18 +1,21 @@
 import type { CounselItem } from '@/pages/MyPage/types/counsel';
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL || 
-  import.meta.env.VITE_API_BASE_URL || 
+  import.meta.env.VITE_API_URL ||
+  import.meta.env.VITE_API_BASE_URL ||
   'http://localhost:3000';
 
 export async function getCounselSummary(sessionId: string | null) {
-  const res = await fetch(`${API_BASE_URL}/summary/consults/${sessionId}/user`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
+  const res = await fetch(
+    `${API_BASE_URL}/summary/consults/${sessionId}/user`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
     },
-    credentials: 'include',
-  });
+  );
 
   if (!res.ok) {
     throw new Error('상담 내역 조회 실패');
@@ -47,13 +50,16 @@ export async function fetchCounselList(params?: {
 
 // 상담사용 완료된 상담 요약 조회
 export async function getConsultantSummary(sessionId: string) {
-  const res = await fetch(`${API_BASE_URL}/summary/consults/${sessionId}/consultant`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
+  const res = await fetch(
+    `${API_BASE_URL}/summary/consults/${sessionId}/consultant`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
     },
-    credentials: 'include',
-  });
+  );
 
   if (!res.ok) {
     throw new Error('상담 요약 조회 실패');
