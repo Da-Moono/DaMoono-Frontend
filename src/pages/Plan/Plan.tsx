@@ -19,7 +19,7 @@ import type {
 
 // Temporary flag: force using mock data for local testing.
 // Set to false to use real backend API.
-const USE_TEMP_MOCK = true;
+const USE_TEMP_MOCK = false;
 
 // 현재 사용 중인 요금제 카드 컴포넌트
 interface CurrentPlanCardProps {
