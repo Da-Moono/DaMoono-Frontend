@@ -63,8 +63,9 @@ function CurrentPlanCard({
     overageSpeedMbps,
     subscriptionServices,
   } = plan;
+  const isPlaceholder = plan.id === -1;
 
-  if (isDisabled) {
+  if (isDisabled || isPlaceholder) {
     return (
       <div
         className={`${styles.currentPlanCard} ${styles.currentPlanCardDisabled}`}
