@@ -7,7 +7,6 @@ import subscribeBanner from '@/assets/images/Subscribe-banner.png';
 import BottomNav from '@/components/BottomNav';
 import Guide from '@/components/Guide';
 import Header from '@/components/Header';
-import LoginRequiredModal from '@/components/modal/LoginRequiredModal';
 import { MOCK_PLANS, OTT_IMAGES, OTT_LABELS } from '@/pages/Plan/constants';
 import {
   CATEGORY_LABELS,
@@ -24,7 +23,6 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showGuide, setShowGuide] = useState(false);
   const [activeTab, setActiveTab] = useState<'plan' | 'subscribe'>('plan');
-  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // 랜덤으로 5개 선택하는 함수
   const getRandomItems = <T,>(array: T[], count: number): T[] => {
@@ -104,12 +102,7 @@ export default function Home() {
   };
 
   const handleChatClick = () => {
-    const userName = localStorage.getItem('userName');
-    if (!userName) {
-      setShowLoginModal(true);
-    } else {
-      navigate('/chat');
-    }
+    navigate('/chat');
   };
 
   return (
@@ -371,8 +364,6 @@ export default function Home() {
       {showGuide && (
         <Guide steps={guideSteps} onComplete={handleGuideComplete} />
       )}
-
-      {showLoginModal && <LoginRequiredModal />}
     </Layout>
   );
 }

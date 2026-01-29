@@ -6,6 +6,7 @@ import infoIcon from '@/assets/images/info-icon.png';
 import moonerbot from '@/assets/images/moonerbot.png';
 import BottomNav from '@/components/BottomNav';
 import Header from '@/components/Header';
+import LoginRequiredModal from '@/components/modal/LoginRequiredModal';
 import Layout from '../layout/Layout';
 import ChatInput from './components/ChatInput';
 import MessageCard from './components/MessageCard';
@@ -44,6 +45,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const voiceRecorderRef = useRef<VoiceRecorderRef>(null);
 
@@ -61,6 +63,12 @@ export default function ChatPage() {
       content.includes('상담사연결') ||
       content.includes('채팅 상담사 연결')
     ) {
+      // 로그인 체크
+      const userName = localStorage.getItem('userName');
+      if (!userName) {
+        setShowLoginModal(true);
+        return;
+      }
       navigate('/chat/consult');
       return;
     }
@@ -196,6 +204,13 @@ export default function ChatPage() {
 
   return (
     <Layout>
+      {showLoginModal && (
+        <LoginRequiredModal
+          onClose={() => setShowLoginModal(false)}
+          useLayout={false}
+        />
+      )}
+      
       {/* 녹음 컴포넌트 */}
       <VoiceRecorder
         ref={voiceRecorderRef}
@@ -398,6 +413,7 @@ export default function ChatPage() {
           voiceRecorderRef={voiceRecorderRef}
           isListening={isListening}
           setIsListening={setIsListening}
+          hasBottomNav={true}
         />
       </div>
 

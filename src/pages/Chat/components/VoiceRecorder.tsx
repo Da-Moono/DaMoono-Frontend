@@ -65,7 +65,6 @@ const VoiceRecorder = forwardRef<VoiceRecorderRef, VoiceRecorderProps>(
     const startSilenceTimer = useCallback(() => {
       clearSilenceTimer();
       silenceTimerRef.current = window.setTimeout(() => {
-        console.log('3초 침묵 감지, 자동 종료');
         handleStop();
       }, 3000);
     }, [clearSilenceTimer, handleStop]);
@@ -91,7 +90,6 @@ const VoiceRecorder = forwardRef<VoiceRecorderRef, VoiceRecorderProps>(
       recognition.interimResults = true;
 
       recognition.onstart = () => {
-        console.log('Recognition started');
         isActiveRef.current = true;
         startSilenceTimer();
       };
@@ -134,7 +132,6 @@ const VoiceRecorder = forwardRef<VoiceRecorderRef, VoiceRecorderProps>(
       };
 
       recognition.onend = () => {
-        console.log('Recognition ended');
         clearSilenceTimer();
 
         // 이미 cleanup 되었으면 무시
@@ -160,9 +157,7 @@ const VoiceRecorder = forwardRef<VoiceRecorderRef, VoiceRecorderProps>(
     ]);
 
     const startRecording = useCallback(() => {
-      // 이미 실행 중이면 무시
       if (isActiveRef.current) {
-        console.log('Already recording');
         return false;
       }
 

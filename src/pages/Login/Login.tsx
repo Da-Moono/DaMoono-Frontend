@@ -12,6 +12,10 @@ export default function Login() {
   };
 
   const handleGuestLogin = () => {
+    // 게스트 로그인 시 userId와 userName을 설정하지 않음
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userRole');
     navigate(PAGE_PATHS.HOME);
   };
 

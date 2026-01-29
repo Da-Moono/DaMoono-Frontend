@@ -4,7 +4,17 @@ import img from '@/assets/images/login-guard.png';
 import Layout from '@/pages/layout/Layout';
 import * as css from './style/LoginRequiredModal.css';
 
-export default function LoginRequiredModal() {
+interface LoginRequiredModalProps {
+  onClose?: () => void;
+  message?: string;
+  useLayout?: boolean;
+}
+
+export default function LoginRequiredModal({ 
+  onClose, 
+  message = '로그인 후 이용 가능한 페이지입니다.\n로그인 후 다시 시도해 주세요!',
+  useLayout = true 
+}: LoginRequiredModalProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,38 +26,49 @@ export default function LoginRequiredModal() {
     };
   }, []);
 
-  return (
-    <Layout>
-      <div className={css.overlay}>
-        <div className={css.modal}>
-          <div className={css.header}>
-            <img src={img} alt="무너 캐릭터" className={css.image} />
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      navigate(-1);
+    }
+  };
 
-            <button
-              className={css.closeButton}
-              onClick={() => navigate(-1)}
-              aria-label="닫기"
-            >
-              ✕
-            </button>
-          </div>
-
-          <h2 className={css.title}>로그인이 필요한 페이지입니다.</h2>
-
-          <p className={css.description}>
-            로그인 후 이용 가능한 페이지입니다.
-            <br />
-            로그인 후 다시 시도해 주세요!
-          </p>
+  const content = (
+    <div className={css.overlay} onClick={handleClose}>
+      <div className={css.modal} onClick={(e) => e.stopPropagation()}>
+        <div className={css.header}>
+          <img src={img} alt="무너 캐릭터" className={css.image} />
 
           <button
-            className={css.loginButton}
-            onClick={() => navigate('/login/form')}
+            className={css.closeButton}
+            onClick={handleClose}
+            aria-label="닫기"
           >
-            로그인 / 회원가입 하러가기
+            ✕
           </button>
         </div>
+
+        <h2 className={css.title}>로그인이 필요한 페이지입니다.</h2>
+
+        <p className={css.description}>
+          {message.split('\n').map((line, i) => (
+            <span key={i}>
+              {line}
+              {i < message.split('\n').length - 1 && <br />}
+            </span>
+          ))}
+        </p>
+
+        <button
+          className={css.loginButton}
+          onClick={() => navigate('/login/form')}
+        >
+          로그인 / 회원가입 하러가기
+        </button>
       </div>
-    </Layout>
+    </div>
   );
+
+  return useLayout ? <Layout>{content}</Layout> : content;
 }

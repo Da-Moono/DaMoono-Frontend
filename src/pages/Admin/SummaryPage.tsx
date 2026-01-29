@@ -104,7 +104,7 @@ const SummaryPage = () => {
         <motion.section className={s.contentSection} variants={itemVariants}>
           <ReportCard
             data={summaryData?.report_card}
-            user={location.state?.summaryData?.sessionId}
+            user={location.state?.userName || '고객'}
           />
         </motion.section>
 

@@ -10,6 +10,20 @@ export const inputContainer = style({
   padding: '12px 20px',
   backgroundColor: '#fff',
   borderTop: '1px solid #F0F0F0',
+  zIndex: 10,
+});
+
+export const inputContainerWithBottomNav = style({
+  position: 'fixed',
+  bottom: '70px',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  width: '480px',
+  maxWidth: '100%',
+  padding: '12px 20px',
+  backgroundColor: '#fff',
+  borderTop: '1px solid #F0F0F0',
+  zIndex: 10,
 });
 
 export const menuOverlay = style({

@@ -5,7 +5,7 @@ export const overlay = style({
   inset: 0,
   background: 'rgba(0, 0, 0, 0.45)',
   backdropFilter: 'blur(4px)',
-  zIndex: 1000,
+  zIndex: 10000,
 
   display: 'flex',
   alignItems: 'center',

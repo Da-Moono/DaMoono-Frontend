@@ -5,9 +5,7 @@ class SocketService {
   private sessionId: string | null = null;
 
   connect() {
-    // 이미 연결되어 있으면 재연결하지 않음
     if (this.socket?.connected) {
-      console.log('🔌 Socket 이미 연결됨:', this.socket.id);
       return this.socket;
     }
 
@@ -15,11 +13,11 @@ class SocketService {
     this.socket = io(apiUrl, { withCredentials: true });
 
     this.socket.on('connect', () => {
-      console.log('🔌 Socket 연결됨:', this.socket?.id);
+      // 연결됨
     });
 
     this.socket.on('disconnect', () => {
-      console.log('🔌 Socket 연결 해제');
+      // 연결 해제
     });
 
     return this.socket;
@@ -32,8 +30,9 @@ class SocketService {
   }
 
   // 사용자: 상담 시작
-  startConsult(userId: string, userName?: string) {
-    this.socket?.emit('start-consult', { userId, userName });
+  startConsult(userName: string, userRole?: string) {
+    const data = { userName, userRole };
+    this.socket?.emit('start-consult', data);
   }
 
   // 상담사: 세션 참여
@@ -53,6 +52,17 @@ class SocketService {
     }
   }
 
+  // 입력 중 상태 전송
+  sendTyping(sender: 'user' | 'consultant', isTyping: boolean) {
+    if (this.sessionId) {
+      this.socket?.emit('typing', {
+        sessionId: this.sessionId,
+        sender,
+        isTyping,
+      });
+    }
+  }
+
   // 상담 종료
   endConsult() {
     if (this.sessionId) {
@@ -65,8 +75,14 @@ class SocketService {
     this.socket?.emit('get-waiting-sessions');
   }
 
+  // 완료된 세션 목록 요청
+  getCompletedSessions() {
+    this.socket?.emit('get-completed-sessions');
+  }
+
   // 이벤트 리스너
   onSessionCreated(callback: (sessionId: string) => void) {
+    this.socket?.off('session-created'); // 기존 리스너 제거
     this.socket?.on('session-created', (sessionId: string) => {
       this.sessionId = sessionId;
       callback(sessionId);
@@ -77,13 +93,13 @@ class SocketService {
     callback: (
       sessions: Array<{
         sessionId: string;
-        userId: string;
-        userName?: string;
+        userName: string;
         status: 'waiting' | 'connected';
         createdAt: Date;
       }>,
     ) => void,
   ) {
+    this.socket?.off('waiting-sessions'); // 기존 리스너 제거
     this.socket?.on('waiting-sessions', callback);
   }
 
@@ -91,17 +107,18 @@ class SocketService {
     callback: (
       sessions: Array<{
         sessionId: string;
-        userId: string;
-        userName?: string;
+        userName: string;
         status: 'waiting' | 'connected';
         createdAt: Date;
       }>,
     ) => void,
   ) {
+    this.socket?.off('sessions-updated'); // 기존 리스너 제거
     this.socket?.on('sessions-updated', callback);
   }
 
   onConsultantConnected(callback: () => void) {
+    this.socket?.off('consultant-connected'); // 기존 리스너 제거
     this.socket?.on('consultant-connected', callback);
   }
 
@@ -112,15 +129,52 @@ class SocketService {
       timestamp: Date;
     }) => void,
   ) {
+    this.socket?.off('receive-message'); // 기존 리스너 제거
     this.socket?.on('receive-message', callback);
   }
 
   onConsultEnded(callback: () => void) {
+    this.socket?.off('consult-ended'); // 기존 리스너 제거
     this.socket?.on('consult-ended', callback);
+  }
+
+  onTyping(callback: (data: { sender: string; isTyping: boolean }) => void) {
+    this.socket?.off('typing'); // 기존 리스너 제거
+    this.socket?.on('typing', callback);
+  }
+
+  onCompletedSessions(
+    callback: (
+      sessions: Array<{
+        sessionId: string;
+        userName: string;
+        completedAt: Date;
+      }>,
+    ) => void,
+  ) {
+    this.socket?.off('completed-sessions'); // 기존 리스너 제거
+    this.socket?.on('completed-sessions', callback);
+  }
+
+  onCompletedSessionsUpdated(
+    callback: (
+      sessions: Array<{
+        sessionId: string;
+        userName: string;
+        completedAt: Date;
+      }>,
+    ) => void,
+  ) {
+    this.socket?.off('completed-sessions-updated'); // 기존 리스너 제거
+    this.socket?.on('completed-sessions-updated', callback);
   }
 
   getSessionId() {
     return this.sessionId;
+  }
+
+  setSessionId(sessionId: string) {
+    this.sessionId = sessionId;
   }
 }
 

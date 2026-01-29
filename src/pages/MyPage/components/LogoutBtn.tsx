@@ -8,6 +8,7 @@ export function LogoutBtn() {
   const handleLogout = async () => {
     try {
       await logout();
+      localStorage.removeItem('userId');
       localStorage.removeItem('userName');
       localStorage.removeItem('userRole');
       navigate('/');

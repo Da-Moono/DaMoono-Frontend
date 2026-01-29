@@ -7,6 +7,7 @@ import plusChat from '@/assets/images/plus-chat.png';
 import plusConsult from '@/assets/images/plus-consult.png';
 import plusInfo from '@/assets/images/plus-info.svg';
 import sendButton from '@/assets/images/send-button.svg';
+import LoginRequiredModal from '@/components/modal/LoginRequiredModal';
 import * as styles from '../style/ChatInput.css';
 import type { VoiceRecorderRef } from './VoiceRecorder';
 
@@ -17,6 +18,8 @@ interface ChatInputProps {
   voiceRecorderRef: React.RefObject<VoiceRecorderRef | null>;
   isListening: boolean;
   setIsListening: (listening: boolean) => void;
+  hasBottomNav?: boolean;
+  onInputChange?: (value: string) => void;
 }
 
 export default function ChatInput({
@@ -25,10 +28,19 @@ export default function ChatInput({
   onClearChat,
   voiceRecorderRef,
   isListening,
+  hasBottomNav = false,
+  onInputChange,
 }: ChatInputProps) {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputMessage(value);
+    onInputChange?.(value);
+  };
 
   const handleSend = () => {
     if (inputMessage.trim() && !isLoading) {
@@ -46,7 +58,6 @@ export default function ChatInput({
 
   const handleVoiceInput = () => {
     if (!isListening) {
-      console.log('Starting recording...');
       voiceRecorderRef.current?.startRecording();
     }
   };
@@ -61,6 +72,14 @@ export default function ChatInput({
   };
 
   const handleConsultant = () => {
+    // 로그인 체크
+    const userName = localStorage.getItem('userName');
+    if (!userName) {
+      setShowLoginModal(true);
+      setShowMenu(false);
+      return;
+    }
+    
     navigate('/chat/consult');
     setShowMenu(false);
   };
@@ -71,7 +90,15 @@ export default function ChatInput({
   };
 
   return (
-    <div className={styles.inputContainer}>
+    <>
+      {showLoginModal && (
+        <LoginRequiredModal
+          onClose={() => setShowLoginModal(false)}
+          useLayout={false}
+        />
+      )}
+      
+      <div className={hasBottomNav ? styles.inputContainerWithBottomNav : styles.inputContainer}>
       {showMenu && (
         <div className={styles.menuOverlay}>
           <button
@@ -132,7 +159,7 @@ export default function ChatInput({
             type="text"
             placeholder="질문을 입력하세요"
             value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
+            onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             className={styles.input}
             disabled={isLoading}
@@ -155,6 +182,7 @@ export default function ChatInput({
           </button>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

@@ -10,6 +10,7 @@ import noCounselingMoono from '@/assets/images/no-counseling-moono.png';
 import consult from '@/assets/images/plus-consult.png';
 import Header from '@/components/Header';
 import { logout } from '@/services/authApi';
+import { getConsultantSummary } from '@/services/counselApi';
 import socketService from '@/services/socketService';
 import Layout from '../layout/Layout';
 import ChatInput from './components/ChatInput';
@@ -27,10 +28,15 @@ interface Message {
 
 interface WaitingSession {
   sessionId: string;
-  userId: string;
-  userName?: string;
+  userName: string;
   status: 'waiting' | 'connected';
   createdAt: Date;
+}
+
+interface CompletedSession {
+  sessionId: string;
+  userName: string;
+  completedAt: Date;
 }
 
 export default function ChatAdminPage() {
@@ -41,17 +47,23 @@ export default function ChatAdminPage() {
   const [isListening, setIsListening] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [sessionId, setSessionId] = useState<string>('');
+  const [currentUserName, setCurrentUserName] = useState<string>('고객'); // 현재 상담 중인 사용자 이름
+  const [isConsultEnded, setIsConsultEnded] = useState(false); // 상담 종료 상태
   const [waitingSessions, setWaitingSessions] = useState<WaitingSession[]>([]);
+  const [completedSessions, setCompletedSessions] = useState<CompletedSession[]>([]);
   const [showSessionList, setShowSessionList] = useState(true);
+  const [isUserTyping, setIsUserTyping] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const voiceRecorderRef = useRef<VoiceRecorderRef>(null);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const messageIdCounter = useRef(0); // 메시지 ID 카운터
 
   const handleSummaryAndNavigate = useCallback(
     async (sessionId: string) => {
       try {
         const apiUrl = import.meta.env.VITE_API_URL;
 
-        // 1. 요약 API 호출
         const response = await axios.post(
           `${apiUrl}/summary/consults/${sessionId}/consultant`,
           {},
@@ -59,100 +71,216 @@ export default function ChatAdminPage() {
         );
 
         if (response.status === 200 || response.status === 201) {
-          alert('상담이 종료되었습니다. 요약본을 생성합니다.');
+          setShowSessionList(true);
+          setSessionId('');
+          setMessages([]);
+          setIsConsultEnded(false);
 
-          setShowSessionList(true); // 세션 목록으로 돌아갈 준비
-          setSessionId(''); // 현재 세션 ID 비우기
-          setMessages([]); // 메시지 내역 비우기
-
-          // 2. 관리자 요약 페이지로 데이터와 함께 이동
           navigate('/admin-summary', {
-            state: { summaryData: response.data.payload },
+            state: { 
+              summaryData: response.data.payload,
+              userName: currentUserName,
+            },
           });
         }
       } catch (error) {
         console.error('요약 생성 실패:', error);
-        // 에러 발생 시에도 최소한 목록으로는 보내줘야 하니 초기화 후 이동
         setShowSessionList(true);
         setSessionId('');
         setMessages([]);
+        setIsConsultEnded(false);
         navigate('/chat/admin');
       }
     },
-    [navigate],
+    [navigate, currentUserName],
   );
 
   // Socket 연결 및 이벤트 리스너 설정
   useEffect(() => {
     socketService.connect();
 
-    // URL에서 세션 ID 가져오기
     const urlSessionId = searchParams.get('session');
     if (urlSessionId) {
       setSessionId(urlSessionId);
       socketService.joinSession(urlSessionId);
       setIsConnected(true);
       setShowSessionList(false);
+      
       socketService.onConsultEnded(() => {
-        // 상담사가 직접 버튼을 눌러 종료한 경우라면 요약 로직을 실행하지 않음
         const isManualEnd = sessionStorage.getItem(
           `is_admin_manual_end_${urlSessionId}`,
         );
 
         if (isManualEnd === 'true') {
           sessionStorage.removeItem(`is_admin_manual_end_${urlSessionId}`);
-          return; // 👈 여기서 멈춤 (요약 API 호출 안 함)
+          return;
         }
 
-        // 그 외(유저가 요약 버튼을 눌러 종료된 경우)에만 요약 페이지로 이동
-        handleSummaryAndNavigate(urlSessionId);
+        setIsConnected(false);
+        setIsConsultEnded(true);
+        
+        messageIdCounter.current += 1;
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `${Date.now()}-${messageIdCounter.current}`,
+            role: 'user',
+            content: `${currentUserName}님이 상담을 종료하였습니다.`,
+            timestamp: new Date(),
+          },
+        ]);
+        
+        setTimeout(() => {
+          messageIdCounter.current += 1;
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: `${Date.now()}-${messageIdCounter.current}`,
+              role: 'user',
+              content: '요약본을 생성합니다.',
+              timestamp: new Date(),
+            },
+          ]);
+          
+          setIsLoading(true);
+          
+          setTimeout(() => {
+            handleSummaryAndNavigate(urlSessionId);
+          }, 1000);
+        }, 500);
       });
     } else {
-      // 대기 중인 세션 목록 요청
       socketService.getWaitingSessions();
+      socketService.getCompletedSessions();
     }
 
-    // 대기 중인 세션 목록 수신
     socketService.onWaitingSessions((sessions) => {
-      setWaitingSessions(sessions);
+      const normalizedSessions = sessions.map((session) => {
+        let userName = session.userName;
+        
+        if (!userName && (session as any).userId) {
+          const userIdObj = (session as any).userId;
+          userName = userIdObj.userName || '게스트';
+        }
+        
+        return {
+          ...session,
+          userName: userName || '게스트',
+        };
+      });
+      
+      setWaitingSessions(normalizedSessions);
     });
 
-    // 세션 목록 업데이트
+    socketService.onCompletedSessions((sessions) => {
+      setCompletedSessions(sessions);
+    });
+
+    socketService.onCompletedSessionsUpdated((sessions) => {
+      setCompletedSessions(sessions);
+    });
+
     socketService.onSessionsUpdated((sessions) => {
-      setWaitingSessions(sessions);
+      const normalizedSessions = sessions.map((session) => {
+        let userName = session.userName;
+        
+        if (!userName && (session as any).userId) {
+          const userIdObj = (session as any).userId;
+          userName = userIdObj.userName || '게스트';
+        }
+        
+        return {
+          ...session,
+          userName: userName || '게스트',
+        };
+      });
+      
+      setWaitingSessions(normalizedSessions);
     });
 
-    // 메시지 수신
     socketService.onMessage((data) => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now().toString(),
-          role: data.sender === 'consultant' ? 'consultant' : 'user',
-          content: data.message,
-          timestamp: new Date(data.timestamp),
-        },
-      ]);
+      messageIdCounter.current += 1;
+      
+      const newMessage: Message = {
+        id: `${Date.now()}-${messageIdCounter.current}-${Math.random().toString(36).substring(2, 9)}`,
+        role: data.sender === 'consultant' ? 'consultant' : 'user',
+        content: data.message,
+        timestamp: new Date(data.timestamp),
+      };
+      
+      setMessages((prev) => [...prev, newMessage]);
+    });
+
+    socketService.onTyping((data) => {
+      if (data.sender === 'user') {
+        setIsUserTyping(data.isTyping);
+      }
     });
 
     return () => {
-      socketService.disconnect();
+      // 연결 유지
     };
-  }, [searchParams, handleSummaryAndNavigate]);
+  }, [searchParams, handleSummaryAndNavigate, currentUserName]);
+
+  // 완료된 상담 목록 로드
+  useEffect(() => {
+    if (showSessionList) {
+      socketService.getCompletedSessions();
+      socketService.getWaitingSessions();
+    }
+  }, [showSessionList]);
+
+  // 완료된 상담 목록 갱신
+  useEffect(() => {
+    const handleCompletedUpdate = (sessions: Array<{
+      sessionId: string;
+      userName: string;
+      completedAt: Date;
+    }>) => {
+      setCompletedSessions(sessions);
+    };
+
+    socketService.onCompletedSessionsUpdated(handleCompletedUpdate);
+
+    return () => {
+      // cleanup
+    };
+  }, []);
 
   // 메시지가 추가될 때마다 스크롤을 아래로
   useEffect(() => {
-    if (contentRef.current && messages.length >= 0) {
-      contentRef.current.scrollTo({
-        top: contentRef.current.scrollHeight,
-        behavior: 'smooth',
+    // requestAnimationFrame을 두 번 사용하여 DOM 렌더링을 확실히 기다림
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        messagesEndRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end',
+        });
       });
-    }
+    });
   }, [messages]);
 
   const handleSendMessage = async (content: string) => {
+    if (!content.trim()) return; // 빈 메시지 방지
+    
     socketService.sendMessage(content, 'consultant');
+    socketService.sendTyping('consultant', false); // 전송 후 입력 중 상태 해제
     setIsLoading(false);
+  };
+
+  const handleInputChange = (value: string) => {
+    if (value.length > 0) {
+      socketService.sendTyping('consultant', true);
+      
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+      typingTimeoutRef.current = setTimeout(() => {
+        socketService.sendTyping('consultant', false);
+      }, 1000);
+    } else {
+      socketService.sendTyping('consultant', false);
+    }
   };
 
   const handleClearChat = () => {
@@ -162,46 +290,91 @@ export default function ChatAdminPage() {
   const handleEndConsult = () => {
     if (window.confirm('상담을 종료하시겠습니까?')) {
       if (sessionId) {
-        // ✅ "내가 버튼을 눌러서 종료한다"는 표시를 남김
         sessionStorage.setItem(`is_admin_manual_end_${sessionId}`, 'true');
 
-        socketService.endConsult();
-
-        // 상태 초기화
-        setShowSessionList(true);
-        setSessionId('');
-        setMessages([]);
-        navigate('/chat/admin');
-
-        alert('상담이 종료되었습니다.');
+        messageIdCounter.current += 1;
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `${Date.now()}-${messageIdCounter.current}`,
+            role: 'consultant',
+            content: '상담이 종료되었습니다.',
+            timestamp: new Date(),
+          },
+        ]);
+        
+        setTimeout(() => {
+          messageIdCounter.current += 1;
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: `${Date.now()}-${messageIdCounter.current}`,
+              role: 'consultant',
+              content: '요약본을 생성합니다.',
+              timestamp: new Date(),
+            },
+          ]);
+          
+          setIsLoading(true);
+          
+          setTimeout(() => {
+            socketService.endConsult();
+            handleSummaryAndNavigate(sessionId);
+          }, 1000);
+        }, 500);
       }
     }
   };
 
-  const handleBackToList = () => {
-    // 세션을 종료하지 않고 목록으로만 돌아감
-    setShowSessionList(true);
-    setSessionId('');
-    setMessages([]);
-    navigate('/chat/admin');
-  };
-
   const handleJoinSession = (selectedSessionId: string) => {
+    // 세션에 참여할 때 해당 세션의 userName 저장
+    const session = waitingSessions.find(s => s.sessionId === selectedSessionId);
+    if (session) {
+      setCurrentUserName(session.userName || '고객');
+    }
+    
     setSessionId(selectedSessionId);
+    setIsConsultEnded(false); // 상태 리셋
     socketService.joinSession(selectedSessionId);
     setIsConnected(true);
     setShowSessionList(false);
     navigate(`/chat/admin?session=${selectedSessionId}`);
   };
 
+  const handleViewCompletedSummary = async (selectedSessionId: string) => {
+    try {
+      // 완료된 세션에서 userName 찾기
+      const session = completedSessions.find(s => s.sessionId === selectedSessionId);
+      const userName = session?.userName || '고객';
+      
+      const response = await getConsultantSummary(selectedSessionId);
+      
+      if (response.success && response.payload) {
+        navigate('/admin-summary', {
+          state: { 
+            summaryData: response.payload.payload,
+            userName: userName, // userName 추가
+          },
+        });
+      } else {
+        alert('요약 데이터를 불러올 수 없습니다.');
+      }
+    } catch (error) {
+      console.error('요약 조회 실패:', error);
+      alert('요약 데이터를 불러오는데 실패했습니다.');
+    }
+  };
+
   const handleLogout = async () => {
     if (confirm('로그아웃 하시겠습니까?')) {
       try {
         await logout();
+        localStorage.removeItem('userId');
         localStorage.removeItem('userName');
         localStorage.removeItem('userRole');
         navigate('/');
       } catch {
+        localStorage.removeItem('userId');
         localStorage.removeItem('userName');
         localStorage.removeItem('userRole');
         navigate('/');
@@ -241,7 +414,9 @@ export default function ChatAdminPage() {
               />
               <h2>상담사 페이지</h2>
             </div>
-            <div className={styles.content}>
+            
+            {/* 현재 요청된 상담 섹션 */}
+            <div style={{ padding: '20px 0' }}>
               {waitingSessions.length === 0 ? (
                 <div className={styles.chatBox}>
                   <div className={styles.chatState}>
@@ -250,7 +425,7 @@ export default function ChatAdminPage() {
                   </div>
                   <img
                     src={noCounselingMoono}
-                    alt="무너"
+                    alt="상담 대기"
                     className={styles.chatStateIcon}
                   />
                   <p>현재 요청된 상담이 없습니다.</p>
@@ -317,51 +492,60 @@ export default function ChatAdminPage() {
                 </div>
               )}
             </div>
-            <div className={styles.content}>
+
+            {/* 완료된 상담 섹션 */}
+            <div style={{ padding: '0 0 20px 0' }}>
               <div className={styles.chatBox}>
                 <div className={styles.chatState}>
                   <img src={consult} alt="상담사" className={styles.chatIcon} />
                   <span>완료된 상담</span>
                 </div>
-                {waitingSessions.map((session) => (
-                  <button
-                    type="button"
-                    key={session.sessionId}
-                    onClick={() => handleJoinSession(session.sessionId)}
-                    className={styles.endChatCard}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow =
-                        '0 4px 12px rgba(0, 0, 0, 0.15)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow =
-                        '0 2px 8px rgba(0, 0, 0, 0.1)';
-                    }}
-                  >
-                    <div className={styles.counselingWrapper}>
-                      <div className={styles.counselingIdBox}>
-                        <img
-                          src={endCounselingIcon}
-                          alt="무너"
-                          className={styles.chatIcon}
-                        />
-                        <div>
-                          <p className={styles.counselingId}>
-                            {session.userName || '게스트'}
-                          </p>
-                          <p className={styles.sessionIdSmall}>
-                            ({session.sessionId})
-                          </p>
+                {completedSessions.length === 0 ? (
+                  <p style={{ textAlign: 'center', color: '#999', padding: '20px' }}>
+                    완료된 상담이 없습니다.
+                  </p>
+                ) : (
+                  completedSessions.map((session) => (
+                    <button
+                      type="button"
+                      key={session.sessionId}
+                      onClick={() => handleViewCompletedSummary(session.sessionId)}
+                      className={styles.endChatCard}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow =
+                          '0 4px 12px rgba(0, 0, 0, 0.15)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow =
+                          '0 2px 8px rgba(0, 0, 0, 0.1)';
+                      }}
+                    >
+                      <div className={styles.counselingWrapper}>
+                        <div className={styles.counselingIdBox}>
+                          <img
+                            src={endCounselingIcon}
+                            alt="무너"
+                            className={styles.chatIcon}
+                          />
+                          <div>
+                            <p className={styles.counselingId}>
+                              {session.userName || '게스트'}
+                            </p>
+                            <p className={styles.sessionIdSmall}>
+                              ({session.sessionId})
+                            </p>
+                          </div>
                         </div>
+                        <div className={styles.endCounselingBtn}>상담 완료</div>
                       </div>
-                      <div className={styles.endCounselingBtn}>상담 완료</div>
-                    </div>
-                  </button>
-                ))}
+                    </button>
+                  ))
+                )}
               </div>
             </div>
+
             <div className={styles.logoutContainer}>
               <button
                 type="button"
@@ -376,20 +560,6 @@ export default function ChatAdminPage() {
           <>
             <div className={styles.header}>
               <div className={styles.headerLeft}>
-                <button
-                  type="button"
-                  onClick={handleBackToList}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontSize: '18px',
-                    padding: '4px 8px',
-                    marginRight: '8px',
-                  }}
-                >
-                  ←
-                </button>
                 <img src={chatIcon} alt="채팅" className={styles.chatIcon} />
                 <span className={styles.headerTitle}>상담 진행하기</span>
               </div>
@@ -405,16 +575,31 @@ export default function ChatAdminPage() {
             <div className={styles.statusContainer}>
               <div className={styles.statusHeader}>
                 <div className={styles.statusIndicator}>
-                  <div className={styles.statusDot} />
+                  <div 
+                    className={styles.statusDot}
+                    style={{ 
+                      backgroundColor: isConsultEnded 
+                        ? '#FF1F1F' 
+                        : isConnected 
+                          ? '#1FFF6A' 
+                          : '#FF1F1F' 
+                    }}
+                  />
                   <span className={styles.statusText}>
-                    {isConnected ? '상담 진행 중' : '대기 중'}
+                    {isConsultEnded 
+                      ? '상담 종료됨' 
+                      : isConnected 
+                        ? '상담 진행 중' 
+                        : '대기 중'}
                   </span>
                 </div>
               </div>
               <p className={styles.statusSubtext}>
-                {isConnected
-                  ? '고객과 실시간 상담 중입니다'
-                  : '세션에 연결 중...'}
+                {isConsultEnded
+                  ? `${currentUserName}님이 상담을 종료하였습니다`
+                  : isConnected
+                    ? '고객과 실시간 상담 중입니다'
+                    : '세션에 연결 중...'}
               </p>
               {sessionId && (
                 <p
@@ -445,7 +630,7 @@ export default function ChatAdminPage() {
                       ) : (
                         <div className={styles.userMessageContainer}>
                           <div className={styles.userHeader}>
-                            <span className={styles.userName}>고객</span>
+                            <span className={styles.userName}>{currentUserName}</span>
                           </div>
                           <div className={styles.userMessage}>
                             <div className={styles.userText}>
@@ -465,6 +650,36 @@ export default function ChatAdminPage() {
                       )}
                     </div>
                   ))}
+                  <div ref={messagesEndRef} />
+                  {isUserTyping && (
+                    <div className={styles.userMessageContainer}>
+                      <div className={styles.userHeader}>
+                        <span className={styles.userName}>{currentUserName}</span>
+                      </div>
+                      <div className={styles.userMessage}>
+                        <div className={styles.userText}>
+                          <div className={styles.loadingDots}>
+                            <div className={styles.loadingDot} />
+                            <div className={styles.loadingDot} />
+                            <div className={styles.loadingDot} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {isLoading && (
+                    <div className={styles.userMessageContainer}>
+                      <div className={styles.userMessage}>
+                        <div className={styles.userText}>
+                          <div className={styles.loadingDots}>
+                            <div className={styles.loadingDot} />
+                            <div className={styles.loadingDot} />
+                            <div className={styles.loadingDot} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -476,6 +691,7 @@ export default function ChatAdminPage() {
               voiceRecorderRef={voiceRecorderRef}
               isListening={isListening}
               setIsListening={setIsListening}
+              onInputChange={handleInputChange}
             />
           </>
         )}

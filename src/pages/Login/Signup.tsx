@@ -91,6 +91,7 @@ export default function Signup() {
 
       // 자동 로그인
       const loginData = await login({ userId, password });
+      localStorage.setItem('userId', loginData.data.userId);
       localStorage.setItem('userName', loginData.data.name);
       localStorage.setItem('userRole', loginData.data.role);
 

@@ -131,8 +131,7 @@ export default function ConsultModal({
   };
 
   return (
-    <button
-      type="button"
+    <div
       className={styles.modalOverlay}
       onClick={onClose}
       onKeyDown={(e) => {
@@ -140,6 +139,7 @@ export default function ConsultModal({
           onClose();
         }
       }}
+      role="presentation"
     >
       <div
         className={styles.modalContainer}
@@ -150,6 +150,6 @@ export default function ConsultModal({
       >
         {renderContent()}
       </div>
-    </button>
+    </div>
   );
 }

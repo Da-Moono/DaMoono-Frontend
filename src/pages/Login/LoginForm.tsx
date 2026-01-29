@@ -26,15 +26,23 @@ export default function LoginForm() {
 
       if (data.success) {
         // 로그인 성공 시 사용자 정보 저장
+        console.log('로그인 데이터:', data);
+        console.log('저장할 userName:', data.data.name);
+        
+        localStorage.setItem('userId', data.data.userId);
         localStorage.setItem('userName', data.data.name);
         localStorage.setItem('userRole', data.data.role);
 
+        console.log('저장 후 localStorage:', {
+          userId: localStorage.getItem('userId'),
+          userName: localStorage.getItem('userName'),
+          userRole: localStorage.getItem('userRole'),
+        });
+
         // ADMIN이면 상담사 페이지로, 아니면 홈으로
         if (data.data.role === 'ADMIN') {
-          console.log('ADMIN으로 /chat/admin 이동');
           navigate('/chat/admin');
         } else {
-          console.log('일반 사용자로 홈 이동');
           navigate(PAGE_PATHS.HOME);
         }
       }
