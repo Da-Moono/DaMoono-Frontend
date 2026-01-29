@@ -17,62 +17,96 @@ interface Question {
   options: string[];
 }
 
-// 질문 데이터
-const questions: Question[] = [
+// 기본 질문 (네트워크 타입)
+const networkQuestion: Question = {
+  id: 1,
+  question: '5G 네트워크가 필요하신가요?',
+  options: ['네, 5G가 필요해요', '아니요, LTE면 충분해요', '잘 모르겠어요'],
+};
+
+// LTE 선택 시 질문
+const lteQuestions: Question[] = [
   {
-    id: 1,
+    id: 2,
+    question: '요금제의 가격은 얼마정도를 원하나요?',
+    options: [
+      '3~4만원대 (저렴하게)',
+      '4~5만원대 (적당한 가격)',
+      '5~6만원대 (조금 비싸도 괜찮음)',
+    ],
+  },
+  {
+    id: 3,
     question: '통화를 자주 하시는 편인가요?',
     options: [
       '매일 1시간 이상 통화한다',
       '자주 하는 편이다',
       '보통이다',
-      '거의 안하는 편이다',
-      '문자나 메신저만 사용한다',
-    ],
-  },
-  {
-    id: 2,
-    question: '한 달 데이터 사용량은 얼마나 되나요?',
-    options: [
-      '100GB 이상 (영상 많이 봄)',
-      '50~100GB (적당히 사용)',
-      '30~50GB (보통)',
-      '10~30GB (적게 사용)',
-      '잘 모르겠다',
-    ],
-  },
-  {
-    id: 3,
-    question: '5G 네트워크가 필요하신가요?',
-    options: [
-      '꼭 필요하다 (빠른 속도 중요)',
-      '있으면 좋다',
-      '잘 모르겠다',
-      '필요 없다 (LTE면 충분)',
-      '가격이 저렴하면 상관없다',
+      '거의 안한다',
     ],
   },
   {
     id: 4,
+    question: 'OTT 서비스가 포함된 요금제를 원하시나요?',
+    options: ['있으면 좋겠다', '상관없다', '없으면 좋겠다'],
+  },
+];
+
+// 5G 선택 시 질문
+const fiveGQuestions: Question[] = [
+  {
+    id: 2,
     question: '요금제의 가격은 얼마정도를 원하나요?',
     options: [
-      '3만원대 (최대한 저렴하게)',
-      '4~5만원대 (적당한 가격)',
-      '6~8만원대 (조금 비싸도 괜찮음)',
-      '8만원 이상 (프리미엄 원함)',
-      '가격보다 혜택이 중요',
+      '5~6만원대 (저렴하게)',
+      '7~9만원대 (적당한 가격)',
+      '10~12만원대 (조금 비싸도 괜찮음)',
+      '13만원 이상 (프리미엄)',
     ],
   },
   {
-    id: 5,
-    question: '평소에 OTT(넷플릭스, 디즈니+ 등)를 즐겨 보시나요?',
+    id: 3,
+    question: '통화를 자주 하시는 편인가요?',
     options: [
-      '매일 본다 (2시간 이상)',
-      '자주 보는 편이다 (주 3~4회)',
-      '가끔 본다 (주 1~2회)',
-      '거의 안본다',
-      '전혀 보지 않는다',
+      '매일 1시간 이상 통화한다',
+      '자주 하는 편이다',
+      '보통이다',
+      '거의 안한다',
     ],
+  },
+  {
+    id: 4,
+    question: 'OTT 서비스가 포함된 요금제를 원하시나요?',
+    options: ['있으면 좋겠다', '상관없다', '없으면 좋겠다'],
+  },
+];
+
+// 잘 모르겠어요 선택 시 질문 (전체 범위)
+const generalQuestions: Question[] = [
+  {
+    id: 2,
+    question: '요금제의 가격은 얼마정도를 원하나요?',
+    options: [
+      '3~5만원대 (저렴하게)',
+      '5~7만원대 (적당한 가격)',
+      '7~10만원대 (조금 비싸도 괜찮음)',
+      '10만원 이상 (프리미엄)',
+    ],
+  },
+  {
+    id: 3,
+    question: '통화를 자주 하시는 편인가요?',
+    options: [
+      '매일 1시간 이상 통화한다',
+      '자주 하는 편이다',
+      '보통이다',
+      '거의 안한다',
+    ],
+  },
+  {
+    id: 4,
+    question: 'OTT 서비스가 포함된 요금제를 원하시나요?',
+    options: ['있으면 좋겠다', '상관없다', '없으면 좋겠다'],
   },
 ];
 
@@ -90,6 +124,7 @@ export default function ServiceRecommendation() {
   const [answers, setAnswers] = useState<number[]>([]);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [recommendedPlans, setRecommendedPlans] = useState<Plan[]>([]);
+  const [questionSet, setQuestionSet] = useState<Question[]>([networkQuestion]);
 
   const handleStartRecommendation = () => {
     setStage('question');
@@ -106,13 +141,32 @@ export default function ServiceRecommendation() {
     newAnswers[currentQuestion] = selectedOption;
     setAnswers(newAnswers);
 
-    // 다음 질문으로 이동
-    if (currentQuestion < questions.length - 1) {
+    // 첫 번째 질문(네트워크 타입)에서 답변에 따라 질문 세트 결정
+    if (currentQuestion === 0) {
+      let newQuestionSet: Question[];
+      if (selectedOption === 0) {
+        // 5G 선택
+        newQuestionSet = [networkQuestion, ...fiveGQuestions];
+      } else if (selectedOption === 1) {
+        // LTE 선택
+        newQuestionSet = [networkQuestion, ...lteQuestions];
+      } else {
+        // 잘 모르겠어요
+        newQuestionSet = [networkQuestion, ...generalQuestions];
+      }
+      setQuestionSet(newQuestionSet);
+      // 첫 번째 질문 후에는 항상 다음 질문으로
       setCurrentQuestion(currentQuestion + 1);
       setSelectedOption(answers[currentQuestion + 1] ?? null);
     } else {
-      // 마지막 질문 완료 시 로딩 단계로 전환
-      setStage('loading');
+      // 다음 질문으로 이동
+      if (currentQuestion < questionSet.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+        setSelectedOption(answers[currentQuestion + 1] ?? null);
+      } else {
+        // 마지막 질문 완료 시 로딩 단계로 전환
+        setStage('loading');
+      }
     }
   };
 
@@ -130,64 +184,86 @@ export default function ServiceRecommendation() {
   useEffect(() => {
     if (stage === 'result') {
       // 답변 기반 추천 로직
-      const voiceAnswer = answers[0]; // 통화 빈도
-      const dataAnswer = answers[1]; // 데이터 사용량
-      const networkAnswer = answers[2]; // 5G 필요성
-      const priceAnswer = answers[3]; // 가격 선호도
-      const ottAnswer = answers[4]; // OTT 시청 빈도
+      const networkAnswer = answers[0]; // 5G 필요성 (0: 5G 필요, 1: LTE 충분, 2: 잘 모름)
+      const priceAnswer = answers[1]; // 가격 선호도
+      const voiceAnswer = answers[2]; // 통화 빈도
+      const ottAnswer = answers[3]; // OTT 선호도
 
       // 요금제 추천
       let filteredPlans = [...MOCK_PLANS];
 
-      // 1. 가격 필터링
-      if (priceAnswer === 0) {
-        // 3만원대
-        filteredPlans = filteredPlans.filter(
-          (p) => p.price >= 30000 && p.price <= 39999,
-        );
-      } else if (priceAnswer === 1) {
-        // 4~5만원대
-        filteredPlans = filteredPlans.filter(
-          (p) => p.price >= 40000 && p.price <= 59999,
-        );
-      } else if (priceAnswer === 2) {
-        // 6~8만원대
-        filteredPlans = filteredPlans.filter(
-          (p) => p.price >= 60000 && p.price <= 89999,
-        );
-      } else if (priceAnswer === 3) {
-        // 8만원 이상
-        filteredPlans = filteredPlans.filter((p) => p.price >= 80000);
-      }
-
-      // 2. 네트워크 타입 필터링
+      // 1. 네트워크 타입 필터링
       if (networkAnswer === 0) {
-        // 5G 꼭 필요
+        // 5G 필요 - 5G만
         filteredPlans = filteredPlans.filter((p) => p.networkType === '5G');
-      } else if (networkAnswer === 3 || networkAnswer === 4) {
-        // LTE면 충분 또는 가격 중요
+
+        // 5G 가격 필터링
+        if (priceAnswer === 0) {
+          // 5~6만원대
+          filteredPlans = filteredPlans.filter(
+            (p) => p.price >= 50000 && p.price <= 69999,
+          );
+        } else if (priceAnswer === 1) {
+          // 7~9만원대
+          filteredPlans = filteredPlans.filter(
+            (p) => p.price >= 70000 && p.price <= 99999,
+          );
+        } else if (priceAnswer === 2) {
+          // 10~12만원대
+          filteredPlans = filteredPlans.filter(
+            (p) => p.price >= 100000 && p.price <= 129999,
+          );
+        } else if (priceAnswer === 3) {
+          // 13만원 이상
+          filteredPlans = filteredPlans.filter((p) => p.price >= 130000);
+        }
+      } else if (networkAnswer === 1) {
+        // LTE 충분 - LTE만
         filteredPlans = filteredPlans.filter((p) => p.networkType === 'LTE');
+
+        // LTE 가격 필터링
+        if (priceAnswer === 0) {
+          // 3~4만원대
+          filteredPlans = filteredPlans.filter(
+            (p) => p.price >= 30000 && p.price <= 49999,
+          );
+        } else if (priceAnswer === 1) {
+          // 4~5만원대
+          filteredPlans = filteredPlans.filter(
+            (p) => p.price >= 40000 && p.price <= 59999,
+          );
+        } else if (priceAnswer === 2) {
+          // 5~6만원대
+          filteredPlans = filteredPlans.filter(
+            (p) => p.price >= 50000 && p.price <= 69999,
+          );
+        }
+      } else {
+        // 잘 모르겠어요 - 필터링 안함
+
+        // 전체 가격 필터링
+        if (priceAnswer === 0) {
+          // 3~5만원대
+          filteredPlans = filteredPlans.filter(
+            (p) => p.price >= 30000 && p.price <= 59999,
+          );
+        } else if (priceAnswer === 1) {
+          // 5~7만원대
+          filteredPlans = filteredPlans.filter(
+            (p) => p.price >= 50000 && p.price <= 79999,
+          );
+        } else if (priceAnswer === 2) {
+          // 7~10만원대
+          filteredPlans = filteredPlans.filter(
+            (p) => p.price >= 70000 && p.price <= 109999,
+          );
+        } else if (priceAnswer === 3) {
+          // 10만원 이상
+          filteredPlans = filteredPlans.filter((p) => p.price >= 100000);
+        }
       }
 
-      // 3. 데이터 사용량 필터링
-      if (dataAnswer === 0) {
-        // 100GB 이상 - 무제한 우선
-        filteredPlans = filteredPlans.filter(
-          (p) => p.dataAmountMb === 0 || p.dataAmountMb >= 100000,
-        );
-      } else if (dataAnswer === 1) {
-        // 50~100GB
-        filteredPlans = filteredPlans.filter(
-          (p) => p.dataAmountMb === 0 || p.dataAmountMb >= 50000,
-        );
-      } else if (dataAnswer === 2) {
-        // 30~50GB
-        filteredPlans = filteredPlans.filter(
-          (p) => p.dataAmountMb === 0 || p.dataAmountMb >= 30000,
-        );
-      }
-
-      // 4. 통화 빈도 고려
+      // 통화 빈도에 따른 정렬
       if (voiceAnswer <= 1) {
         // 통화 많이 함 - 무제한 통화 우선
         filteredPlans.sort((a, b) => {
@@ -197,9 +273,12 @@ export default function ServiceRecommendation() {
         });
       }
 
-      // 5. OTT 선호도에 따른 정렬
-      if (ottAnswer <= 1) {
-        // OTT 자주 봄
+      // OTT 선호도에 따른 필터링 및 정렬
+      if (ottAnswer === 0) {
+        // 있으면 좋겠다 - OTT 있는 것만 + OTT 많은 순
+        filteredPlans = filteredPlans.filter(
+          (p) => p.subscriptionServices.length > 0,
+        );
         filteredPlans.sort((a, b) => {
           const aOttCount = a.subscriptionServices.length;
           const bOttCount = b.subscriptionServices.length;
@@ -208,8 +287,14 @@ export default function ServiceRecommendation() {
           }
           return a.price - b.price;
         });
-      } else {
-        // OTT 안봄 - 가격순
+      } else if (ottAnswer === 1) {
+        // 상관없다 - 가격순
+        filteredPlans.sort((a, b) => a.price - b.price);
+      } else if (ottAnswer === 2) {
+        // 없으면 좋겠다 - OTT 없는 것만 + 가격순
+        filteredPlans = filteredPlans.filter(
+          (p) => p.subscriptionServices.length === 0,
+        );
         filteredPlans.sort((a, b) => a.price - b.price);
       }
 
@@ -323,6 +408,14 @@ export default function ServiceRecommendation() {
         <Header />
 
         <div className={styles.resultContainer}>
+          <button
+            type="button"
+            className={styles.backButton}
+            onClick={() => navigate(PAGE_PATHS.HOME)}
+          >
+            ‹ 홈으로
+          </button>
+
           <h1 className={styles.resultTitle}>
             <span className={styles.highlight}>당신을 위한</span>
             <br />
@@ -330,7 +423,7 @@ export default function ServiceRecommendation() {
           </h1>
 
           {/* 요금제 추천 */}
-          {recommendedPlans.length > 0 && (
+          {recommendedPlans.length > 0 ? (
             <div className={styles.resultSection}>
               <h2 className={styles.resultSectionTitle}>추천 요금제</h2>
               <div className={styles.resultCardList}>
@@ -399,6 +492,11 @@ export default function ServiceRecommendation() {
                 ))}
               </div>
             </div>
+          ) : (
+            <div className={styles.emptyResult}>
+              <p>조건에 맞는 요금제를 찾지 못했습니다.</p>
+              <p>다른 조건으로 다시 시도해보세요.</p>
+            </div>
           )}
         </div>
       </Layout>
@@ -406,7 +504,7 @@ export default function ServiceRecommendation() {
   }
 
   // 질문 화면
-  const question = questions[currentQuestion];
+  const question = questionSet[currentQuestion];
 
   return (
     <Layout>
@@ -444,7 +542,7 @@ export default function ServiceRecommendation() {
           onClick={handleNext}
           disabled={selectedOption === null}
         >
-          {currentQuestion === questions.length - 1 ? '완료' : '다음'}
+          {currentQuestion === questionSet.length - 1 ? '완료' : '다음'}
         </button>
       </div>
     </Layout>

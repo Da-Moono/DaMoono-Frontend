@@ -275,6 +275,37 @@ export const resultContainer = style({
   paddingTop: '100px',
   paddingBottom: '100px',
   minHeight: 'calc(100vh - 80px)',
+  position: 'relative',
+});
+
+export const backButton = style({
+  position: 'absolute',
+  top: '100px',
+  left: '20px',
+  background: 'none',
+  border: 'none',
+  fontSize: '16px',
+  fontWeight: '500',
+  color: '#666',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+  padding: '8px 12px',
+  transition: 'all 0.2s ease',
+  fontFamily: 'SCDream, sans-serif',
+
+  ':hover': {
+    color: '#333',
+  },
+});
+
+export const emptyResult = style({
+  textAlign: 'center',
+  padding: '60px 20px',
+  color: '#999',
+  fontSize: '16px',
+  lineHeight: '1.8',
 });
 
 export const resultTitle = style({
