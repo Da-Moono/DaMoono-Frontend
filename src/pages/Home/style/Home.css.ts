@@ -27,8 +27,9 @@ export const chatButton = style({
 export const chatText = style({
   fontSize: '24px',
   fontWeight: '500',
-  color: '#313131ff',
+  color: '#333',
   flex: 1,
+  fontFamily: 'SCDream, sans-serif',
 });
 
 export const chatButtonImage = style({

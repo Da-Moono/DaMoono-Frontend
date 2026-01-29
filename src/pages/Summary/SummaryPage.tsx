@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
+import { useLocation } from 'react-router';
 import BottomNav from '@/components/BottomNav/BottomNav';
+import BackButton from '@/components/Button/BackButton';
 import Header from '@/components/Header/Header';
 import Layout from '@/pages/layout/Layout';
 import * as s from '@/pages/Summary/style/SummaryPage.css';
 import CharacterScene from './CharacterScene';
-import Accordion from './components/Accordion';
 import CompactTipBox from './components/CompactTipBox';
 import GuideChecklist from './components/GuideChecklist';
 import NextActionCard from './components/NextActionCard';
@@ -134,6 +135,10 @@ const itemVariants = {
 };
 
 const SummaryPage = () => {
+  const location = useLocation();
+  // 넘겨받은 데이터가 없을 경우를 대비해 기본값 설정
+  const summaryData = location.state?.summaryData || MOCK_SUMMARY_DATA;
+
   return (
     // 1. 전체 레이아웃 틀로 감싸기
     <Layout>
@@ -156,33 +161,37 @@ const SummaryPage = () => {
 
         <motion.section className={s.contentSection} variants={itemVariants}>
           <SummaryResultCard
-            category={MOCK_SUMMARY_DATA.category}
-            summary={MOCK_SUMMARY_DATA.summary}
-            coreActions={MOCK_SUMMARY_DATA.coreActions}
+            category={summaryData.category}
+            summary={summaryData.summary}
+            coreActions={summaryData.coreActions}
           />
         </motion.section>
 
         <motion.section className={s.contentSection} variants={itemVariants}>
-          <StatusCard currentStatus={MOCK_SUMMARY_DATA.currentStatus} />
+          <StatusCard currentStatus={summaryData.currentStatus} />
         </motion.section>
 
         <motion.section className={s.contentSection} variants={itemVariants}>
-          <WarningCard notices={MOCK_SUMMARY_DATA.notices} />
+          <WarningCard notices={summaryData.notices} />
         </motion.section>
 
         <motion.section className={s.contentSection} variants={itemVariants}>
-          <NextActionCard nextActions={MOCK_SUMMARY_DATA.nextActions} />
+          <NextActionCard nextActions={summaryData.nextActions} />
         </motion.section>
 
         <motion.section className={s.contentSection} variants={itemVariants}>
-          <Accordion type="guide" data={MOCK_SUMMARY_DATA.guides} />
+          {/* <Accordion type="guide" data={MOCK_SUMMARY_DATA.guides} />
           <Accordion type="tip" data={MOCK_SUMMARY_DATA.tips} />
-          <Accordion type="proposal" data={MOCK_SUMMARY_DATA.proposals} />
+          <Accordion type="proposal" data={MOCK_SUMMARY_DATA.proposals} /> */}
 
-          <GuideChecklist data={MOCK_SUMMARY_DATA.guides} />
-          <CompactTipBox data={MOCK_SUMMARY_DATA.tips} />
-          <ProposalHighlight data={MOCK_SUMMARY_DATA.proposals} />
+          {summaryData?.guides && <GuideChecklist data={summaryData.guides} />}
+          {summaryData?.tips && <CompactTipBox data={summaryData.tips} />}
+          {summaryData?.guides && (
+            <ProposalHighlight data={summaryData.proposals} />
+          )}
         </motion.section>
+
+        <BackButton targetPath="/chat" label="채팅 화면으로 돌아가기" />
       </motion.div>
 
       {/* 4. 네비게이션 */}
