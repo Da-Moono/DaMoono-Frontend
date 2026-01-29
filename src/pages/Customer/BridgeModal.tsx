@@ -14,13 +14,15 @@ export default function BridgeModal({ url, onClose }: BridgeModalProps) {
       setPercent((prev) => {
         if (prev >= 100) {
           clearInterval(timer);
+          // 브라우저 팝업 차단 방지를 위해 보통은 사용자 액션이 필요하지만,
+          // 요구사항에 맞춰 100% 도달 시 새 탭 이동 처리
           window.open(url, '_blank');
           onClose();
           return 100;
         }
         return prev + 1;
       });
-    }, 40); // 약 4초 동안 프로그레스 바 진행 (30ms * 100)
+    }, 40); // 40ms * 100 = 약 4초
 
     return () => clearInterval(timer);
   }, [url, onClose]);
@@ -28,15 +30,18 @@ export default function BridgeModal({ url, onClose }: BridgeModalProps) {
   return (
     <div className={S.overlay}>
       <div className={S.modalFrame}>
+        {/* CSS clamp로 크기가 조절되는 캐릭터 이미지 */}
         <div className={S.characterImage} />
+
         <h2 className={S.title}>
           잠시 후 해당 페이지로
           <br />
           이동합니다
         </h2>
 
+        {/* 프로그레스 바 영역 */}
         <div className={S.progressContainer}>
-          {/* 퍼센트 수치에 따른 동적 바 렌더링 */}
+          {/* 노란색 게이지: 인라인 스타일은 width만 남기고 나머지는 CSS로 위임 */}
           <div
             style={{
               position: 'absolute',
@@ -53,20 +58,24 @@ export default function BridgeModal({ url, onClose }: BridgeModalProps) {
 
         <p className={S.waitingText}>잠시만 기다려 주세요.</p>
 
+        {/* 하단 버튼 그룹 */}
         <div className={S.buttonGroup}>
           <button
+            type="button"
             className={S.actionButton}
             onClick={() => {
-              window.open(url, '_blank'); // 즉시 이동
+              window.open(url, '_blank');
               onClose();
             }}
           >
             [ 지금이동 ]
           </button>
+
           <button
+            type="button"
             className={S.actionButton}
             style={{ color: '#666' }}
-            onClick={onClose} // 이동 취소 및 모달 닫기
+            onClick={onClose}
           >
             취소
           </button>

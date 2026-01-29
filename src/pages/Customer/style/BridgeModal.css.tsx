@@ -25,35 +25,43 @@ export const overlay = style({
 
 export const modalFrame = style({
   width: 'calc(100% - 48px)',
-  height: '580px',
+  // ⭐ 세로가 긴 화면부터 짧은 화면까지 대응
+  height: 'auto',
+  maxHeight: '90vh',
+  minHeight: '450px',
   background: '#FFFFFF',
   borderRadius: '20px',
   boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.25)',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '40px 20px',
+  padding: 'clamp(20px, 8vw, 40px) 20px', // 패딩도 유동적으로
   boxSizing: 'border-box',
 });
 
 export const characterImage = style({
-  width: '180px',
-  height: '190px',
+  // ⭐ 모달 크기에 맞춰 이미지 크기 자동 조절
+  width: 'clamp(120px, 40vw, 180px)',
+  height: 'auto',
+  aspectRatio: '180 / 190',
   backgroundImage: 'url("/src/assets/images/bridge.png")',
   backgroundSize: 'contain',
   backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center',
   marginBottom: '20px',
   animation: `${flyAnimation} 3s ease-in-out infinite`,
+  flexShrink: 0,
 });
 
 export const title = style({
   fontFamily: "'S-Core Dream', sans-serif",
   fontWeight: 700,
-  fontSize: '22px',
+  // ⭐ 폰트 사이즈 반응형
+  fontSize: 'clamp(18px, 5vw, 22px)',
   textAlign: 'center',
   color: '#000000',
   lineHeight: '1.4',
-  marginBottom: '30px',
+  marginBottom: 'clamp(15px, 5vw, 30px)',
 });
 
 export const progressContainer = style({
@@ -78,23 +86,28 @@ export const percentText = style({
 export const waitingText = style({
   fontFamily: "'S-Core Dream', sans-serif",
   fontWeight: 700,
-  fontSize: '20px',
-  marginBottom: '40px',
+  fontSize: 'clamp(16px, 4vw, 20px)',
+  marginBottom: '30px',
 });
 
 export const buttonGroup = style({
   width: '100%',
   display: 'flex',
   justifyContent: 'space-between',
-  marginTop: 'auto',
+  marginTop: 'auto', // 아래쪽에 붙도록 유지
   padding: '0 10px',
 });
 
 export const actionButton = style({
   fontFamily: "'S-Core Dream', sans-serif",
   fontWeight: 700,
-  fontSize: '22px',
+  fontSize: 'clamp(18px, 5vw, 22px)',
   background: 'none',
   border: 'none',
+  padding: '10px',
   cursor: 'pointer',
+  transition: 'opacity 0.2s ease',
+  selectors: {
+    '&:active': { opacity: 0.5 },
+  },
 });

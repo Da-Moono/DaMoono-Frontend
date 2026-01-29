@@ -35,11 +35,9 @@ export default function LoginRequiredModal({
   };
 
   const content = (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: 모달 오버레이 클릭으로 닫기 기능
     // biome-ignore lint/a11y/noStaticElementInteractions: 모달 오버레이 클릭 처리
     <div className={css.overlay} onClick={handleClose} role="presentation">
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: 모달 내부 클릭 전파 방지 */}
-      {/* biome-ignore lint/a11y/noStaticElementInteractions: 모달 내부 클릭 전파 방지 */}
       <div
         className={css.modal}
         onClick={(e) => e.stopPropagation()}

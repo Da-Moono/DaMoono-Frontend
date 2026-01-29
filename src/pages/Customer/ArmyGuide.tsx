@@ -19,40 +19,46 @@ export default function ArmyGuide() {
 
   return (
     <Layout>
+      {/* 전체 스크롤 영역 */}
       <div className={S.scrollArea}>
-        {/* 린트 에러 방지를 위해 onClick 제거 */}
+        {/* 1. 상단 로고 (반응형 적용됨) */}
         <div className={S.topLogo} />
 
+        {/* 2. 헤더 타이틀 프레임 */}
         <div className={S.headerFrame}>
           <span className={S.headerTitle}>군인 요금제 및 군인 혜택 가입</span>
         </div>
 
-        <h2 className={S.subTitle}>
-          다무너와 함께
-          <br />
-          서류를 챙겨보세요
-        </h2>
-
-        {/* 린트 에러 방지를 위해 onClick 제거 */}
-        <div className={S.characterImage} />
-
-        <div className={S.statusText}>준비 현황 ({checkedCount} / 3)</div>
-        <div className={S.progressBarContainer}>
-          <div
-            style={{
-              width: `${progressPercent}%`,
-              height: '100%',
-              backgroundColor: '#FBE88A',
-              transition: 'width 0.3s ease-in-out',
-            }}
-          />
+        {/* 3. 서브 타이틀 & 캐릭터 가로 배치 컨테이너 */}
+        <div className={S.titleContainer}>
+          <h2 className={S.subTitle}>
+            다무너와 함께
+            <br />
+            서류를 챙겨보세요
+          </h2>
+          {/* 캐릭터 이미지 (clamp 적용으로 자동 크기 조절) */}
+          <div className={S.characterImage} />
         </div>
-        <div className={S.percentText}>{progressPercent} %</div>
 
+        {/* 4. 준비 현황 텍스트 */}
+        <div className={S.statusText}>준비 현황 ({checkedCount} / 3)</div>
+
+        {/* 5. 프로그레스 바 + 퍼센트 가로 배치 컨테이너 */}
+        <div className={S.progressWrapper}>
+          <div className={S.progressBarContainer}>
+            {/* 게이지 바: width만 상태값으로 조절 */}
+            <div
+              className={S.progressGauge}
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+          <div className={S.percentText}>{progressPercent} %</div>
+        </div>
+
+        {/* 6. 문서 카드 리스트 (Flex 흐름으로 자동 배치 및 스크롤 생성) */}
         <button
           type="button"
           className={S.documentCard}
-          style={{ top: '310px' }}
           onClick={() => handleCheck(0)}
         >
           <div className={S.docText}>
@@ -67,7 +73,6 @@ export default function ArmyGuide() {
         <button
           type="button"
           className={S.documentCard}
-          style={{ top: '480px' }}
           onClick={() => handleCheck(1)}
         >
           <div className={S.docText}>
@@ -90,7 +95,6 @@ export default function ArmyGuide() {
         <button
           type="button"
           className={S.documentCard}
-          style={{ top: '650px' }}
           onClick={() => handleCheck(2)}
         >
           <div className={S.docText}>
@@ -110,15 +114,19 @@ export default function ArmyGuide() {
         </button>
       </div>
 
+      {/* 7. 하단 주의사항 (화면 하단 고정) */}
       <div className={S.warningBox}>
         <span className={S.warningText}>
           ※ 주의 사항 : 모든 서류는 발급일로부터 3개월 이내여야 합니다.
         </span>
       </div>
 
+      {/* 외부 링크 연결 모달 */}
       {targetUrl && (
         <BridgeModal url={targetUrl} onClose={() => setTargetUrl(null)} />
       )}
+
+      {/* 하단 네비게이션 */}
       <BottomNav />
     </Layout>
   );

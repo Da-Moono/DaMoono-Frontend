@@ -8,54 +8,56 @@ export default function MinorGuide() {
   const [checkedList, setCheckedList] = useState([false, false, false]);
   const [targetUrl, setTargetUrl] = useState<string | null>(null);
 
-  // 체크박스 토글 함수
   const handleCheck = (index: number) => {
     const newCheckedList = [...checkedList];
     newCheckedList[index] = !newCheckedList[index];
     setCheckedList(newCheckedList);
   };
 
-  // 진행률 계산 로직
   const checkedCount = checkedList.filter(Boolean).length;
   const progressPercent = Math.round((checkedCount / 3) * 100);
 
   return (
     <Layout>
+      {/* 1. 전체 스크롤 영역: absolute를 제거했으므로 요소가 쌓이면서 스크롤이 생깁니다 */}
       <div className={S.scrollArea}>
-        {/* 린트 에러 해결을 위해 onClick 이벤트 제거 */}
+        {/* 2. 상단 로고 (반응형) */}
         <div className={S.topLogo} />
 
+        {/* 3. 헤더 타이틀 프레임 */}
         <div className={S.headerFrame}>
           <span className={S.headerTitle}>미성년자 가입 구비 서류</span>
         </div>
 
-        <h2 className={S.subTitle}>
-          다무너와 함께
-          <br />
-          서류를 챙겨보세요
-        </h2>
-
-        {/* 린트 에러 해결을 위해 onClick 이벤트 제거 */}
-        <div className={S.characterImage} />
-
-        <div className={S.statusText}>준비 현황 ({checkedCount} / 3)</div>
-        <div className={S.progressBarContainer}>
-          <div
-            style={{
-              width: `${progressPercent}%`,
-              height: '100%',
-              backgroundColor: '#FBE88A',
-              transition: 'width 0.3s ease-in-out',
-            }}
-          />
+        {/* 4. 서브 타이틀 & 캐릭터 가로 배치 컨테이너 */}
+        <div className={S.titleContainer}>
+          <h2 className={S.subTitle}>
+            다무너와 함께
+            <br />
+            서류를 챙겨보세요
+          </h2>
+          {/* 캐릭터 이미지 (clamp 적용으로 자동 크기 조절) */}
+          <div className={S.characterImage} />
         </div>
-        <div className={S.percentText}>{progressPercent} %</div>
 
-        {/* 카드 1: 법정대리인 신분증 */}
+        {/* 5. 준비 현황 텍스트 */}
+        <div className={S.statusText}>준비 현황 ({checkedCount} / 3)</div>
+
+        {/* 6. 프로그레스 바 + 퍼센트 가로 배치 컨테이너 */}
+        <div className={S.progressWrapper}>
+          <div className={S.progressBarContainer}>
+            <div
+              className={S.progressGauge}
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+          <div className={S.percentText}>{progressPercent} %</div>
+        </div>
+
+        {/* 7. 문서 카드 리스트 (인라인 top 제거 -> 자동으로 순서대로 쌓이며 스크롤 생성) */}
         <button
           type="button"
           className={S.documentCard}
-          style={{ top: '310px' }}
           onClick={() => handleCheck(0)}
         >
           <div className={S.docText}>
@@ -67,11 +69,9 @@ export default function MinorGuide() {
           </div>
         </button>
 
-        {/* 카드 2: 관계 증명 서류 */}
         <button
           type="button"
           className={S.documentCard}
-          style={{ top: '480px' }}
           onClick={() => handleCheck(1)}
         >
           <div className={S.docText}>
@@ -93,11 +93,9 @@ export default function MinorGuide() {
           </button>
         </button>
 
-        {/* 카드 3: 동의서 양식 */}
         <button
           type="button"
           className={S.documentCard}
-          style={{ top: '650px' }}
           onClick={() => handleCheck(2)}
         >
           <div className={S.docText}>
@@ -122,6 +120,7 @@ export default function MinorGuide() {
         </button>
       </div>
 
+      {/* 8. 하단 주의사항 (fixed 처리됨) */}
       <div className={S.warningBox}>
         <span className={S.warningText}>
           ※ 모든 서류는 발급일로부터 3개월 이내여야 합니다.
@@ -131,7 +130,6 @@ export default function MinorGuide() {
       {targetUrl && (
         <BridgeModal url={targetUrl} onClose={() => setTargetUrl(null)} />
       )}
-
       <BottomNav />
     </Layout>
   );
