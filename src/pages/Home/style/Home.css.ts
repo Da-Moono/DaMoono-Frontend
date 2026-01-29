@@ -25,11 +25,12 @@ export const chatButton = style({
 });
 
 export const chatText = style({
-  fontSize: '24px',
+  fontSize: '18px',
   fontWeight: '500',
   color: '#333',
   flex: 1,
   fontFamily: 'SCDream, sans-serif',
+  textAlign: 'left',
 });
 
 export const chatButtonImage = style({
