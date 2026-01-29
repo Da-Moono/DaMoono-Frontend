@@ -35,7 +35,7 @@ export default function Counsel() {
       try {
         setLoading(true);
 
-        const res = await fetchCounselList({ sort, page: 1, size: 20 });
+        const res = await fetchCounselList({ page: 1, size: 20 });
 
         const mapped: CounselItem[] = res.items.map((item: CounselApiItem) => ({
           id: item.sessionId,
@@ -55,7 +55,7 @@ export default function Counsel() {
     };
 
     load();
-  }, [sort]);
+  }, []);
 
   // 정렬
   const sortedItems = useMemo(() => {
