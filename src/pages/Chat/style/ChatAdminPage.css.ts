@@ -21,6 +21,9 @@ export const container = style({
  상담사 페이지 헤더 부분
 **********************/
 export const header = style({
+  position: 'sticky', // 상단 고정
+  top: 60, // 기존 Header(모바일 상단바 등) 높이만큼 띄움
+  zIndex: 10, // 메시지보다 위에 오도록 설정
   display: 'flex',
   justifyContent: 'flex-start',
   alignItems: 'center',
@@ -253,7 +256,7 @@ export const statusSubtext = style({
 export const content = style({
   flex: 1,
   overflowY: 'auto',
-  padding: '20px',
+  padding: '20px 20px 180px',
   backgroundColor: '#FEFDFD',
 });
 

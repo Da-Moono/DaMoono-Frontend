@@ -2,7 +2,7 @@ import * as s from '@/pages/Admin/style/ReportCard.css';
 import Badge from '@/pages/Summary/components/atoms/Badge';
 
 interface ReportCardProps {
-  data: {
+  data?: {
     category: string;
     outcome: { value: string; reason: string };
     re_contact: { value: string; reason: string };
@@ -10,6 +10,7 @@ interface ReportCardProps {
 }
 
 export default function ReportCard({ data }: ReportCardProps) {
+  if (!data) return null;
   return (
     <div className={s.CardContainer}>
       <div className={s.header}>

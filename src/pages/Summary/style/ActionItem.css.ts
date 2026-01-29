@@ -12,6 +12,8 @@ export const iconBox = recipe({
   base: {
     width: 40,
     height: 40,
+    aspectRatio: '1 / 1', // 정사각형 비율 유지
+    flexShrink: 0, // 부모 컨테이너가 좁아져도 박스가 줄어들지 않게 함
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
