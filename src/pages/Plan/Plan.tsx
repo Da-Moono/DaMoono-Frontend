@@ -19,7 +19,7 @@ import type {
 
 // Temporary flag: force using mock data for local testing.
 // Set to false to use real backend API.
-const USE_TEMP_MOCK = false;
+const USE_TEMP_MOCK = true;
 
 // 현재 사용 중인 요금제 카드 컴포넌트
 interface CurrentPlanCardProps {
@@ -198,7 +198,7 @@ function SortFilterPanel({
   return (
     <div className={styles.filterPanel}>
       <div className={styles.filterControls}>
-        <div className={styles.selectWrapper} style={{ width: '100px' }}>
+        <div className={styles.selectWrapper} style={{ width: '120px' }}>
           <button
             onClick={() => {
               setShowSortOrderMenu((prev) => !prev);
