@@ -47,17 +47,17 @@ export default function Home() {
   const [recentCounsels, setRecentCounsels] = useState<RecentCounsel[]>([]);
   const [counselSlide, setCounselSlide] = useState(0);
 
-  // 랜덤으로 5개 선택하는 함수
+  // 랜덤으로 3개 선택하는 함수
   const getRandomItems = <T,>(array: T[], count: number): T[] => {
     const shuffled = [...array].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, count);
   };
 
-  // 랜덤 5개 요금제
-  const [randomPlans] = useState(() => getRandomItems(MOCK_PLANS, 5));
+  // 랜덤 3개 요금제
+  const [randomPlans] = useState(() => getRandomItems(MOCK_PLANS, 3));
 
-  // 랜덤 5개 구독
-  const [randomSubscribes] = useState(() => getRandomItems(MOCK_SUBSCRIBES, 5));
+  // 랜덤 3개 구독
+  const [randomSubscribes] = useState(() => getRandomItems(MOCK_SUBSCRIBES, 3));
 
   const slides = [
     {
