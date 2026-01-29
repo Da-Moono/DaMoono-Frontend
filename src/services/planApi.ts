@@ -27,6 +27,7 @@ export async function getPlans(): Promise<Plan[]> {
     // API 응답 로깅 (디버깅용)
     console.log('API 응답 데이터:', data);
 
+    // biome-ignore lint/suspicious/noExplicitAny: API 응답 타입이 동적이므로 any 사용 필요
     let plansArray: any[] = [];
 
     // API 응답이 배열인 경우
@@ -44,6 +45,7 @@ export async function getPlans(): Promise<Plan[]> {
     }
 
     // 백엔드 응답을 프론트엔드 타입에 맞게 변환
+    // biome-ignore lint/suspicious/noExplicitAny: API 응답 아이템 타입이 동적이므로 any 사용 필요
     const mappedPlans: Plan[] = plansArray.map((item: any) => {
       console.log('원본 아이템:', item);
 

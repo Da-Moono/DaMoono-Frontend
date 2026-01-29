@@ -131,6 +131,7 @@ export default function ConsultModal({
   };
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: 모달 오버레이는 키보드 이벤트 포함
     <div
       className={styles.modalOverlay}
       onClick={onClose}

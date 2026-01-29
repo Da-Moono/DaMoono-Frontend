@@ -35,8 +35,16 @@ export default function LoginRequiredModal({
   };
 
   const content = (
-    <div className={css.overlay} onClick={handleClose}>
-      <div className={css.modal} onClick={(e) => e.stopPropagation()}>
+    // biome-ignore lint/a11y/useKeyWithClickEvents: 모달 오버레이 클릭으로 닫기 기능
+    // biome-ignore lint/a11y/noStaticElementInteractions: 모달 오버레이 클릭 처리
+    <div className={css.overlay} onClick={handleClose} role="presentation">
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: 모달 내부 클릭 전파 방지 */}
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: 모달 내부 클릭 전파 방지 */}
+      <div
+        className={css.modal}
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+      >
         <div className={css.header}>
           <img src={img} alt="무너 캐릭터" className={css.image} />
 
@@ -53,6 +61,7 @@ export default function LoginRequiredModal({
 
         <p className={css.description}>
           {message.split('\n').map((line, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: 정적 텍스트 분할이므로 인덱스 사용 안전
             <span key={i}>
               {line}
               {i < message.split('\n').length - 1 && <br />}

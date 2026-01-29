@@ -16,8 +16,11 @@ export function CounselCard({
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: 카드 전체 클릭 UX를 위해 의도적으로 div 사용
     // biome-ignore lint/a11y/noStaticElementInteractions: button 중첩 방지
+    // biome-ignore lint/a11y/useSemanticElements: 카드 레이아웃을 위해 div 사용
     <div
       className={css.card}
+      role="button"
+      tabIndex={0}
       onClick={summarized ? onGetSummary : undefined}
       onKeyDown={
         summarized

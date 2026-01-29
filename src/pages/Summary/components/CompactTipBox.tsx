@@ -7,7 +7,7 @@ import * as s from '@/pages/Summary/style/CompactTipBox.css';
 interface TipAccordionProps {
   data: {
     title: string;
-    steps: string[];
+    items: string[];
   };
 }
 
@@ -28,7 +28,7 @@ export default function TipAccordion({ data }: TipAccordionProps) {
   }, [isOpen]);
 
   // 데이터가 없으면 렌더링 안 함
-  if (!data.steps || data.steps.length === 0) return null;
+  if (!data.items || data.items.length === 0) return null;
 
   return (
     <div className={s.container} ref={accordionRef}>
@@ -65,7 +65,7 @@ export default function TipAccordion({ data }: TipAccordionProps) {
             className={s.contentWrapper}
           >
             <div className={s.tipList}>
-              {data.steps.map((tip, index) => (
+              {data.items.map((tip, index) => (
                 <motion.div
                   key={tip}
                   className={s.tipItem}

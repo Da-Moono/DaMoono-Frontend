@@ -23,19 +23,19 @@ const MOCK_SUMMARY_DATA = {
   coreActions: [
     {
       id: 1,
-      icon: '🛡️',
+      icon: ':shield:',
       title: '네트워크 품질측정 티켓 등록',
       description: 'NET-77531 (현장팀 분석 착수)',
     },
     {
       id: 2,
-      icon: '📱',
+      icon: ':iphone:',
       title: '단말기 임시 개선 설정 안내',
       description: 'LTE 고정 등 4단계 설정법 가이드',
     },
     {
       id: 3,
-      icon: '⏰',
+      icon: ':alarm_clock:',
       title: '결과 안내 예약',
       description: '영업일 {N}일 내 문자 또는 콜백(해피콜) 예정',
     },
@@ -44,25 +44,25 @@ const MOCK_SUMMARY_DATA = {
   // 3. 현재 적용 상태
   currentStatus: [
     {
-      icon: '✨',
+      icon: ':sparkles:',
       label: '처리 상태',
       detail: '현장 점검 단계',
       value: '품질 분석 중',
     },
     {
-      icon: '🛡️',
+      icon: ':shield:',
       label: '티켓 번호',
       detail: '', // 없는 경우 빈 문자열
       value: 'NET-77531',
     },
     {
-      icon: '📱',
+      icon: ':iphone:',
       label: '기기 정보',
       detail: '단말 모델',
       value: 'ios 최신',
     },
     {
-      icon: '📶',
+      icon: ':signal_strength:',
       label: '임시 설정 LTE 고정',
       detail: '4G 우선',
       value: '적용 완료',
@@ -90,13 +90,13 @@ const MOCK_SUMMARY_DATA = {
 
   // 5. 다음 단계 안내
   nextActions: [
-    '📩 문자로 전송된 상세 조치 가이드 및 티켓 정보 확인',
-    '📞 현장팀 분석 완료 후 담당 상담사의 안내 전화(콜백) 대기',
+    ':envelope_with_arrow: 문자로 전송된 상세 조치 가이드 및 티켓 정보 확인',
+    ':telephone_receiver: 현장팀 분석 완료 후 담당 상담사의 안내 전화(콜백) 대기',
   ],
 
   // 6. 이용 가이드 / 제시안 / 꿀팁
   guides: {
-    title: '📍 단말기 임시 개선 조치 순서',
+    title: ':round_pushpin: 단말기 임시 개선 조치 순서',
     steps: [
       '설정에서 LTE 고정(4G 우선)으로 전환',
       'VoLTE 및 Wi-Fi 통화 기능 ON(활성화)',
@@ -112,7 +112,7 @@ const MOCK_SUMMARY_DATA = {
 
   tips: {
     title: '꿀팁',
-    steps: [
+    items: [
       'Wi-Fi 우선 사용 권장: 데이터 속도가 불안정한 실내 장소에서는 가급적 Wi-Fi를 우선 연결하여 사용하시는 것을 추천드립니다.',
       '신뢰할 수 있는 AP 활용: 보안이 확인된 신뢰할 수 있는 AP를 연결하면 훨씬 안정적인 통신 환경을 이용하실 수 있습니다.',
     ],
@@ -191,7 +191,7 @@ const SummaryPage = () => {
 
           {summaryData?.guides && <GuideChecklist data={summaryData.guides} />}
           {summaryData?.tips && <CompactTipBox data={summaryData.tips} />}
-          {summaryData?.guides && (
+          {summaryData?.proposals && (
             <ProposalHighlight data={summaryData.proposals} />
           )}
         </motion.section>
