@@ -1,4 +1,14 @@
-import { style } from '@vanilla-extract/css';
+import { keyframes, style } from '@vanilla-extract/css';
+
+// 로딩 애니메이션
+const dotFlashing = keyframes({
+  '0%, 80%, 100%': {
+    opacity: 0.3,
+  },
+  '40%': {
+    opacity: 1,
+  },
+});
 
 // Container
 export const container = style({
@@ -6,6 +16,10 @@ export const container = style({
   flexDirection: 'column',
   height: '100vh',
   backgroundColor: '#FEFDFD',
+  position: 'relative',
+  maxWidth: '480px',
+  margin: '0 auto',
+  paddingTop: '60px',
 });
 
 // Chat Header (채팅 페이지 내부 헤더)
@@ -15,7 +29,6 @@ export const chatHeader = style({
   gap: '8px',
   padding: '16px 20px',
   backgroundColor: '#fff',
-  borderBottom: '1px solid #f0f0f0',
 });
 
 export const headerIcon = style({
@@ -98,7 +111,7 @@ export const questionButton = style({
   textAlign: 'center',
   cursor: 'pointer',
   transition: 'all 0.2s',
-  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
   whiteSpace: 'nowrap',
 
   ':hover': {
@@ -108,8 +121,8 @@ export const questionButton = style({
 });
 
 export const infoIcon = style({
-  width: '12px',
-  height: '12px',
+  width: '18px',
+  height: '18px',
 });
 
 // Messages
@@ -203,110 +216,29 @@ export const timestamp = style({
   marginLeft: '8px',
 });
 
-// Input
-export const inputContainer = style({
-  position: 'fixed',
-  bottom: '70px',
-  left: '50%',
-  transform: 'translateX(-50%)',
-  width: '480px',
-  maxWidth: '100%',
-  padding: '16px 20px',
-  backgroundColor: '#fff',
-  borderTop: '1px solid #f0f0f0',
-});
-
-export const menu = style({
+// 로딩 애니메이션
+export const loadingDots = style({
   display: 'flex',
-  gap: '8px',
-  marginBottom: '12px',
+  gap: '4px',
+  alignItems: 'center',
+  padding: '8px 0',
 });
 
-export const menuItem = style({
-  padding: '8px 16px',
-  backgroundColor: '#f5f5f5',
-  border: 'none',
-  borderRadius: '20px',
-  fontFamily: 'S-Core Dream',
-  fontSize: '14px',
-  fontWeight: 400,
-  color: '#333',
-  cursor: 'pointer',
-  transition: 'background-color 0.2s',
-
-  ':hover': {
-    backgroundColor: '#e0e0e0',
+export const loadingDot = style({
+  width: '8px',
+  height: '8px',
+  borderRadius: '50%',
+  backgroundColor: '#999',
+  animation: `${dotFlashing} 1.4s infinite ease-in-out`,
+  selectors: {
+    '&:nth-child(1)': {
+      animationDelay: '0s',
+    },
+    '&:nth-child(2)': {
+      animationDelay: '0.2s',
+    },
+    '&:nth-child(3)': {
+      animationDelay: '0.4s',
+    },
   },
-});
-
-export const inputWrapper = style({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '12px',
-});
-
-export const plusButton = style({
-  width: '40px',
-  height: '40px',
-  backgroundColor: 'transparent',
-  border: '1px solid #666666',
-  borderRadius: '5px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  cursor: 'pointer',
-  flexShrink: 0,
-  transition: 'background-color 0.2s',
-
-  ':hover': {
-    backgroundColor: '#f5f5f5',
-  },
-});
-
-export const plusIcon = style({
-  width: '20px',
-  height: '20px',
-});
-
-export const inputBox = style({
-  flex: 1,
-  display: 'flex',
-  alignItems: 'center',
-  gap: '8px',
-  padding: '10px 16px',
-  backgroundColor: '#fff',
-  border: '1px solid #CDCDCD',
-  borderRadius: '30px',
-});
-
-export const input = style({
-  flex: 1,
-  border: 'none',
-  outline: 'none',
-  fontFamily: 'S-Core Dream',
-  fontSize: '16px',
-  fontWeight: 400,
-  color: '#333',
-
-  '::placeholder': {
-    color: '#CDCDCD',
-  },
-});
-
-export const iconButton = style({
-  width: '24px',
-  height: '24px',
-  backgroundColor: 'transparent',
-  border: 'none',
-  padding: 0,
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  flexShrink: 0,
-});
-
-export const icon = style({
-  width: '100%',
-  height: '100%',
 });

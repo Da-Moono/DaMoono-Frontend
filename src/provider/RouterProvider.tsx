@@ -1,10 +1,29 @@
 import { createBrowserRouter } from 'react-router';
 import { RouterProvider as Provider } from 'react-router/dom';
-import Admin from '../pages/Admin/Admin';
+import ArmyGuide from '@/pages/Customer/ArmyGuide';
+import CustomerService from '@/pages/Customer/CustomerService';
+import MinorGuide from '@/pages/Customer/MinorGuide';
+import ProxyGuide from '@/pages/Customer/ProxyGuide';
+import MyPage from '@/pages/MyPage/MyPage';
+import Counsel from '@/pages/MyPage/pages/Counsel';
+import AdminRoute from '@/shared/routes/AdminRoute';
+import ProtectedRoute from '@/shared/routes/ProtectedRoute';
+import Admin from '../pages/Admin/SummaryPage';
+import ChatAdminPage from '../pages/Chat/ChatAdminPage';
+import ChatConsultPage from '../pages/Chat/ChatConsultPage';
 import ChatManualPage from '../pages/Chat/ChatManualPage';
 import ChatPage from '../pages/Chat/ChatPage';
 import Home from '../pages/Home/Home';
 import Login from '../pages/Login/Login';
+import LoginForm from '../pages/Login/LoginForm';
+import Signup from '../pages/Login/Signup';
+import Tips from '../pages/MyPage/pages/Tips';
+import Plan from '../pages/Plan/Plan';
+import PlanCompare from '../pages/Plan/PlanCompare';
+import PlanDetail from '../pages/Plan/PlanDetail';
+import ServiceRecommendation from '../pages/ServiceRecommendation/ServiceRecommendation';
+import Subscribe from '../pages/Subscribe/Subscribe';
+import SubscribeDetail from '../pages/Subscribe/SubscribeDetail';
 import Summary from '../pages/Summary/SummaryPage';
 import { PAGE_PATHS } from '../shared/config/paths';
 
@@ -13,6 +32,14 @@ export default function RouterProvider() {
     {
       path: PAGE_PATHS.LOGIN,
       Component: Login,
+    },
+    {
+      path: PAGE_PATHS.LOGIN_FORM,
+      Component: LoginForm,
+    },
+    {
+      path: PAGE_PATHS.SIGNUP,
+      Component: Signup,
     },
     {
       path: PAGE_PATHS.HOME,
@@ -27,8 +54,69 @@ export default function RouterProvider() {
       Component: ChatManualPage,
     },
     {
+      path: '/chat/consult',
+      Component: ChatConsultPage,
+    },
+    {
+      path: '/chat/admin',
+      element: (
+        <AdminRoute>
+          <ChatAdminPage />
+        </AdminRoute>
+      ),
+    },
+    {
       path: PAGE_PATHS.SUMMARY,
       Component: Summary,
+    },
+    {
+      element: <ProtectedRoute />,
+      children: [
+        { path: '/mypage', Component: MyPage },
+        { path: '/counsel', Component: Counsel },
+        { path: '/mypage/tips', Component: Tips },
+      ],
+    },
+    {
+      path: PAGE_PATHS.CUSTOMER_SERVICE,
+      element: <CustomerService />,
+    },
+    {
+      path: PAGE_PATHS.ARMY_GUIDE,
+      element: <ArmyGuide />,
+    },
+    {
+      path: PAGE_PATHS.PROXY_GUIDE,
+      element: <ProxyGuide />,
+    },
+
+    {
+      path: PAGE_PATHS.MINOR_GUIDE,
+      element: <MinorGuide />,
+    },
+    {
+      path: PAGE_PATHS.PLAN,
+      Component: Plan,
+    },
+    {
+      path: PAGE_PATHS.PLAN_DETAIL,
+      Component: PlanDetail,
+    },
+    {
+      path: PAGE_PATHS.PLAN_COMPARE,
+      Component: PlanCompare,
+    },
+    {
+      path: PAGE_PATHS.SUBSCRIBE,
+      Component: Subscribe,
+    },
+    {
+      path: PAGE_PATHS.SUBSCRIBE_DETAIL,
+      Component: SubscribeDetail,
+    },
+    {
+      path: PAGE_PATHS.SERVICE_RECOMMENDATION,
+      Component: ServiceRecommendation,
     },
     {
       path: PAGE_PATHS.ADMIN,

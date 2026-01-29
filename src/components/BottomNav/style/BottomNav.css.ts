@@ -14,6 +14,7 @@ export const bottomNav = style({
   padding: '12px 0',
   paddingBottom: 'calc(12px + env(safe-area-inset-bottom))',
   boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.05)',
+  zIndex: 1000,
 });
 
 export const navItem = style({
@@ -32,7 +33,9 @@ export const navItem = style({
 });
 
 export const navIcon = style({
-  fontSize: '24px',
+  width: '28px',
+  height: '28px',
+  objectFit: 'contain',
 });
 
 export const navLabel = style({
