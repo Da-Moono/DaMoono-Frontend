@@ -653,10 +653,8 @@ export default function Plan() {
           if (savedPlan) {
             setCurrentPlan(savedPlan);
           } else {
-            // 저장된 요금제가 없으면 랜덤 선택
-            setCurrentPlan(
-              fetchedPlans[Math.floor(Math.random() * fetchedPlans.length)],
-            );
+            // No saved plan found -> show placeholder instead of random selection
+            setCurrentPlan(NO_SELECTION_PLAN);
           }
         } else {
           // No saved plan -> show placeholder instead of random selection
