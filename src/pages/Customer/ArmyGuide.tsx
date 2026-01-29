@@ -8,51 +8,57 @@ export default function ArmyGuide() {
   const [checkedList, setCheckedList] = useState([false, false, false]);
   const [targetUrl, setTargetUrl] = useState<string | null>(null);
 
+  // 체크박스 상태 토글
   const handleCheck = (index: number) => {
     const newCheckedList = [...checkedList];
     newCheckedList[index] = !newCheckedList[index];
     setCheckedList(newCheckedList);
   };
 
+  // 진행률 계산
   const checkedCount = checkedList.filter(Boolean).length;
   const progressPercent = Math.round((checkedCount / 3) * 100);
 
   return (
     <Layout>
+      {/* 1. 전체 스크롤 영역 */}
       <div className={S.scrollArea}>
-        {/* 린트 에러 방지를 위해 onClick 제거 */}
+        {/* 2. 상단 로고 */}
         <div className={S.topLogo} />
 
+        {/* 3. 헤더 프레임 */}
         <div className={S.headerFrame}>
           <span className={S.headerTitle}>군인 요금제 및 군인 혜택 가입</span>
         </div>
 
-        <h2 className={S.subTitle}>
-          다무너와 함께
-          <br />
-          서류를 챙겨보세요
-        </h2>
-
-        {/* 린트 에러 방지를 위해 onClick 제거 */}
-        <div className={S.characterImage} />
-
-        <div className={S.statusText}>준비 현황 ({checkedCount} / 3)</div>
-        <div className={S.progressBarContainer}>
-          <div
-            style={{
-              width: `${progressPercent}%`,
-              height: '100%',
-              backgroundColor: '#FBE88A',
-              transition: 'width 0.3s ease-in-out',
-            }}
-          />
+        {/* 4. 타이틀 & 캐릭터 가로 배치 (반응형 핵심) */}
+        <div className={S.titleContainer}>
+          <h2 className={S.subTitle}>
+            다무너와 함께
+            <br />
+            서류를 챙겨보세요
+          </h2>
+          <div className={S.characterImage} />
         </div>
-        <div className={S.percentText}>{progressPercent} %</div>
 
+        {/* 5. 준비 현황 텍스트 */}
+        <div className={S.statusText}>준비 현황 ({checkedCount} / 3)</div>
+
+        {/* 6. 프로그레스 바 + 퍼센트 가로 배치 */}
+        <div className={S.progressWrapper}>
+          <div className={S.progressBarContainer}>
+            <div
+              className={S.progressGauge}
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+          <div className={S.percentText}>{progressPercent} %</div>
+        </div>
+
+        {/* 7. 문서 카드 버튼 리스트 (인라인 top 제거됨) */}
         <button
           type="button"
           className={S.documentCard}
-          style={{ top: '310px' }}
           onClick={() => handleCheck(0)}
         >
           <div className={S.docText}>
@@ -67,7 +73,6 @@ export default function ArmyGuide() {
         <button
           type="button"
           className={S.documentCard}
-          style={{ top: '480px' }}
           onClick={() => handleCheck(1)}
         >
           <div className={S.docText}>
@@ -79,7 +84,7 @@ export default function ArmyGuide() {
             type="button"
             className={S.linkButton}
             onClick={(e) => {
-              e.stopPropagation();
+              e.stopPropagation(); // 카드 체크 방지
               setTargetUrl('https://www.mma.go.kr');
             }}
           >
@@ -90,7 +95,6 @@ export default function ArmyGuide() {
         <button
           type="button"
           className={S.documentCard}
-          style={{ top: '650px' }}
           onClick={() => handleCheck(2)}
         >
           <div className={S.docText}>
@@ -110,7 +114,9 @@ export default function ArmyGuide() {
         </button>
       </div>
 
+      {/* 8. 하단 주의사항 (warningText 에러 해결) */}
       <div className={S.warningBox}>
+        {/* CSS 파일에 export const warningText 스타일이 반드시 있어야 합니다. */}
         <span className={S.warningText}>
           ※ 주의 사항 : 모든 서류는 발급일로부터 3개월 이내여야 합니다.
         </span>
@@ -119,6 +125,7 @@ export default function ArmyGuide() {
       {targetUrl && (
         <BridgeModal url={targetUrl} onClose={() => setTargetUrl(null)} />
       )}
+
       <BottomNav />
     </Layout>
   );

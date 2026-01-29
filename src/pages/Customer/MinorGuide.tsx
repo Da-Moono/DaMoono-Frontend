@@ -21,41 +21,45 @@ export default function MinorGuide() {
 
   return (
     <Layout>
+      {/* 1. 전체 스크롤 영역 */}
       <div className={S.scrollArea}>
-        {/* 린트 에러 해결을 위해 onClick 이벤트 제거 */}
+        {/* 2. 상단 로고 (반응형 clamp 적용) */}
         <div className={S.topLogo} />
 
+        {/* 3. 헤더 타이틀 프레임 */}
         <div className={S.headerFrame}>
           <span className={S.headerTitle}>미성년자 가입 구비 서류</span>
         </div>
 
-        <h2 className={S.subTitle}>
-          다무너와 함께
-          <br />
-          서류를 챙겨보세요
-        </h2>
-
-        {/* 린트 에러 해결을 위해 onClick 이벤트 제거 */}
-        <div className={S.characterImage} />
-
-        <div className={S.statusText}>준비 현황 ({checkedCount} / 3)</div>
-        <div className={S.progressBarContainer}>
-          <div
-            style={{
-              width: `${progressPercent}%`,
-              height: '100%',
-              backgroundColor: '#FBE88A',
-              transition: 'width 0.3s ease-in-out',
-            }}
-          />
+        {/* 4. 타이틀 & 캐릭터 가로 배치 (반응형 핵심) */}
+        <div className={S.titleContainer}>
+          <h2 className={S.subTitle}>
+            다무너와 함께
+            <br />
+            서류를 챙겨보세요
+          </h2>
+          <div className={S.characterImage} />
         </div>
-        <div className={S.percentText}>{progressPercent} %</div>
 
-        {/* 카드 1: 법정대리인 신분증 */}
+        {/* 5. 준비 현황 텍스트 */}
+        <div className={S.statusText}>준비 현황 ({checkedCount} / 3)</div>
+
+        {/* 6. 프로그레스 바 + 퍼센트 가로 배치 */}
+        <div className={S.progressWrapper}>
+          <div className={S.progressBarContainer}>
+            {/* 게이지 바 애니메이션 적용 */}
+            <div
+              className={S.progressGauge}
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+          <div className={S.percentText}>{progressPercent} %</div>
+        </div>
+
+        {/* 7. 문서 카드 리스트 (인라인 top을 제거하여 자동 간격 유지) */}
         <button
           type="button"
           className={S.documentCard}
-          style={{ top: '310px' }}
           onClick={() => handleCheck(0)}
         >
           <div className={S.docText}>
@@ -67,11 +71,9 @@ export default function MinorGuide() {
           </div>
         </button>
 
-        {/* 카드 2: 관계 증명 서류 */}
         <button
           type="button"
           className={S.documentCard}
-          style={{ top: '480px' }}
           onClick={() => handleCheck(1)}
         >
           <div className={S.docText}>
@@ -85,7 +87,7 @@ export default function MinorGuide() {
             type="button"
             className={S.linkButton}
             onClick={(e) => {
-              e.stopPropagation();
+              e.stopPropagation(); // 카드 체크 방지
               setTargetUrl('https://www.gov.kr');
             }}
           >
@@ -93,11 +95,9 @@ export default function MinorGuide() {
           </button>
         </button>
 
-        {/* 카드 3: 동의서 양식 */}
         <button
           type="button"
           className={S.documentCard}
-          style={{ top: '650px' }}
           onClick={() => handleCheck(2)}
         >
           <div className={S.docText}>
@@ -122,6 +122,7 @@ export default function MinorGuide() {
         </button>
       </div>
 
+      {/* 8. 하단 주의사항 (CSS에서 fixed 처리) */}
       <div className={S.warningBox}>
         <span className={S.warningText}>
           ※ 모든 서류는 발급일로부터 3개월 이내여야 합니다.

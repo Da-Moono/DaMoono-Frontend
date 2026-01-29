@@ -10,30 +10,23 @@ export default function CustomerService() {
   const navigate = useNavigate();
 
   // 상태 관리
-  const [openId, setOpenId] = useState<string | null>(null); // FAQ 아코디언 열림 상태
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null); // 하단 가이드 선택 상태
-  const [searchQuery, setSearchQuery] = useState(''); // 검색어 상태
-  const [activeTab, setActiveTab] = useState<string>('전체'); // 상단 카테고리 탭 상태
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState<string>('전체');
 
   // 핸들러 함수
-  const toggleFaq = (id: string) => setOpenId(openId === id ? null : id); // FAQ 열고 닫기
+  const toggleFaq = (id: string) => setOpenId(openId === id ? null : id);
   const handleCategorySelect = (id: string) =>
-    setSelectedCategory(selectedCategory === id ? null : id); // 가이드 항목 토글 선택
+    setSelectedCategory(selectedCategory === id ? null : id);
 
-  // 선택된 카테고리에 따른 페이지 이동
   const handleGuideButtonClick = () => {
-    if (selectedCategory === 'army') {
-      navigate(PAGE_PATHS.ARMY_GUIDE);
-    }
-    if (selectedCategory === 'proxy') {
-      navigate(PAGE_PATHS.PROXY_GUIDE);
-    }
-    if (selectedCategory === 'minor') {
-      navigate(PAGE_PATHS.MINOR_GUIDE);
-    }
+    if (selectedCategory === 'army') navigate(PAGE_PATHS.ARMY_GUIDE);
+    if (selectedCategory === 'proxy') navigate(PAGE_PATHS.PROXY_GUIDE);
+    if (selectedCategory === 'minor') navigate(PAGE_PATHS.MINOR_GUIDE);
   };
 
-  // --- 필터링 로직
+  // 필터링 로직
   const filteredFaqs = faqs.filter((faq) => {
     const matchesTab =
       activeTab === '전체' ? faq.isTop10 : faq.category === activeTab;
@@ -45,9 +38,10 @@ export default function CustomerService() {
 
   return (
     <Layout>
+      {/* 상단 헤더 섹션: CSS clamp에 의해 캐릭터와 로고 크기가 자동 조절됩니다. */}
       <header className={S.headerSection}>
         <div className={S.topLogo} />
-        <div className={S.faqCharacter} />
+        <div className={S.customerCharacter} />
         <h1 className={S.title}>무엇을 도와드릴까요?</h1>
         <div className={S.searchContainer}>
           <input
@@ -76,20 +70,17 @@ export default function CustomerService() {
         </div>
       </header>
 
+      {/* 중앙 스크롤 영역 */}
       <div className={S.scrollArea}>
         <div className={S.faqListWrapper}>
           {filteredFaqs.map((faq) => (
-            <div
-              key={faq.id}
-              className={S.faqItemBox}
-              style={{ height: openId === faq.id ? 'auto' : '50px' }}
-            >
+            <div key={faq.id} className={S.faqItemBox}>
               <button
                 type="button"
                 className={S.faqHeader}
                 onClick={() => toggleFaq(faq.id)}
               >
-                <span style={{ textAlign: 'left', flex: 1 }}>{faq.title}</span>
+                <span className={S.faqHeaderText}>{faq.title}</span>
                 <div
                   className={`${S.arrowIcon} ${openId === faq.id ? S.arrowIconOpen : ''}`}
                 />
@@ -101,29 +92,19 @@ export default function CustomerService() {
           ))}
         </div>
 
+        {/* 하단 가이드 프레임 */}
         <div className={S.guideFrame}>
-          <p
-            style={{ textAlign: 'center', paddingTop: '20px', fontWeight: 700 }}
-          >
-            항목 선택 시 서류 안내
-          </p>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: '8px',
-              marginTop: '20px',
-            }}
-          >
-            {/* 군인 혜택 */}
+          <p className={S.cardTitle}>항목 선택 시 서류 안내</p>
+
+          {/* ⭐ 3개 버튼을 한 줄로 정렬하는 반응형 컨테이너 */}
+          <div className={S.categoryGroup}>
             <button
               type="button"
               className={S.categoryBox}
               style={{
-                border:
-                  selectedCategory === 'army'
-                    ? '2px solid #FBC02D'
-                    : '1px solid #EFEFEF',
+                borderColor:
+                  selectedCategory === 'army' ? '#FBC02D' : '#EFEFEF',
+                borderWidth: selectedCategory === 'army' ? '2px' : '1px',
               }}
               onClick={() => handleCategorySelect('army')}
             >
@@ -134,31 +115,29 @@ export default function CustomerService() {
               type="button"
               className={S.categoryBox}
               style={{
-                border:
-                  selectedCategory === 'proxy'
-                    ? '2px solid #FBC02D'
-                    : '1px solid #EFEFEF',
+                borderColor:
+                  selectedCategory === 'proxy' ? '#FBC02D' : '#EFEFEF',
+                borderWidth: selectedCategory === 'proxy' ? '2px' : '1px',
               }}
               onClick={() => handleCategorySelect('proxy')}
             >
               대리인 서류 {selectedCategory === 'proxy' && '✓'}
             </button>
 
-            {/* 미성년자 가입 */}
             <button
               type="button"
               className={S.categoryBox}
               style={{
-                border:
-                  selectedCategory === 'minor'
-                    ? '2px solid #FBC02D'
-                    : '1px solid #EFEFEF',
+                borderColor:
+                  selectedCategory === 'minor' ? '#FBC02D' : '#EFEFEF',
+                borderWidth: selectedCategory === 'minor' ? '2px' : '1px',
               }}
               onClick={() => handleCategorySelect('minor')}
             >
               미성년자 가입 {selectedCategory === 'minor' && '✓'}
             </button>
           </div>
+
           <button
             type="button"
             className={`${S.guideButton} ${selectedCategory ? S.buttonActive : S.buttonDisabled}`}
