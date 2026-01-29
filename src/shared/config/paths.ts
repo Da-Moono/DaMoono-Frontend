@@ -4,7 +4,7 @@ export const PAGE_PATHS = {
   SIGNUP: '/signup',
   HOME: '/home',
   SUMMARY: '/summary',
-  ADMIN: '/admin',
+  ADMIN: '/admin-summary',
   PLAN: '/plan',
   PLAN_DETAIL: '/plan/:id',
   PLAN_COMPARE: '/plan/compare',

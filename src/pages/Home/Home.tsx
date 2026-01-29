@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import chatbotButton from '@/assets/images/damoono-chatbot-button-removebg.png';
 import planBanner from '@/assets/images/Plan-banner.png';
 import serviceRecommendationBanner from '@/assets/images/ServiceRecommendation-banner.png';
 import subscribeBanner from '@/assets/images/Subscribe-banner.png';
@@ -7,8 +8,12 @@ import BottomNav from '@/components/BottomNav';
 import Guide from '@/components/Guide';
 import Header from '@/components/Header';
 import LoginRequiredModal from '@/components/modal/LoginRequiredModal';
-import { MOCK_PLANS } from '@/pages/Plan/constants';
-import { MOCK_SUBSCRIBES } from '@/pages/Subscribe/constants';
+import { MOCK_PLANS, OTT_IMAGES, OTT_LABELS } from '@/pages/Plan/constants';
+import {
+  CATEGORY_LABELS,
+  MOCK_SUBSCRIBES,
+  SUBSCRIBE_IMAGES,
+} from '@/pages/Subscribe/constants';
 import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
 import * as styles from './style/Home.css';
@@ -127,7 +132,11 @@ export default function Home() {
           onClick={handleChatClick}
         >
           <span className={styles.chatText}>무너에게 다 무너봐~</span>
-          <span className={styles.chatBadge}>채팅하기</span>
+          <img
+            src={chatbotButton}
+            alt="채팅하기"
+            className={styles.chatButtonImage}
+          />
         </button>
 
         {/* 최근 상담 요약 */}
@@ -139,6 +148,20 @@ export default function Home() {
         {/* 이벤트 슬라이더 */}
         <section className={styles.section}>
           <div className={styles.sliderWrapper}>
+            {/* 왼쪽 화살표 */}
+            <button
+              type="button"
+              className={styles.sliderArrowLeft}
+              onClick={() =>
+                setCurrentSlide((prev) =>
+                  prev === 0 ? slides.length - 1 : prev - 1,
+                )
+              }
+              aria-label="이전 슬라이드"
+            >
+              ‹
+            </button>
+
             <div
               className={styles.sliderTrack}
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -158,6 +181,21 @@ export default function Home() {
                 </button>
               ))}
             </div>
+
+            {/* 오른쪽 화살표 */}
+            <button
+              type="button"
+              className={styles.sliderArrowRight}
+              onClick={() =>
+                setCurrentSlide((prev) =>
+                  prev === slides.length - 1 ? 0 : prev + 1,
+                )
+              }
+              aria-label="다음 슬라이드"
+            >
+              ›
+            </button>
+
             <div className={styles.sliderDots}>
               {slides.map((slide, index) => (
                 <button
@@ -212,45 +250,115 @@ export default function Home() {
 
           <div className={styles.productList}>
             {activeTab === 'plan'
-              ? randomPlans.map((plan, index) => (
+              ? randomPlans.map((plan) => (
                   <button
                     key={plan.id}
                     type="button"
-                    className={styles.productItem}
+                    className={styles.productCard}
                     onClick={() =>
                       navigate(
                         `${PAGE_PATHS.PLAN_DETAIL.replace(':id', plan.id.toString())}`,
                       )
                     }
                   >
-                    <div className={styles.productRank}>{index + 1}</div>
-                    <div className={styles.productInfo}>
-                      <p className={styles.productName}>{plan.name} &gt;</p>
-                      <p className={styles.productPrice}>
+                    <div className={styles.cardHeader}>
+                      <span className={styles.cardProvider}>LG U+</span>
+                      <span className={styles.cardPrice}>
                         월 {plan.price.toLocaleString()}원
-                      </p>
+                      </span>
                     </div>
+                    <div className={styles.cardName} title={plan.name}>
+                      {plan.name}
+                    </div>
+
+                    <div className={styles.badgeContainer}>
+                      <span className={`${styles.badge} ${styles.badgeData}`}>
+                        {plan.dataAmountMb === 0
+                          ? '무제한'
+                          : `${(plan.dataAmountMb / 1024).toFixed(1)}GB`}
+                      </span>
+                      <span className={`${styles.badge} ${styles.badgeVoice}`}>
+                        {plan.voiceMinutes === -1
+                          ? '무제한'
+                          : `${plan.voiceMinutes}분`}
+                      </span>
+                      <span className={`${styles.badge} ${styles.badgeSpeed}`}>
+                        속도 {plan.overageSpeedMbps ?? 0}Mbps
+                      </span>
+                      <span className={`${styles.badge} ${styles.badgeSms}`}>
+                        혜택 가치 {plan.smsIncluded}
+                      </span>
+                    </div>
+
+                    {plan.subscriptionServices &&
+                      plan.subscriptionServices.length > 0 && (
+                        <div className={styles.ottContainer}>
+                          {plan.subscriptionServices.map((service, index) => (
+                            <div
+                              key={service}
+                              className={`${styles.ottCircle} ${index !== 0 ? styles.ottCircleOverlap : ''}`}
+                              title={OTT_LABELS[service]}
+                            >
+                              <img
+                                src={OTT_IMAGES[service]}
+                                alt={OTT_LABELS[service]}
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  borderRadius: '50%',
+                                  objectFit: 'cover',
+                                }}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      )}
                   </button>
                 ))
-              : randomSubscribes.map((subscribe, index) => (
+              : randomSubscribes.map((subscribe) => (
                   <button
                     key={subscribe.id}
                     type="button"
-                    className={styles.productItem}
+                    className={styles.productCard}
                     onClick={() =>
                       navigate(
                         `${PAGE_PATHS.SUBSCRIBE_DETAIL.replace(':id', subscribe.id.toString())}`,
                       )
                     }
                   >
-                    <div className={styles.productRank}>{index + 1}</div>
-                    <div className={styles.productInfo}>
-                      <p className={styles.productName}>
-                        {subscribe.name} &gt;
-                      </p>
-                      <p className={styles.productPrice}>
+                    <div className={styles.cardHeader}>
+                      <span className={styles.cardCategory}>
+                        {CATEGORY_LABELS[subscribe.category]}
+                      </span>
+                      <span className={styles.cardPrice}>
                         월 {subscribe.monthlyPrice.toLocaleString()}원
+                      </span>
+                    </div>
+                    <div className={styles.cardName} title={subscribe.name}>
+                      {subscribe.name}
+                    </div>
+
+                    <div className={styles.descriptionContainer}>
+                      <p className={styles.descriptionText}>
+                        {subscribe.description}
                       </p>
+                    </div>
+
+                    <div className={styles.subscribeContainer}>
+                      <div
+                        className={styles.subscribeCircle}
+                        title={subscribe.name}
+                      >
+                        {SUBSCRIBE_IMAGES[subscribe.name] ? (
+                          <img
+                            src={SUBSCRIBE_IMAGES[subscribe.name] || ''}
+                            alt={subscribe.name}
+                            className={styles.subscribeImage}
+                          />
+                        ) : (
+                          subscribe.name.charAt(0)
+                        )}
+                      </div>
                     </div>
                   </button>
                 ))}

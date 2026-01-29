@@ -26,7 +26,10 @@ export default function WarningCard({ notices }: WarningData) {
             <img src={WarningIcon} className={s.imgItem} alt="warning" />
             <div className={s.textWrapper}>
               <p className={s.warningTitle}>{notice.title}</p>
-              <p className={s.warningText}>{notice.text}</p>
+              <p className={s.warningText}>
+                <br />
+                {notice.text}
+              </p>
             </div>
           </div>
         ))}

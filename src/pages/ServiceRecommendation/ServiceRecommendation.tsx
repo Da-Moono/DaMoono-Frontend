@@ -6,8 +6,6 @@ import thinkingMascot from '@/assets/images/thinking-moono.png';
 import Header from '@/components/Header';
 import { MOCK_PLANS, OTT_IMAGES, OTT_LABELS } from '@/pages/Plan/constants';
 import type { Plan } from '@/pages/Plan/types';
-import { CATEGORY_LABELS, MOCK_SUBSCRIBES } from '@/pages/Subscribe/constants';
-import type { Subscribe } from '@/pages/Subscribe/types';
 import { PAGE_PATHS } from '@/shared/config/paths';
 import Layout from '../layout/Layout';
 import * as styles from './style/ServiceRecommendation.css';
@@ -76,39 +74,6 @@ const questions: Question[] = [
       '전혀 보지 않는다',
     ],
   },
-  {
-    id: 6,
-    question: '어떤 OTT 서비스에 관심이 있으신가요?',
-    options: [
-      '넷플릭스, 디즈니+ (해외 콘텐츠)',
-      '티빙, 웨이브 (국내 콘텐츠)',
-      '유튜브 프리미엄 (광고 제거)',
-      '여러 개 다 보고 싶다',
-      '관심 없다',
-    ],
-  },
-  {
-    id: 7,
-    question: '음악 스트리밍 서비스를 사용하시나요?',
-    options: [
-      '매일 듣는다',
-      '자주 듣는 편이다',
-      '가끔 듣는다',
-      '거의 안듣는다',
-      '전혀 사용 안함',
-    ],
-  },
-  {
-    id: 8,
-    question: '이미 사용중인 구독 서비스가 있나요? (중복 선택 가능)',
-    options: [
-      '넷플릭스',
-      '유튜브 프리미엄',
-      '디즈니+',
-      '티빙/웨이브',
-      '사용중인 서비스가 없다',
-    ],
-  },
 ];
 
 type RecommendationStage =
@@ -124,52 +89,21 @@ export default function ServiceRecommendation() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [multipleSelections, setMultipleSelections] = useState<number[]>([]); // 다중 선택용
   const [recommendedPlans, setRecommendedPlans] = useState<Plan[]>([]);
-  const [recommendedSubscribes, setRecommendedSubscribes] = useState<
-    Subscribe[]
-  >([]);
 
   const handleStartRecommendation = () => {
     setStage('question');
   };
 
   const handleSelectOption = (optionIndex: number) => {
-    // 마지막 질문(8번)은 다중 선택 가능
-    if (currentQuestion === questions.length - 1) {
-      // "사용중인 서비스가 없다" 선택 시 다른 선택 초기화
-      if (optionIndex === 4) {
-        setMultipleSelections([4]);
-      } else {
-        // 다른 옵션 선택 시 "없다" 제거하고 토글
-        const filtered = multipleSelections.filter((i) => i !== 4);
-        if (filtered.includes(optionIndex)) {
-          setMultipleSelections(filtered.filter((i) => i !== optionIndex));
-        } else {
-          setMultipleSelections([...filtered, optionIndex]);
-        }
-      }
-    } else {
-      setSelectedOption(optionIndex);
-    }
+    setSelectedOption(optionIndex);
   };
 
   const handleNext = () => {
-    // 마지막 질문은 다중 선택이므로 체크
-    if (currentQuestion === questions.length - 1) {
-      if (multipleSelections.length === 0) return;
-    } else {
-      if (selectedOption === null) return;
-    }
+    if (selectedOption === null) return;
 
     const newAnswers = [...answers];
-
-    // 마지막 질문은 배열로 저장
-    if (currentQuestion === questions.length - 1) {
-      newAnswers[currentQuestion] = multipleSelections.length > 0 ? -1 : 0; // 플래그로 저장
-    } else {
-      newAnswers[currentQuestion] = selectedOption!;
-    }
+    newAnswers[currentQuestion] = selectedOption;
     setAnswers(newAnswers);
 
     // 다음 질문으로 이동
@@ -201,9 +135,6 @@ export default function ServiceRecommendation() {
       const networkAnswer = answers[2]; // 5G 필요성
       const priceAnswer = answers[3]; // 가격 선호도
       const ottAnswer = answers[4]; // OTT 시청 빈도
-      const ottTypeAnswer = answers[5]; // OTT 종류 선호
-      const musicAnswer = answers[6]; // 음악 스트리밍
-      // 마지막 질문은 multipleSelections 사용
 
       // 요금제 추천
       let filteredPlans = [...MOCK_PLANS];
@@ -284,99 +215,8 @@ export default function ServiceRecommendation() {
 
       // 조건에 맞는 모든 요금제 표시 (최대 10개)
       setRecommendedPlans(filteredPlans.slice(0, 10));
-
-      // 구독 서비스 추천
-      let filteredSubscribes = [...MOCK_SUBSCRIBES];
-
-      // 1. 이미 사용중인 구독 서비스 제외 (다중 선택)
-      if (!multipleSelections.includes(4)) {
-        // "사용중인 서비스가 없다"가 선택되지 않은 경우
-        if (multipleSelections.includes(0)) {
-          // 넷플릭스 사용중
-          filteredSubscribes = filteredSubscribes.filter(
-            (s) => !s.name.includes('넷플릭스'),
-          );
-        }
-        if (multipleSelections.includes(1)) {
-          // 유튜브 프리미엄 사용중
-          filteredSubscribes = filteredSubscribes.filter(
-            (s) => !s.name.includes('유튜브'),
-          );
-        }
-        if (multipleSelections.includes(2)) {
-          // 디즈니+ 사용중
-          filteredSubscribes = filteredSubscribes.filter(
-            (s) => !s.name.includes('디즈니'),
-          );
-        }
-        if (multipleSelections.includes(3)) {
-          // 티빙/웨이브 사용중
-          filteredSubscribes = filteredSubscribes.filter(
-            (s) => !s.name.includes('티빙') && !s.name.includes('웨이브'),
-          );
-        }
-      }
-
-      // 2. OTT 시청 빈도에 따른 필터링
-      if (ottAnswer <= 1) {
-        // OTT 자주 봄
-        if (ottTypeAnswer === 0) {
-          // 해외 콘텐츠 선호 - 넷플릭스, 디즈니+ 등
-          filteredSubscribes = filteredSubscribes.filter(
-            (s) =>
-              s.category === 'OTT' &&
-              (s.name.includes('넷플릭스') ||
-                s.name.includes('디즈니') ||
-                s.name.includes('유튜브')),
-          );
-        } else if (ottTypeAnswer === 1) {
-          // 국내 콘텐츠 선호 - 티빙, 웨이브 등
-          filteredSubscribes = filteredSubscribes.filter(
-            (s) =>
-              s.category === 'OTT' &&
-              (s.name.includes('티빙') ||
-                s.name.includes('웨이브') ||
-                s.name.includes('쿠팡')),
-          );
-        } else if (ottTypeAnswer === 2) {
-          // 유튜브 프리미엄 선호
-          filteredSubscribes = filteredSubscribes.filter(
-            (s) => s.category === 'OTT' && s.name.includes('유튜브'),
-          );
-        } else if (ottTypeAnswer === 3) {
-          // 여러 개 다 보고 싶음
-          filteredSubscribes = filteredSubscribes.filter(
-            (s) => s.category === 'OTT',
-          );
-        }
-      } else if (ottAnswer >= 3) {
-        // OTT 거의 안봄 - OTT 제외
-        filteredSubscribes = filteredSubscribes.filter(
-          (s) => s.category !== 'OTT',
-        );
-      }
-
-      // 3. 음악 스트리밍 선호도
-      if (musicAnswer <= 1) {
-        // 음악 자주 들음 - 음악 카테고리 추가
-        const musicServices = MOCK_SUBSCRIBES.filter(
-          (s) => s.category === 'MUSIC',
-        );
-        filteredSubscribes = [...filteredSubscribes, ...musicServices];
-      }
-
-      // 중복 제거
-      filteredSubscribes = Array.from(
-        new Map(filteredSubscribes.map((s) => [s.id, s])).values(),
-      );
-
-      // 가격순 정렬
-      filteredSubscribes.sort((a, b) => a.monthlyPrice - b.monthlyPrice);
-
-      // 조건에 맞는 모든 구독 서비스 표시 (최대 8개)
-      setRecommendedSubscribes(filteredSubscribes.slice(0, 8));
     }
-  }, [stage, answers, multipleSelections]);
+  }, [stage, answers]);
 
   const handleShowResult = () => {
     setStage('result');
@@ -384,10 +224,6 @@ export default function ServiceRecommendation() {
 
   const handlePlanClick = (planId: number) => {
     navigate(PAGE_PATHS.PLAN_DETAIL.replace(':id', planId.toString()));
-  };
-
-  const handleSubscribeClick = (subscribeId: number) => {
-    navigate(`/subscribe/${subscribeId}`);
   };
 
   // 시작 화면
@@ -400,7 +236,7 @@ export default function ServiceRecommendation() {
           <img src={mascot} alt="무너" className={styles.mascot} />
 
           <h1 className={styles.title}>
-            나에게 <span className={styles.highlight}>어울리는 상품</span>은
+            나에게 <span className={styles.highlight}>어울리는 요금제</span>는
             무엇일까?
           </h1>
 
@@ -415,7 +251,7 @@ export default function ServiceRecommendation() {
             className={styles.startButton}
             onClick={handleStartRecommendation}
           >
-            맞춤 추천 시작하기
+            질문에 답하고 서비스 추천받기
           </button>
         </div>
       </Layout>
@@ -438,7 +274,7 @@ export default function ServiceRecommendation() {
           <h1 className={styles.loadingTitle}>
             당신에게 맞는 서비스를
             <br />
-            찾고 있어요...
+            찾는 중입니다...
           </h1>
 
           <div className={styles.loadingBarContainer}>
@@ -564,59 +400,6 @@ export default function ServiceRecommendation() {
               </div>
             </div>
           )}
-
-          {/* 구독 서비스 추천 */}
-          {recommendedSubscribes.length > 0 && (
-            <div className={styles.resultSection}>
-              <h2 className={styles.resultSectionTitle}>추천 구독 서비스</h2>
-              <div className={styles.resultCardList}>
-                {recommendedSubscribes.map((subscribe) => {
-                  return (
-                    <button
-                      key={subscribe.id}
-                      type="button"
-                      onClick={() => handleSubscribeClick(subscribe.id)}
-                      className={styles.resultCard}
-                    >
-                      <div className={styles.resultCardHeader}>
-                        <span className={styles.resultCardCategory}>
-                          {CATEGORY_LABELS[subscribe.category]}
-                        </span>
-                        <span className={styles.resultCardPrice}>
-                          월 {subscribe.monthlyPrice.toLocaleString()}원
-                        </span>
-                      </div>
-                      <div
-                        className={styles.resultCardName}
-                        title={subscribe.name}
-                      >
-                        {subscribe.name}
-                      </div>
-
-                      <div className={styles.resultBadgeContainer}>
-                        {subscribe.badges.length > 0 ? (
-                          subscribe.badges.map((badge) => (
-                            <span
-                              key={badge}
-                              className={`${styles.resultBadge} ${styles.resultBadgeHighlight}`}
-                            >
-                              {badge}
-                            </span>
-                          ))
-                        ) : (
-                          <span
-                            className={`${styles.resultBadge} ${styles.resultBadgeCategory}`}
-                          >
-                            {CATEGORY_LABELS[subscribe.category]}
-                          </span>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
         </div>
       </Layout>
     );
@@ -638,11 +421,7 @@ export default function ServiceRecommendation() {
 
         <div className={styles.optionsContainer}>
           {question.options.map((option, index) => {
-            // 마지막 질문은 다중 선택
-            const isLastQuestion = currentQuestion === questions.length - 1;
-            const isSelected = isLastQuestion
-              ? multipleSelections.includes(index)
-              : selectedOption === index;
+            const isSelected = selectedOption === index;
 
             return (
               <button
@@ -663,11 +442,7 @@ export default function ServiceRecommendation() {
           type="button"
           className={styles.nextButton}
           onClick={handleNext}
-          disabled={
-            currentQuestion === questions.length - 1
-              ? multipleSelections.length === 0
-              : selectedOption === null
-          }
+          disabled={selectedOption === null}
         >
           {currentQuestion === questions.length - 1 ? '완료' : '다음'}
         </button>

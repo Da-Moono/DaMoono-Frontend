@@ -1,4 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import homeIcon from '@/assets/images/home.png';
+import phoneIcon from '@/assets/images/phone.png';
+import userIcon from '@/assets/images/user.png';
 import * as styles from './style/BottomNav.css';
 
 export default function BottomNav() {
@@ -11,7 +14,7 @@ export default function BottomNav() {
         className={styles.navItem}
         onClick={() => navigate('/customer')}
       >
-        <span className={styles.navIcon}>📞</span>
+        <img src={phoneIcon} alt="고객센터" className={styles.navIcon} />
         <span className={styles.navLabel}>고객센터</span>
       </button>
 
@@ -20,7 +23,7 @@ export default function BottomNav() {
         className={styles.navItem}
         onClick={() => navigate('/home')}
       >
-        <span className={styles.navIcon}>🏠</span>
+        <img src={homeIcon} alt="홈" className={styles.navIcon} />
         <span className={styles.navLabel}>홈</span>
       </button>
 
@@ -29,7 +32,7 @@ export default function BottomNav() {
         className={styles.navItem}
         onClick={() => navigate('/mypage')}
       >
-        <span className={styles.navIcon}>👤</span>
+        <img src={userIcon} alt="마이페이지" className={styles.navIcon} />
         <span className={styles.navLabel}>마이페이지</span>
       </button>
     </nav>

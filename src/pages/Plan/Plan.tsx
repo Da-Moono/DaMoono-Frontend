@@ -515,7 +515,9 @@ export default function Plan() {
   );
   const [selectedOttList, setSelectedOttList] = useState<OTTType[]>([]);
   const [selectedPlanId, setSelectedPlanId] = useState<number | null>(null);
-  const [isCompareMode, setIsCompareMode] = useState(false);
+  const [isCompareMode, setIsCompareMode] = useState(() => {
+    return location.state?.compare ?? false;
+  });
   const [comparePlans, setComparePlans] = useState<number[]>([]);
   const listRef = useRef<HTMLDivElement>(null);
 

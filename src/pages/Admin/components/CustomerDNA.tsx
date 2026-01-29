@@ -12,12 +12,12 @@ interface CustomerDNAProps {
   title?: string;
 }
 
-export default function CustomerDNA({ dnaList }: CustomerDNAProps) {
+export default function CustomerDNA({ dnaList, title }: CustomerDNAProps) {
   const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
 
   return (
     <div className={s.container}>
-      <h3 className={s.title}>고객 DNA</h3>
+      <h3 className={s.title}>{title}</h3>
 
       <div className={s.tagWrapper}>
         {dnaList.map((item, index) => (

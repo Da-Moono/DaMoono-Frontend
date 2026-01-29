@@ -43,7 +43,7 @@ export default function TipsPage() {
               id: 2,
               title: '상담 챗봇 서비스와 상담 요약 사용법',
               description: '사용 방법을 자세히 알고 싶다면!',
-              imageUrl: '/src/assets/images/tip-guide-1.png',
+              imageUrl: '/src/assets/images/tip-guide-2.png',
             },
             {
               id: 3,
@@ -55,7 +55,7 @@ export default function TipsPage() {
               id: 4,
               title: '나의 성향을 알아볼 수 있어요',
               description: '메뉴의 성향 탭을 사용해보세요!',
-              imageUrl: '/src/assets/images/tip-guide-1.png',
+              imageUrl: '/src/assets/images/tip-guide-3.png',
             },
           ]}
         />

@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useNavigate, useSearchParams } from 'react-router';
 import chatIcon from '@/assets/images/chat.png';
@@ -45,6 +46,42 @@ export default function ChatAdminPage() {
   const contentRef = useRef<HTMLDivElement>(null);
   const voiceRecorderRef = useRef<VoiceRecorderRef>(null);
 
+  const handleSummaryAndNavigate = useCallback(
+    async (sessionId: string) => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+
+        // 1. 요약 API 호출
+        const response = await axios.post(
+          `${apiUrl}/summary/consults/${sessionId}/consultant`,
+          {},
+          { withCredentials: true },
+        );
+
+        if (response.status === 200 || response.status === 201) {
+          alert('상담이 종료되었습니다. 요약본을 생성합니다.');
+
+          setShowSessionList(true); // 세션 목록으로 돌아갈 준비
+          setSessionId(''); // 현재 세션 ID 비우기
+          setMessages([]); // 메시지 내역 비우기
+
+          // 2. 관리자 요약 페이지로 데이터와 함께 이동
+          navigate('/admin-summary', {
+            state: { summaryData: response.data.payload.payload },
+          });
+        }
+      } catch (error) {
+        console.error('요약 생성 실패:', error);
+        // 에러 발생 시에도 최소한 목록으로는 보내줘야 하니 초기화 후 이동
+        setShowSessionList(true);
+        setSessionId('');
+        setMessages([]);
+        navigate('/chat/admin');
+      }
+    },
+    [navigate],
+  );
+
   // Socket 연결 및 이벤트 리스너 설정
   useEffect(() => {
     socketService.connect();
@@ -56,6 +93,20 @@ export default function ChatAdminPage() {
       socketService.joinSession(urlSessionId);
       setIsConnected(true);
       setShowSessionList(false);
+      socketService.onConsultEnded(() => {
+        // 상담사가 직접 버튼을 눌러 종료한 경우라면 요약 로직을 실행하지 않음
+        const isManualEnd = sessionStorage.getItem(
+          `is_admin_manual_end_${urlSessionId}`,
+        );
+
+        if (isManualEnd === 'true') {
+          sessionStorage.removeItem(`is_admin_manual_end_${urlSessionId}`);
+          return; // 👈 여기서 멈춤 (요약 API 호출 안 함)
+        }
+
+        // 그 외(유저가 요약 버튼을 눌러 종료된 경우)에만 요약 페이지로 이동
+        handleSummaryAndNavigate(urlSessionId);
+      });
     } else {
       // 대기 중인 세션 목록 요청
       socketService.getWaitingSessions();
@@ -84,26 +135,20 @@ export default function ChatAdminPage() {
       ]);
     });
 
-    // 상담 종료
-    socketService.onConsultEnded(() => {
-      alert('상담이 종료되었습니다.');
-      setShowSessionList(true);
-      setSessionId('');
-      setMessages([]);
-      navigate('/chat/admin');
-    });
-
     return () => {
       socketService.disconnect();
     };
-  }, [navigate, searchParams]);
+  }, [searchParams, handleSummaryAndNavigate]);
 
   // 메시지가 추가될 때마다 스크롤을 아래로
   useEffect(() => {
-    if (contentRef.current) {
-      contentRef.current.scrollTop = contentRef.current.scrollHeight;
+    if (contentRef.current && messages.length >= 0) {
+      contentRef.current.scrollTo({
+        top: contentRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
     }
-  });
+  }, [messages]);
 
   const handleSendMessage = async (content: string) => {
     socketService.sendMessage(content, 'consultant');
@@ -115,12 +160,21 @@ export default function ChatAdminPage() {
   };
 
   const handleEndConsult = () => {
-    if (confirm('상담을 종료하시겠습니까?')) {
-      socketService.endConsult();
-      setShowSessionList(true);
-      setSessionId('');
-      setMessages([]);
-      navigate('/chat/admin');
+    if (window.confirm('상담을 종료하시겠습니까?')) {
+      if (sessionId) {
+        // ✅ "내가 버튼을 눌러서 종료한다"는 표시를 남김
+        sessionStorage.setItem(`is_admin_manual_end_${sessionId}`, 'true');
+
+        socketService.endConsult();
+
+        // 상태 초기화
+        setShowSessionList(true);
+        setSessionId('');
+        setMessages([]);
+        navigate('/chat/admin');
+
+        alert('상담이 종료되었습니다.');
+      }
     }
   };
 

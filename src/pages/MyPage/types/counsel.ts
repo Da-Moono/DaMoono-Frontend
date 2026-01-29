@@ -1,7 +1,6 @@
-// types/counsel.ts
 export interface CounselItem {
   id: string;
-  date: string; // '2026-01-15'
+  date: string;
   content: string;
   summarized: boolean;
 }

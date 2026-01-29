@@ -8,10 +8,10 @@ export const container = style({
 
 export const chatButton = style({
   width: '100%',
-  padding: '20px',
-  backgroundColor: '#F4E185',
+  padding: '0px 24px',
+  backgroundColor: '#FBE88A',
   border: 'none',
-  borderRadius: '16px',
+  borderRadius: '20px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -20,23 +20,22 @@ export const chatButton = style({
   transition: 'all 0.2s ease',
 
   ':hover': {
-    backgroundColor: '#F0D96F',
+    backgroundColor: '#FFF4C4',
   },
 });
 
 export const chatText = style({
-  fontSize: '20px',
-  fontWeight: '700',
-  color: '#333',
+  fontSize: '24px',
+  fontWeight: '500',
+  color: '#313131ff',
+  flex: 1,
 });
 
-export const chatBadge = style({
-  padding: '8px 16px',
-  backgroundColor: '#FFB84D',
-  borderRadius: '20px',
-  fontSize: '14px',
-  fontWeight: '600',
-  color: '#fff',
+export const chatButtonImage = style({
+  height: '70px',
+  width: 'auto',
+  display: 'block',
+  flexShrink: 0,
 });
 
 export const section = style({
@@ -116,6 +115,66 @@ export const sliderImage = style({
   height: '100%',
   objectFit: 'cover',
   objectPosition: 'center -10px',
+});
+
+export const sliderArrowLeft = style({
+  position: 'absolute',
+  left: '4px',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  zIndex: 10,
+  width: '40px',
+  height: '40px',
+  borderRadius: '50%',
+  backgroundColor: 'transparent',
+  border: 'none',
+  fontSize: '48px',
+  fontWeight: '300',
+  color: 'rgba(255, 255, 255, 0.7)',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'all 0.2s ease',
+
+  ':hover': {
+    color: 'rgba(255, 255, 255, 1)',
+    transform: 'translateY(-50%) scale(1.2)',
+  },
+
+  ':active': {
+    transform: 'translateY(-50%) scale(1)',
+  },
+});
+
+export const sliderArrowRight = style({
+  position: 'absolute',
+  right: '4px',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  zIndex: 10,
+  width: '40px',
+  height: '40px',
+  borderRadius: '50%',
+  backgroundColor: 'transparent',
+  border: 'none',
+  fontSize: '48px',
+  fontWeight: '300',
+  color: 'rgba(255, 255, 255, 0.7)',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'all 0.2s ease',
+
+  ':hover': {
+    color: 'rgba(255, 255, 255, 1)',
+    transform: 'translateY(-50%) scale(1.2)',
+  },
+
+  ':active': {
+    transform: 'translateY(-50%) scale(1)',
+  },
 });
 
 export const sliderContent = style({
@@ -258,4 +317,161 @@ export const productPrice = style({
   fontWeight: '700',
   color: '#333',
   margin: 0,
+});
+
+export const productCard = style({
+  width: '100%',
+  cursor: 'pointer',
+  borderRadius: '12px',
+  border: '1px solid #e5e7eb',
+  backgroundColor: '#fff',
+  padding: '16px 20px',
+  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+  transition: 'box-shadow 0.2s, border-color 0.2s',
+  textAlign: 'left',
+
+  ':hover': {
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+});
+
+export const cardHeader = style({
+  marginBottom: '4px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+});
+
+export const cardProvider = style({
+  fontSize: '14px',
+  color: '#1f2937',
+});
+
+export const cardCategory = style({
+  fontSize: '14px',
+  color: '#1f2937',
+});
+
+export const cardPrice = style({
+  fontSize: '14px',
+  fontWeight: '600',
+  color: '#E91685',
+});
+
+export const cardName = style({
+  maxWidth: '100%',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  fontSize: '18px',
+  fontWeight: '700',
+  margin: 0,
+  marginBottom: '8px',
+});
+
+export const badgeContainer = style({
+  marginTop: '8px',
+  display: 'flex',
+  width: '100%',
+  flexWrap: 'nowrap',
+  gap: '8px',
+  overflowX: 'auto',
+  scrollbarWidth: 'none',
+
+  '::-webkit-scrollbar': {
+    display: 'none',
+  },
+});
+
+export const badge = style({
+  borderRadius: '9999px',
+  border: 'none',
+  padding: '4px 8px',
+  fontSize: '12px',
+  whiteSpace: 'nowrap',
+});
+
+export const badgeData = style({
+  backgroundColor: '#eef2ff',
+  color: '#4f46e5',
+});
+
+export const badgeVoice = style({
+  backgroundColor: '#ecfdf5',
+  color: '#059669',
+});
+
+export const badgeSpeed = style({
+  backgroundColor: '#fffbeb',
+  color: '#d97706',
+});
+
+export const badgeSms = style({
+  backgroundColor: '#fef2f2',
+  color: '#dc2626',
+});
+
+export const ottContainer = style({
+  marginTop: '12px',
+  display: 'flex',
+  alignItems: 'center',
+});
+
+export const ottCircle = style({
+  width: '32px',
+  height: '32px',
+  borderRadius: '50%',
+  backgroundColor: '#d1d5db',
+  border: '2px solid #fff',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '12px',
+});
+
+export const ottCircleOverlap = style({
+  marginLeft: '-12px',
+});
+
+export const descriptionContainer = style({
+  marginBottom: '16px',
+  marginTop: '8px',
+});
+
+export const descriptionText = style({
+  fontSize: '14px',
+  color: '#6b7280',
+  lineHeight: '1.5',
+  margin: 0,
+  display: '-webkit-box',
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: 'vertical',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+});
+
+export const subscribeContainer = style({
+  marginTop: '12px',
+  display: 'flex',
+  alignItems: 'center',
+});
+
+export const subscribeCircle = style({
+  width: '32px',
+  height: '32px',
+  borderRadius: '50%',
+  backgroundColor: '#d1d5db',
+  border: '2px solid #fff',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '12px',
+  fontWeight: '600',
+  overflow: 'hidden',
+});
+
+export const subscribeImage = style({
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
 });

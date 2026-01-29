@@ -13,12 +13,12 @@ export const mypage = style({
 // 마이페이지 상담섹션 컨테이너 스타일
 export const container = style({
   padding: '16px',
-  background: '#FEFDFD',
+  background: '#FFFFFF',
 });
 
 // 마이페이지 메뉴/이용 꿀팁 컨테이너 스타일
 export const section = style({
-  background: '#FEFDFD',
+  background: '#FFFFFF',
   padding: '16px',
   margin: '16px 16px 32px 16px',
   borderRadius: '10px',
@@ -153,6 +153,7 @@ export const menuItem = style({
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: '14px 12px',
+  cursor: 'pointer',
 });
 
 export const menuLeft = style({
@@ -162,7 +163,19 @@ export const menuLeft = style({
 });
 
 export const icon = style({
-  fontSize: '16px',
+  width: '30px',
+  height: '30px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  lineHeight: 1,
+});
+
+export const iconImg = style({
+  maxWidth: '24px',
+  maxHeight: '24px',
+  objectFit: 'contain',
+  display: 'block',
 });
 
 /********************

@@ -4,9 +4,10 @@ import { CounselCard } from './CounselCard';
 
 interface CounselCardListProps {
   items: CounselItem[];
+  onSummarize: (id: string) => void;
 }
 
-export function CounselCardList({ items }: CounselCardListProps) {
+export function CounselCardList({ items, onSummarize }: CounselCardListProps) {
   const grouped = items.reduce<Record<string, CounselItem[]>>((acc, cur) => {
     acc[cur.date] = acc[cur.date] ?? [];
     acc[cur.date].push(cur);
@@ -24,9 +25,7 @@ export function CounselCardList({ items }: CounselCardListProps) {
               key={item.id}
               content={item.content}
               summarized={item.summarized}
-              onSummarize={() => {
-                console.log('요약하기:', item.id);
-              }}
+              onSummarize={() => onSummarize(item.id)}
             />
           ))}
         </section>

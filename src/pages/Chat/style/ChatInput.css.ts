@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 export const inputContainer = style({
   position: 'fixed',
-  bottom: '70px',
+  bottom: 0,
   left: '50%',
   transform: 'translateX(-50%)',
   width: '480px',

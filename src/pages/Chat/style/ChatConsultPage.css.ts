@@ -15,7 +15,13 @@ export const container = style({
   minHeight: '100vh',
   backgroundColor: '#FEFDFD',
   position: 'relative',
+});
+
+export const headerWrapper = style({
+  position: 'sticky',
   paddingTop: '60px',
+  top: 0,
+  zIndex: 10,
 });
 
 export const statusContainer = style({
@@ -176,4 +182,13 @@ export const loadingDot = style({
       animationDelay: '-0.16s',
     },
   },
+});
+
+export const inputWrapper = style({
+  position: 'fixed',
+  bottom: '80px',
+  left: 0,
+  right: 0,
+  width: '100%',
+  zIndex: 8,
 });

@@ -33,7 +33,9 @@ export const navItem = style({
 });
 
 export const navIcon = style({
-  fontSize: '24px',
+  width: '28px',
+  height: '28px',
+  objectFit: 'contain',
 });
 
 export const navLabel = style({
