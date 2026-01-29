@@ -8,15 +8,13 @@ export const scrollArea = style({
   overflowY: 'auto',
   display: 'flex',
   flexDirection: 'column',
-  // 콘텐츠를 중앙 쪽으로 밀어내기 위한 상단 패딩
   paddingTop: 'clamp(30px, 6vw, 50px)',
-  paddingBottom: '240px',
+  paddingBottom: '240px', // 하단 고정 요소(warningBox, Nav) 공간 확보
   boxSizing: 'border-box',
   backgroundColor: '#FFFFFF',
   WebkitOverflowScrolling: 'touch',
 });
 
-// 1. 상단 로고 (중앙 정렬 및 반응형)
 export const topLogo = style({
   width: 'clamp(80px, 25vw, 110px)',
   height: 'auto',
@@ -48,7 +46,6 @@ export const headerTitle = style({
   color: '#000000',
 });
 
-// 2. 타이틀 & 캐릭터 영역 (가로 배치용 상자)
 export const titleContainer = style({
   display: 'flex',
   justifyContent: 'space-between',
@@ -77,7 +74,6 @@ export const characterImage = style({
   flexShrink: 0,
 });
 
-// 3. 진행 현황 영역
 export const statusText = style({
   padding: 'clamp(40px, 10vw, 70px) 24px 0',
   fontFamily: SCOREDREAM,
@@ -106,7 +102,7 @@ export const progressBarContainer = style({
 
 export const progressGauge = style({
   height: '100%',
-  background: '#FBE88A', // 프로그레스 바 색상 유지
+  background: '#FBE88A',
   transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
 });
 
@@ -118,12 +114,10 @@ export const percentText = style({
   textAlign: 'right',
 });
 
-// 4. 문서 카드 (요청하신 대로 카드 사이 간격 48px 적용)
 export const documentCard = style({
   width: 'calc(100% - 48px)',
-  // 프로그레스 바와의 첫 간격은 80px, 이후 카드끼리는 48px
-  marginTop: '80px',
-  marginBottom: '48px',
+  marginTop: '80px', // 프로그레스 바와의 첫 여백
+  marginBottom: '48px', // 카드 간 세로 여백
   marginLeft: 'auto',
   marginRight: 'auto',
   minHeight: 'clamp(110px, 25vw, 130px)',
@@ -141,7 +135,7 @@ export const documentCard = style({
   transition: 'all 0.2s ease-in-out',
   selectors: {
     '& + &': {
-      marginTop: '0px',
+      marginTop: '0px', // 인접 카드 간 마진 겹침 방지
     },
     '&:active': {
       transform: 'scale(0.97)',
@@ -182,7 +176,6 @@ export const linkButton = style({
   cursor: 'pointer',
 });
 
-// 5. 하단 고정 요소
 const fixedBase = style({
   position: 'fixed',
   left: '50%',
@@ -196,7 +189,7 @@ const fixedBase = style({
 export const warningBox = style([
   fixedBase,
   {
-    bottom: '80px',
+    bottom: '80px', // BottomNav 상단 위치
     height: 'auto',
     minHeight: '54px',
     padding: '10px 20px',

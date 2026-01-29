@@ -8,15 +8,13 @@ export const scrollArea = style({
   overflowY: 'auto',
   display: 'flex',
   flexDirection: 'column',
-  // 중앙 쪽으로 내리기 위한 상단 여백 및 하단 네비 공간 확보
   paddingTop: 'clamp(40px, 8vw, 60px)',
-  paddingBottom: '240px',
+  paddingBottom: '240px', // 하단 fixed 요소(warningBox, navBar) 공간 확보
   boxSizing: 'border-box',
   backgroundColor: '#FFFFFF',
   WebkitOverflowScrolling: 'touch',
 });
 
-// 상단 중앙 로고
 export const topLogo = style({
   width: 'clamp(80px, 20vw, 110px)',
   height: 'auto',
@@ -48,7 +46,6 @@ export const headerTitle = style({
   color: '#000000',
 });
 
-// 타이틀과 캐릭터를 감싸는 컨테이너 (가로 배치용)
 export const titleContainer = style({
   display: 'flex',
   justifyContent: 'space-between',
@@ -66,7 +63,6 @@ export const subTitle = style({
   flex: 1,
 });
 
-// 우측 상단 캐릭터
 export const characterImage = style({
   width: 'clamp(75px, 20vw, 95px)',
   height: 'auto',
@@ -78,16 +74,14 @@ export const characterImage = style({
   flexShrink: 0,
 });
 
-// 진행 현황 텍스트
 export const statusText = style({
-  padding: 'clamp(40px, 12vw, 70px) 24px 0', // 카드를 아래로 밀어주는 핵심 여백
+  padding: 'clamp(40px, 12vw, 70px) 24px 0', // 카드 리스트를 화면 중앙 하단으로 밀어주는 여백
   fontFamily: SCOREDREAM,
   fontStyle: 'italic',
   fontWeight: 700,
   fontSize: '18px',
 });
 
-// 프로그레스 바 영역
 export const progressWrapper = style({
   display: 'flex',
   alignItems: 'center',
@@ -107,7 +101,7 @@ export const progressBarContainer = style({
 
 export const progressGauge = style({
   height: '100%',
-  background: '#FBC02D', // 노란색 게이지
+  background: '#FBC02D',
   transition: 'width 0.4s ease',
 });
 
@@ -119,12 +113,10 @@ export const percentText = style({
   textAlign: 'right',
 });
 
-// 문서 카드 (간격 띄우기 적용)
 export const documentCard = style({
   width: 'calc(100% - 48px)',
-  // 첫 번째 카드와 프로그레스 바 사이 간격은 80px, 카드끼리는 48px 적용
-  marginTop: '80px',
-  marginBottom: '48px',
+  marginTop: '80px', // 프로그레스 바와의 첫 간격
+  marginBottom: '48px', // 카드 간 세로 간격
   marginLeft: 'auto',
   marginRight: 'auto',
   minHeight: 'clamp(110px, 25vw, 130px)',
@@ -141,9 +133,8 @@ export const documentCard = style({
   border: '1px solid #F0F0F0',
   transition: 'all 0.2s ease-in-out',
   selectors: {
-    // 연속된 카드 사이의 중첩 마진 방지
     '& + &': {
-      marginTop: '0px',
+      marginTop: '0px', // 연속된 카드 사이의 중첩 마진 방지
     },
     '&:active': {
       transform: 'scale(0.97)',
@@ -184,7 +175,6 @@ export const linkButton = style({
   cursor: 'pointer',
 });
 
-// 하단 고정 요소
 const fixedBase = style({
   position: 'fixed',
   left: '50%',
@@ -198,7 +188,7 @@ const fixedBase = style({
 export const warningBox = style([
   fixedBase,
   {
-    bottom: '80px',
+    bottom: '80px', // navBar 높이(80px) 위로 배치
     height: 'auto',
     minHeight: '46px',
     padding: '10px 0',
