@@ -1,6 +1,6 @@
 <div align="center">
 
-## AI 기반 통신사 요금제 추천 및 실시간 상담 서비스, 다무너 (DaMoono) 🐙
+## 실시간 상담 및 AI 기반 상담 요약 통신사 플랫폼, 다무너 (DaMoono) 🐙
 
 <img width="1300" height="853" alt="DaMoono Main" src="https://github.com/user-attachments/assets/1c3938b5-b14c-405f-aa1c-13d8ee3291c8" />
 
