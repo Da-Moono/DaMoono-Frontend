@@ -15,108 +15,16 @@ import SummaryResultCard from './components/SummaryResultCard';
 import WarningCard from './components/WarningCard';
 
 const MOCK_SUMMARY_DATA = {
-  id: 'NET-77531',
-  category: '품질',
-  summary: '네트워크 품질측정 티켓 접수 및 단말기 임시 조치 가이드 안내 완료',
-
-  // 2. 처리된 핵심 조치
-  coreActions: [
-    {
-      id: 1,
-      icon: ':shield:',
-      title: '네트워크 품질측정 티켓 등록',
-      description: 'NET-77531 (현장팀 분석 착수)',
-    },
-    {
-      id: 2,
-      icon: ':iphone:',
-      title: '단말기 임시 개선 설정 안내',
-      description: 'LTE 고정 등 4단계 설정법 가이드',
-    },
-    {
-      id: 3,
-      icon: ':alarm_clock:',
-      title: '결과 안내 예약',
-      description: '영업일 {N}일 내 문자 또는 콜백(해피콜) 예정',
-    },
-  ],
-
-  // 3. 현재 적용 상태
-  currentStatus: [
-    {
-      icon: ':sparkles:',
-      label: '처리 상태',
-      detail: '현장 점검 단계',
-      value: '품질 분석 중',
-    },
-    {
-      icon: ':shield:',
-      label: '티켓 번호',
-      detail: '', // 없는 경우 빈 문자열
-      value: 'NET-77531',
-    },
-    {
-      icon: ':iphone:',
-      label: '기기 정보',
-      detail: '단말 모델',
-      value: 'ios 최신',
-    },
-    {
-      icon: ':signal_strength:',
-      label: '임시 설정 LTE 고정',
-      detail: '4G 우선',
-      value: '적용 완료',
-    },
-  ],
-
-  // 4. 필수 확인 및 주의사항
-  notices: [
-    {
-      id: 1,
-      title: '피크 타임: ',
-      text: '저녁 {19:00~22:00} 혼잡 시간대에는 속도 저하가 발생할 수 있습니다.',
-    },
-    {
-      id: 2,
-      title: '재측정: ',
-      text: '설정 변경 후 {5~10}분 뒤 개선 여부를 다시 확인해 주세요.',
-    },
-    {
-      id: 3,
-      title: '추가 제보:',
-      text: ' 통화 끊김(콜드랍) 발생 시 더 정밀한 분석이 가능합니다.',
-    },
-  ],
-
-  // 5. 다음 단계 안내
-  nextActions: [
-    ':envelope_with_arrow: 문자로 전송된 상세 조치 가이드 및 티켓 정보 확인',
-    ':telephone_receiver: 현장팀 분석 완료 후 담당 상담사의 안내 전화(콜백) 대기',
-  ],
-
-  // 6. 이용 가이드 / 제시안 / 꿀팁
-  guides: {
-    title: ':round_pushpin: 단말기 임시 개선 조치 순서',
-    steps: [
-      '설정에서 LTE 고정(4G 우선)으로 전환',
-      'VoLTE 및 Wi-Fi 통화 기능 ON(활성화)',
-      '백그라운드 데이터 제한 및 데이터 절약 모드 적용',
-      '단말기 전원 재부팅 후 재측정',
-    ],
-  },
-
-  proposals: {
-    title: '제시안',
-    items: ['그냥 샘플 데이터입니다.'],
-  },
-
-  tips: {
-    title: '꿀팁',
-    items: [
-      'Wi-Fi 우선 사용 권장: 데이터 속도가 불안정한 실내 장소에서는 가급적 Wi-Fi를 우선 연결하여 사용하시는 것을 추천드립니다.',
-      '신뢰할 수 있는 AP 활용: 보안이 확인된 신뢰할 수 있는 AP를 연결하면 훨씬 안정적인 통신 환경을 이용하실 수 있습니다.',
-    ],
-  },
+  id: '',
+  category: '',
+  summary: '',
+  coreActions: [],
+  currentStatus: [],
+  notices: [],
+  nextActions: [],
+  guides: null,
+  proposals: null,
+  tips: null,
 };
 
 const containerVariants = {
@@ -143,6 +51,44 @@ const SummaryPage = () => {
     from === 'chat'
       ? { targetPath: '/chat', label: '채팅 화면으로 돌아가기' }
       : { targetPath: '/mypage', label: '마이페이지로 돌아가기' };
+
+  if (
+    summaryData.id === '' ||
+    (summaryData.summary.trim() === '' &&
+      summaryData.coreActions.length === 0 &&
+      summaryData.currentStatus.length === 0 &&
+      summaryData.notices.length === 0 &&
+      summaryData.nextActions.length === 0)
+  ) {
+    return (
+      <Layout>
+        <Header />
+        <motion.div
+          className={s.pageContainer}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingTop: '100px',
+          }}
+        >
+          <motion.section className={s.characterSection}>
+            {/* 기존 스타일 유지를 위해 캐릭터 씬 등을 활용해도 좋습니다 */}
+            <p style={{ textAlign: 'left', fontSize: '1.2rem', color: '#666' }}>
+              상담 데이터가 충분하지 않아 <br />
+              <strong>리포트를 생성할 수 없습니다.</strong>
+            </p>
+          </motion.section>
+
+          <BackButton targetPath="/chat" label="채팅 화면으로 돌아가기" />
+        </motion.div>
+        <BottomNav />
+      </Layout>
+    );
+  }
 
   return (
     // 1. 전체 레이아웃 틀로 감싸기
